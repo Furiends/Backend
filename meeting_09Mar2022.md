@@ -1,0 +1,44 @@
+## Date: 09Mar2022
+
+## 上周任务汇报
+
+- @锅巴：08Mar2022才得到aws的权限打开，接下来继续完善教程
+- @Alice：git actions调研
+  - Public repository 免费
+  - 前端、后端、AI组都需要建立
+  - 需要继续调研现有workflow来实现CICD
+- @小舒：数据库
+  - 上周确定nosql后，比较mongodb 和 dynamoDB
+
+  - dynamoDB：API和mysql比较相似
+
+  - 功能上都可以实现我们的功能，索引上稍微有不同
+
+  - `mongodb`可以用多种`cloud`，但部署上
+
+  - 部署在云端都要收费，
+    - mongodb: payasyougo
+
+    - dynamodb: 一开始会更便宜
+- @shaw: TPM 确定是先做小程序
+  - 开发框架：
+    - 主流框架：类vue和类react，都支持跨端
+  - 问题：小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
+
+
+
+# Discussion
+
+- @Natalia: 要与前端讨论是否一开始使用小程序，应该本周会得出结论
+- 小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
+  - 前后端分离的话，不需要考虑平台。
+- framework: 既然确定用python，那需要在Django VS Flusk选择
+
+- @锅巴：aws 虚拟机 ubuntu: 18.04
+
+## 下周任务
+
+- Luying, Shaw, 小舒：
+  - 调研flusk和django，记录在hackmd上
+- 锅巴：继续aws部署学习
+- Alice: 继续git actions 学习
