@@ -52,5 +52,7 @@
 
 - Luying, Shaw, 小舒：
   - 调研flask和django，记录在hackmd上
+  - 数据库调研@小舒：可以和AI组的Jeni姐妹配合调研，如果有必要的话可以协商@Natalia 约一个后端组与AI组的跨组会议
+  - 调研flask和django，记录在hackmd
 - 锅巴：继续aws部署学习
 - Alice: 继续git actions 学习
