@@ -2,7 +2,7 @@
 
 ## 上周任务汇报
 
-- @锅巴：08Mar2022才得到aws的权限打开，接下来继续完善教程
+- @锅巴：08Apr2022才得到aws的权限打开，接下来继续完善教程
 - @Alice：git actions调研
   - Public repository 免费
   - 前端、后端、AI组都需要建立
