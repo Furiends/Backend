@@ -23,6 +23,20 @@
 - @shaw: TPM 确定是先做小程序
   - 前端开发框架：
     - 主流框架：类vue和类react，都支持跨端
+     类VUE: uni-app（支持跨端：支付宝/微信）
+        使用 Vue.js 开发小程序、H5、App的统一前端框架。  
+         *github：https://github.com/dcloudio/uni-app*
+      类React: taro
+      开源的一款使用 React.js 开发微信小程序的前端框架。
+      *github地址：https://github.com/NervJS/taro*
+      
+      类Vue: WePY（最近官方更新：2020.6.4）
+        *github：https://github.com/Tencent/wepy*
+
+    类VUE: mpvue（已停止维护）
+      美团团队开源的一款使用 Vue.js 开发微信小程序的前端框架。（已经停止维护）
+      *github地址：https://github.com/Meituan-Dianping/mpvue*
+      
   - 问题：小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
 
 
