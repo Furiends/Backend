@@ -3,3 +3,4 @@
 ## Meeting Minutes 
 1. [03Apr2022](meeting_03Apr2022.md)
 2. [09Apr2022](meeting_09Apr2022.md)
+3. [Resource](https://github.com/Furiends/Backend/blob/main/resource.md)
