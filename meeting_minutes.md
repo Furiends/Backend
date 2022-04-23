@@ -1,8 +1,70 @@
 # Table of Contents
 
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat) 
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022)
 
 
+
+# Date: 23Apr2022
+
+## 上周任务汇报
+
+- @shaw（微信）
+  - 学习aws
+  
+- @luying
+  - aws & AWS CICD 学习
+  - 复习udemy springboot的课程
+
+- @锅巴：
+  - Springboot项目学习：[litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql)
+  - 微信开发者工具stable， 微信需要
+  - 专业技术文档
+
+- @小舒：
+  - 学习aws
+
+- @Alice
+  - 熟悉aws
+
+
+## Discussion
+
+- 第一阶段工作：
+  - @锅巴：
+    - 先搭框架实现单一功能
+    - 最简单的竞品（？）：展示宠物照片和内容
+  - @cherrie: 
+    - 后端也需要visualisation
+    - 先做一个MVP：minimum viable product 最小化可行产品
+    - 用户发布照片
+  - @Natalia: 4月24日上午的UIUX会议会讨论需求，一周后TPM静静会给完整需求
+
+- 数据库：
+  - @cherie: 
+    - 数据有很多层，最初数据就是log
+    - AI的model需要大量、清晰数据
+    - 前期不可能考虑AI来搭建数据库，后期有需要可以进行数据导出、迁移、清洗
+
+
+- 其他：
+
+  - @cherie:
+    - 如果在aws上进行操作，要小心超预算
+    - 公众号文章推荐：[从0开始小程序](https://mp.weixin.qq.com/s/vfN0WvSYESSHEKYyRhiMRg)
+  - @小舒：上周静静参加会议有讲是先网页开发，再小程序。具体如何？
+    - @Natalia：4月24日上午的会议会reveal整个项目的规划
+
+  - @Alice：微信作为工作工具不是非常上手，但slack国内需要VPN一直在线不方便，而github不适合实时交流
+    - @cherie：可内部先尝试一下各种工具，但最好所有组统一使用相同的工具，方便信息集中共享
+
+
+## 下周任务
+
+- 先通过跑github上开源的用`springboot`框架的小程序项目来学习小程序，并分享相关信息在[GitHub](resources/survey_wechat_mini_programs.md)上。
+
+- 根据4月24日上午的会议来确定后端组短期内的时间和要求
+
+  
 
 
 # [Date: 16Apr2022 wechat]
@@ -23,7 +85,7 @@
 
 
 
-## Date: 16Apr2022
+# Date: 16Apr2022
 
 ## 上周任务汇报
 
@@ -46,7 +108,7 @@
   
 
 
-# Discussion
+## Discussion
 
 - @natialia：前端会议做网页，tob toc网页版；第一版会是html
 - 数据库的讨论
@@ -122,7 +184,7 @@
 
 
 
-# Discussion
+## Discussion
 
 - @Natalia: 要与前端讨论是否一开始使用小程序，应该本周会得出结论
 - 小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
