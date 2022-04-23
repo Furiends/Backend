@@ -23,14 +23,15 @@
 
 # template
 
-（欢迎大家写下/修改template的任何item，如有修改，请在群里告知）
+（欢迎大家写下/修改template的下面任何item，如有改动，请在群里告知）
 
 （在使用时请复制去创建你的section）
 
 1. 项目链接：
-2. General info:
+2. Other general info:
    - 前端
    - 数据库
 3. 项目文档链接：
+   - 阅读心得：
 4. 实操使用经验/感受：
 5. 潜在问题或难点：
