@@ -2,7 +2,7 @@
 
 （请大家把自己调研的项目写在这里，作为汇总，也可以embed links to section来方便文档里查阅）
 
-- 锅巴 [litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql)
+- 锅巴 [litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql) [医院挂号系统](https://github.com/YuJian95/hospital)
 - Luying
 - Shaw
 - 小舒
