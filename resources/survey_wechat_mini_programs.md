@@ -5,7 +5,8 @@
 - 锅巴 [litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql) [医院挂号系统](https://github.com/YuJian95/hospital)
 - Luying
 - Shaw [Mango](https://github.com/Xin-Felix/Mango)(Springboot+Mybatis+MySQL+Vue)
-- 小舒
+- 小舒 [学之思考试系统](https://github.com/mindskip/xzs-mysql) (springboot+vue+mybatis+mysql)
+
 - Alice
 - Cherie
 
