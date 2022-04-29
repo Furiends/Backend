@@ -7,7 +7,7 @@
 - Shaw [Mango](https://github.com/Xin-Felix/Mango)(Springboot+Mybatis+MySQL+Vue)
 - 小舒 [学之思考试系统](https://github.com/mindskip/xzs-mysql) (springboot+vue+mybatis+mysql)
 
-- Alice
+- Alice [万物有名项目实战](https://www.bilibili.com/video/BV1oU4y1P7qc?p)
 - Cherie
 
 
