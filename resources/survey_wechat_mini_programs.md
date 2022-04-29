@@ -4,7 +4,7 @@
 
 - 锅巴 [litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql) [医院挂号系统](https://github.com/YuJian95/hospital)
 - Luying
-- Shaw
+- Shaw [Mango](https://github.com/Xin-Felix/Mango)(Springboot+Mybatis+MySQL+Vue)
 - 小舒
 - Alice
 - Cherie
