@@ -1,7 +1,57 @@
 # Table of Contents
 
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022)
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022)
 
+
+# Date: 30Apr2022
+
+## 上周任务汇报
+
+- @shaw（微信）
+    - 小程序调研的文档不知道更新在哪里
+    - 看了小程序mongo论坛功能，有回复。
+    - 微信接口存储
+    - 用户权限不明显，没有后台管理系统权限，操作数据库（简陋）
+  
+- @luying
+
+
+- @锅巴：
+   - 学习了微信小程序，并且自己尝试上线了微信小程序来了解这一流程，微信小程序需要开通开发者权限，需要提交身份证以及相关资格证，小程序有自己的云后台数据库管理
+   - 调研了litemall商城，调研文档链接
+   - 搭建了后端技术组的技术博客文档
+
+
+- cherie
+  - 学习了目前文档，熟悉当前的需求
+  - 对于小程序进行了学习，还没有run
+
+
+
+- @小舒：
+
+- @Alice
+    - 商用版和非商用版区别，不太清楚springboot框架，准备跟课
+    - 小程序
+    - pm想要做的事情太多，网页ios andorid都想要，对我们太冗杂
+    - spring cloud和spring boot的区别
+
+
+## Discussion
+
+- 数据库：确定为mysql，比较容易上手
+- cherie完成一个简单的数据库可跑的本地数据库
+- 还是先完成本地可跑的用户管理系统，可以先不管小程序，当做后端开发来做
+- alice：大家还是应该把文档放到git上，在开会之前，google docs完成
+- cherie:文档信息过于分散，git,slack微信,goole docs,zoom软件过多
+
+
+## 下周任务
+- alice:学习spring boot+小程序,数据库
+- 锅巴：mybatis文档，如何部署项目写文档
+- cherie: 项目跑成功,数据库的增删查改
+- shawn,小舒：跑项目并且写to do list实现最基本功能
+- 下周的会议记录由shaw开始。
 
 
 # Date: 23Apr2022
