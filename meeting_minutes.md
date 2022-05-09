@@ -1,6 +1,66 @@
 # Table of Contents
 
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022)
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022),[08 May](#date-08may2022)
+- 
+# Date: 08Apr2022
+
+## 上周任务汇报
+
+- @shaw（微信）
+    - 复习mybatis和springboot的相关知识
+    - 完成Litemall商城的小程序本地部署，阅读了部分源码进行学习
+    - 进行了数据库表的设计构想
+
+- @锅巴：
+   - 调研了dependencies的配置，gradle的使用
+   - 完成了TodoList的代码实现
+   - 写技术文档
+
+- cherie
+  - 安装Intellij，学习配置
+  - run锅巴的代码
+  - 学习锅巴的技术文档，学习框架
+
+- @小舒：
+  - 学习了MyBatis，简化JDBC开发。
+  - 启动一个SpringBoot程序，使用Maven配合SpringBoot
+  - 用SpringBoot整合Junit和Mybatis，使用MyBatis连接数据库
+
+- @Alice
+    - 完成学习springboot quick start
+    - maven + derby + JPA
+    - postman发送API
+    - CRUD 功能实现
+    - 利用JPA实现数据库的entitiy relationship
+
+## Discussion
+
+- @锅巴：
+   - 不清楚大家的进度，考虑是否需要前端的展示？建议大家直接练习Mybatis的操作。
+   - 做最简化版的功能，如宠物信息的增删查改，先写一些简单的东西。
+   - Maven和Graddle无偏好，都可以。
+ 
+- cherie
+  - MVP1流程图足够清晰，把流程图转换为需求，进行系统设计。考虑各种的UseCase，需要什么样的service。
+  - 大公司的做法是由有经验的人进行high level的设计，事先确定好设计，再break成小任务。
+
+- @小舒：
+  - 建立google Drive存pdf类的资料
+  - 不建议单独设计表，建议分组进行数据库设计
+
+- @Alice
+    - postman发送API，方便调试；前期可以用一个很简单的前端先熟悉，后面都是直接用API。
+    - 先实现必须实现的功能，需要先在框架中就搭建起来。有些功能可以单独拆开打包成一个单独的service，后面再添加新的feature。
+    - 需要跟前端进行讨论，考虑我们的技术进度，是否能赶上ddl
+    - 大的系统设计可能不适合我们这种小团队，考虑先建数据库，之后进行功能迭代。
+
+## 下周任务
+- 数据库设计：alice和cherie一组，锅巴、小舒、shaw一组。
+- 主持人应该确认好会议大纲，开会前大家需要直接把上一周完成的事项传入github，并且根据大纲事先准备发言，控制会议时间。
+- 锅巴：写一个SpringBoot注解版的todolist。担心大家的学习进度，希望大家及时沟通并提问。
+- Alice：继续学习MyBatis
+- 小舒：学习springboot，完成todolist
+- cherie：学习todolist代码
 
 
 # Date: 30Apr2022
