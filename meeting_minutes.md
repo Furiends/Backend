@@ -1,8 +1,19 @@
 # Table of Contents
 
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022),[08 May](#date-08may2022)
-- 
-# Date: 08Apr2022
+- May2022: [08 May](#date-08may2022)
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022)
+
+# Date: 15May2022
+
+- @Shaw:
+- @锅巴：
+- @Cherie：
+- @小舒
+- @Alice
+    -   [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql， 学习了JDBC，入门了MyBatis
+    -   进行了数据库表的构想，并与@Cherie讨论了两人的最终方案。
+
+# Date: 08May2022
 
 ## 上周任务汇报
 
