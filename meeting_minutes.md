@@ -6,6 +6,8 @@
 # Date: 15May2022
 
 - @Shaw:
+    -   了解MyBatisPlus，练习了MyBatisPlus相关的CRUD。 [MyBatisPlus参考](https://blog.csdn.net/qq_54769967/article/details/120434394)
+    -   与锅巴和小舒进行了数据库设计的探讨，并完成了TableRelations/EntityRelations两张图作为说明（附在小舒的文档里）。
 - @锅巴：
 - @Cherie：
 - @小舒
