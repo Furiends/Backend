@@ -5,12 +5,15 @@
 
 # Date: 15May2022
 
+## 上周任务汇报
+
 - @Shaw:
     -   了解MyBatisPlus，练习了MyBatisPlus相关的CRUD。 [MyBatisPlus参考](https://blog.csdn.net/qq_54769967/article/details/120434394)
     -   与锅巴和小舒进行了数据库设计的探讨，并完成了TableRelations/EntityRelations两张图作为说明（附在小舒的文档里）。
 - @锅巴：
     -  与小舒和shaw进行了数据库设计的探讨，从中学习了相关数据库的经验，负责数据库表字段设计并使用代码创建schema。
 - @Cherie：
+    - 与@Alice讨论数据库设计[link]()
 - @小舒
 - @Alice
     -   [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql， 学习了JDBC，入门了MyBatis
