@@ -15,7 +15,6 @@
 - @Cherie：
     - 与@Alice讨论数据库设计[link]()
 - @小舒
-    - 
 - @Alice
     -   [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql， 学习了JDBC，入门了MyBatis
     -   进行了数据库表的构想，并与@Cherie讨论了两人的最终方案。
