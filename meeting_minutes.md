@@ -20,6 +20,13 @@
     -   [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql， 学习了JDBC，入门了MyBatis
     -   进行了数据库表的构想，并与@Cherie讨论了两人的最终方案。
 
+## Discussion
+
+- 讨论了PetInfo、ShelterInfo、UserInfo基础表的字段，技术会上也确认了微信号为用户唯一标识（MVP1）
+- 下次组会前，完成合并两种设计方案的基础表，并最终敲定方案、更新[google doc](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
+- 下次组会，需要讨论更多表的字段设计，如ApplicationTable、SurveyTable
+- 根据技术大会得到的[排期](https://docs.qq.com/sheet/DQ25yUU15TkZTSVBG?u=c0e550a33fe04a6cb7ea99c1f73bd9b6&tab=BB08J2)，细分接下来的任务
+
 # Date: 08May2022
 
 ## 上周任务汇报
