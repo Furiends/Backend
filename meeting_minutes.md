@@ -1,7 +1,27 @@
 # Table of Contents
 
-- May2022: [08 May](#date-08may2022)
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022),[30 Apr](#date-30-apr2022)
+- May2022: [22 May](#date-22may2022), [15 May](#date-15may2022), [08 May](#date-08may2022)
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022), [30 Apr](#date-30apr2022)
+
+# Date: 22May2022
+
+## 上周任务汇报
+
+- @Shaw:
+- @锅巴：
+- @Cherie：
+- @小舒
+- @Alice
+    -   校对了@锅巴 的数据库基础表格设计文档， 并migrate到[【腾讯文档】Furiends数据库设计](
+https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
+
+## Discussion
+
+- 讨论了PetInfo、ShelterInfo、UserInfo基础表的字段，技术会上也确认了微信号为用户唯一标识（MVP1）
+- 下次组会前，完成合并两种设计方案的基础表，并最终敲定方案、更新[google doc](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
+- 下次组会，需要讨论更多表的字段设计，如ApplicationTable、SurveyTable
+- 根据技术大会得到的[排期](https://docs.qq.com/sheet/DQ25yUU15TkZTSVBG?u=c0e550a33fe04a6cb7ea99c1f73bd9b6&tab=BB08J2)，细分接下来的任务
+
 
 # Date: 15May2022
 
