@@ -16,11 +16,35 @@
 https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 
 ## Discussion
+- 需要向PM和uiux提出的要求：
+  - 共同使用一张字段表，以保证信息同步。
+- 需要向PM和uiux澄清的问题有：
+  1. 注册的作用？微信小程序授权和平台注册的区别？
+     - 后端的构想：授权即称为“一般用户”身份；当提出领养申请时，升级为“申请者”的身份
+     - 理由：
+       - 大部分的小程序并没有注册这一步骤
+       - 就算是注册，我们也建议使用“微信号”作为用户的主键
+     - 解决方案：如果没有注册功能，可将基础表在第一次申请时连同机构的申请表一起填写，之后的申请可省却这张表的填写。
+     - 延伸问题：微信炸号，如何找回？
+       - 是否可用电话+前微信号提供+浏览信息核查来通过客服找回
+       - 在MVP1吗？
+  2. 长久规划里，送养人在平台的角色是什么？
+     - 后端的构想：送养人仅通过平台查看筛选机构，但这可通过“一般用户”实现，不需要创建单独的表和实现特殊功能
+  3. 客服作为可放出黑名单的角色，是否需要在MVP1实现？计划如何实现？
+  4. 关于字段加密，可否由产品/uiux先给出字段加密的定级初稿，再由后端审核实现？
 
-- 讨论了PetInfo、ShelterInfo、UserInfo基础表的字段，技术会上也确认了微信号为用户唯一标识（MVP1）
-- 下次组会前，完成合并两种设计方案的基础表，并最终敲定方案、更新[google doc](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
-- 下次组会，需要讨论更多表的字段设计，如ApplicationTable、SurveyTable
-- 根据技术大会得到的[排期](https://docs.qq.com/sheet/DQ25yUU15TkZTSVBG?u=c0e550a33fe04a6cb7ea99c1f73bd9b6&tab=BB08J2)，细分接下来的任务
+## 会后，关于小程序授权的资料查找：
+- 小程序[授权](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/authorize.html)可以得到的信息
+
+  - 微信基本信息
+
+  - 位置
+
+  - [手机号](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html):
+
+    - 针对非个人开发者，且完成了认证的小程序开放（不包含海外主体）
+    - 用户可使用微信绑定手机号进行授权，也可添加非微信绑定手机号进行授权。
+    - **若开发者仅通过手机号作为业务关联凭证，在重点场景可适当增加短信验证逻辑。**
 
 
 # Date: 15May2022
