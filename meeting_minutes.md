@@ -3,6 +3,15 @@
 - May2022: [29 May](#date-29may2022), [22 May](#date-22may2022), [15 May](#date-15may2022), [08 May](#date-08may2022)
 - Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022), [30 Apr](#date-30apr2022)
 
+# Date:12June2022
+
+##  上周任务汇报
+- @Shaw：
+- @锅巴：
+- Cherie：
+- 小舒：
+- Alice：
+
 # Date: 29May2022
 此次会议是与PM, UIUX进行业务细节同步
 - 注册问题
