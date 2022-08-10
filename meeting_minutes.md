@@ -1,11 +1,13 @@
 # Table of Contents
 
 - May2022: [29 May](#date-29may2022), [22 May](#date-22may2022), [15 May](#date-15may2022), [08 May](#date-08may2022)
-- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022), [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022), [30 Apr](#date-30apr2022)
+- Apr 2022: [03 Apr](#date-03apr2022), [09 Apr](#date-09apr2022), [16 Apr](#date-16apr2022)
+  , [16 Apr会后](#date-16apr2022-wechat), [23 Apr](#date-23apr2022), [30 Apr](#date-30apr2022)
 
 # Date:12June2022
 
-##  上周任务汇报
+## 上周任务汇报
+
 - @Shaw：
 - @锅巴：
 - Cherie：
@@ -13,31 +15,32 @@
 - Alice：
 
 # Date: 29May2022
+
 此次会议是与PM, UIUX进行业务细节同步
+
 - 注册问题
-  - 业务逻辑：
-    - 用户进入平台、授权即称为平台用户
-    - 当用户点击申请第一只宠物时，填写基础表来完成平台“注册” （“注册”->审核？）
-    - 如果分数通过，进入第一只宠物的真正的领养过程（包括填写狗表/猫表，MVP1内狗表、猫表所有机构相同）
-    - 用户再次申请其他宠物时，不需要再填写基础表
-  - 另外：
-    - 用户主键确定为微信号。
-    - 不需要考虑炸号问题。
-  - 遗留问题：
-    - MVP1内，领养流程的实现程度，各组意见并未统一；决定在lofi表出后，各组内部审核，预定下周末（6月4-5日）各组一起开大会商讨。
+    - 业务逻辑：
+        - 用户进入平台、授权即称为平台用户
+        - 当用户点击申请第一只宠物时，填写基础表来完成平台“注册” （“注册”->审核？）
+        - 如果分数通过，进入第一只宠物的真正的领养过程（包括填写狗表/猫表，MVP1内狗表、猫表所有机构相同）
+        - 用户再次申请其他宠物时，不需要再填写基础表
+    - 另外：
+        - 用户主键确定为微信号。
+        - 不需要考虑炸号问题。
+    - 遗留问题：
+        - MVP1内，领养流程的实现程度，各组意见并未统一；决定在lofi表出后，各组内部审核，预定下周末（6月4-5日）各组一起开大会商讨。
 
 - 送养人问题
-  - 业务逻辑：
-    - 送养人将在平台填写基础动物信息，进行送养申请，由机构审核。
-    - 后期可追踪宠物动态。
-  - 不在MVP1
+    - 业务逻辑：
+        - 送养人将在平台填写基础动物信息，进行送养申请，由机构审核。
+        - 后期可追踪宠物动态。
+    - 不在MVP1
 - 客服问题
-  - 业务逻辑：
-    - 将绑定至各个机构，我们仅提供交流平台。
-  - 不在MVP1
+    - 业务逻辑：
+        - 将绑定至各个机构，我们仅提供交流平台。
+    - 不在MVP1
 - 字段加密问题
-  - PM将和NGO商讨机构内部权限问题，再给后端初稿
-
+    - PM将和NGO商讨机构内部权限问题，再给后端初稿
 
 # Date: 22May2022
 
@@ -48,62 +51,66 @@
 - @Cherie：
 - @小舒
 - @Alice
-    -   校对了@锅巴 的数据库基础表格设计文档， 并migrate到[【腾讯文档】Furiends数据库设计](
-https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
+    - 校对了@锅巴 的数据库基础表格设计文档， 并migrate到[【腾讯文档】Furiends数据库设计](
+      https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 
 ## Discussion
+
 - 需要向PM和uiux提出的要求：
-  - 共同使用一张字段表，以保证信息同步。
+    - 共同使用一张字段表，以保证信息同步。
 - 需要向PM和uiux澄清的问题有：
-  1. 注册的作用？微信小程序授权和平台注册的区别？
-     - 后端的构想：授权即称为“一般用户”身份；当提出领养申请时，升级为“申请者”的身份
-     - 理由：
-       - 大部分的小程序并没有注册这一步骤
-       - 就算是注册，我们也建议使用“微信号”作为用户的主键
-     - 解决方案：如果没有注册功能，可将基础表在第一次申请时连同机构的申请表一起填写，之后的申请可省却这张表的填写。
-     - 延伸问题：微信炸号，如何找回？
-       - 是否可用电话+前微信号提供+浏览信息核查来通过客服找回
-       - 在MVP1吗？
-  2. 长久规划里，送养人在平台的角色是什么？
-     - 后端的构想：送养人仅通过平台查看筛选机构，但这可通过“一般用户”实现，不需要创建单独的表和实现特殊功能
-  3. 客服作为可放出黑名单的角色，是否需要在MVP1实现？计划如何实现？
-  4. 关于字段加密，可否由产品/uiux先给出字段加密的定级初稿，再由后端审核实现？
+    1. 注册的作用？微信小程序授权和平台注册的区别？
+        - 后端的构想：授权即称为“一般用户”身份；当提出领养申请时，升级为“申请者”的身份
+        - 理由：
+            - 大部分的小程序并没有注册这一步骤
+            - 就算是注册，我们也建议使用“微信号”作为用户的主键
+        - 解决方案：如果没有注册功能，可将基础表在第一次申请时连同机构的申请表一起填写，之后的申请可省却这张表的填写。
+        - 延伸问题：微信炸号，如何找回？
+            - 是否可用电话+前微信号提供+浏览信息核查来通过客服找回
+            - 在MVP1吗？
+    2. 长久规划里，送养人在平台的角色是什么？
+        - 后端的构想：送养人仅通过平台查看筛选机构，但这可通过“一般用户”实现，不需要创建单独的表和实现特殊功能
+    3. 客服作为可放出黑名单的角色，是否需要在MVP1实现？计划如何实现？
+    4. 关于字段加密，可否由产品/uiux先给出字段加密的定级初稿，再由后端审核实现？
 
 ## 会后，关于小程序授权的资料查找：
+
 - 小程序[授权](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/authorize.html)可以得到的信息
 
-  - 微信基本信息
+    - 微信基本信息
 
-  - 位置
+    - 位置
 
-  - [手机号](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html):
+    - [手机号](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html):
 
-    - 针对非个人开发者，且完成了认证的小程序开放（不包含海外主体）
-    - 用户可使用微信绑定手机号进行授权，也可添加非微信绑定手机号进行授权。
-    - **若开发者仅通过手机号作为业务关联凭证，在重点场景可适当增加短信验证逻辑。**
-
+        - 针对非个人开发者，且完成了认证的小程序开放（不包含海外主体）
+        - 用户可使用微信绑定手机号进行授权，也可添加非微信绑定手机号进行授权。
+        - **若开发者仅通过手机号作为业务关联凭证，在重点场景可适当增加短信验证逻辑。**
 
 # Date: 15May2022
 
 ## 上周任务汇报
 
 - @Shaw:
-    -   了解MyBatisPlus，练习了MyBatisPlus相关的CRUD。 [MyBatisPlus参考](https://blog.csdn.net/qq_54769967/article/details/120434394)
-    -   与锅巴和小舒进行了数据库设计的探讨，并完成了TableRelations/EntityRelations两张图作为说明（附在小舒的文档里）。
+    - 了解MyBatisPlus，练习了MyBatisPlus相关的CRUD。 [MyBatisPlus参考](https://blog.csdn.net/qq_54769967/article/details/120434394)
+    - 与锅巴和小舒进行了数据库设计的探讨，并完成了TableRelations/EntityRelations两张图作为说明（附在小舒的文档里）。
 - @锅巴：
-    -  与小舒和shaw进行了数据库设计的探讨，从中学习了相关数据库的经验，负责并完成了数据库表字段设计并使用代码创建schema。[link](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
+    -
+    与小舒和shaw进行了数据库设计的探讨，从中学习了相关数据库的经验，负责并完成了数据库表字段设计并使用代码创建schema。[link](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
 - @Cherie：
     - 与@Alice讨论[数据库设计](https://docs.google.com/document/d/1JrV1GO9C1yBF7NJU24Hie_QyYJgWbynjs56PyNtWTJA/edit?usp=sharing)
 - @小舒
-   - 写数据库设计文档，和锅巴、shaw完成数据库设计
+    - 写数据库设计文档，和锅巴、shaw完成数据库设计
 - @Alice
-    -   [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql， 学习了JDBC，入门了MyBatis
-    -   进行了数据库表的构想，并与@Cherie讨论了两人的最终方案。
+    - [黑马javaweb](https://www.bilibili.com/video/BV1Qf4y1T7Hx?spm_id_from=333.337.search-card.all.click) 复习了mysql，
+      学习了JDBC，入门了MyBatis
+    - 进行了数据库表的构想，并与@Cherie讨论了两人的最终方案。
 
 ## Discussion
 
 - 讨论了PetInfo、ShelterInfo、UserInfo基础表的字段，技术会上也确认了微信号为用户唯一标识（MVP1）
-- 下次组会前，完成合并两种设计方案的基础表，并最终敲定方案、更新[google doc](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
+-
+下次组会前，完成合并两种设计方案的基础表，并最终敲定方案、更新[google doc](https://docs.google.com/document/d/1xTv_d3ietM3VZdQ0XRWxiG0c2PtrVpwggFVLLPwpu4s/edit?usp=sharing)
 - 下次组会，需要讨论更多表的字段设计，如ApplicationTable、SurveyTable
 - 根据技术大会得到的[排期](https://docs.qq.com/sheet/DQ25yUU15TkZTSVBG?u=c0e550a33fe04a6cb7ea99c1f73bd9b6&tab=BB08J2)，细分接下来的任务
 
@@ -117,19 +124,19 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
     - 进行了数据库表的设计构想
 
 - @锅巴：
-   - 调研了dependencies的配置，gradle的使用
-   - 完成了TodoList的代码实现
-   - 写技术文档
+    - 调研了dependencies的配置，gradle的使用
+    - 完成了TodoList的代码实现
+    - 写技术文档
 
 - cherie
-  - 安装Intellij，学习配置
-  - run锅巴的代码
-  - 学习锅巴的技术文档，学习框架
+    - 安装Intellij，学习配置
+    - run锅巴的代码
+    - 学习锅巴的技术文档，学习框架
 
 - @小舒：
-  - 学习了MyBatis，简化JDBC开发。
-  - 启动一个SpringBoot程序，使用Maven配合SpringBoot
-  - 用SpringBoot整合Junit和Mybatis，使用MyBatis连接数据库
+    - 学习了MyBatis，简化JDBC开发。
+    - 启动一个SpringBoot程序，使用Maven配合SpringBoot
+    - 用SpringBoot整合Junit和Mybatis，使用MyBatis连接数据库
 
 - @Alice
     - 完成学习springboot quick start
@@ -141,17 +148,17 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 ## Discussion
 
 - @锅巴：
-   - 不清楚大家的进度，考虑是否需要前端的展示？建议大家直接练习Mybatis的操作。
-   - 做最简化版的功能，如宠物信息的增删查改，先写一些简单的东西。
-   - Maven和Graddle无偏好，都可以。
- 
+    - 不清楚大家的进度，考虑是否需要前端的展示？建议大家直接练习Mybatis的操作。
+    - 做最简化版的功能，如宠物信息的增删查改，先写一些简单的东西。
+    - Maven和Graddle无偏好，都可以。
+
 - cherie
-  - MVP1流程图足够清晰，把流程图转换为需求，进行系统设计。考虑各种的UseCase，需要什么样的service。
-  - 大公司的做法是由有经验的人进行high level的设计，事先确定好设计，再break成小任务。
+    - MVP1流程图足够清晰，把流程图转换为需求，进行系统设计。考虑各种的UseCase，需要什么样的service。
+    - 大公司的做法是由有经验的人进行high level的设计，事先确定好设计，再break成小任务。
 
 - @小舒：
-  - 建立google Drive存pdf类的资料
-  - 不建议单独设计表，建议分组进行数据库设计
+    - 建立google Drive存pdf类的资料
+    - 不建议单独设计表，建议分组进行数据库设计
 
 - @Alice
     - postman发送API，方便调试；前期可以用一个很简单的前端先熟悉，后面都是直接用API。
@@ -160,13 +167,13 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
     - 大的系统设计可能不适合我们这种小团队，考虑先建数据库，之后进行功能迭代。
 
 ## 下周任务
+
 - 数据库设计：alice和cherie一组，锅巴、小舒、shaw一组。
 - 主持人应该确认好会议大纲，开会前大家需要直接把上一周完成的事项传入github，并且根据大纲事先准备发言，控制会议时间。
 - 锅巴：写一个SpringBoot注解版的todolist。担心大家的学习进度，希望大家及时沟通并提问。
 - Alice：继续学习MyBatis
 - 小舒：学习springboot，完成todolist
 - cherie：学习todolist代码
-
 
 # Date: 30Apr2022
 
@@ -177,32 +184,30 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
     - 看了小程序mongo论坛功能，有回复。
     - 微信接口存储
     - 用户权限不明显，没有后台管理系统权限，操作数据库（简陋）
-  
-- @luying
-没参加
+
+- @luying 没参加
 
 
 - @锅巴：
-   - 学习了微信小程序，并且自己尝试上线了微信小程序来了解这一流程，微信小程序需要开通开发者权限，需要提交身份证以及相关资格证，小程序有自己的云后台数据库管理
-   - 调研了litemall商城，调研文档链接
-   - 搭建了后端技术组的技术博客文档
+    - 学习了微信小程序，并且自己尝试上线了微信小程序来了解这一流程，微信小程序需要开通开发者权限，需要提交身份证以及相关资格证，小程序有自己的云后台数据库管理
+    - 调研了litemall商城，调研文档链接
+    - 搭建了后端技术组的技术博客文档
 
 
 - cherie
-  - 学习了目前文档，熟悉当前的需求
-  - 对于小程序进行了学习，还没有run
-
+    - 学习了目前文档，熟悉当前的需求
+    - 对于小程序进行了学习，还没有run
 
 
 - @小舒：
-- 有web管理系统、web学生系统、小程序端。小程序端实际上是实现了web端学生系统的功能。web管理系统主要功能是管理学生和发布试卷等任务，使用者应为老师。学生系统和小程序主要功能是学生练习及上交试卷，使用者为学生。我们的app设计时，发布待领养动物和领养动物的系统需要分开设计吗？（一点小疑问，因为我记得我们app定位是由NPO组织来发布待领养动物。
+-
+有web管理系统、web学生系统、小程序端。小程序端实际上是实现了web端学生系统的功能。web管理系统主要功能是管理学生和发布试卷等任务，使用者应为老师。学生系统和小程序主要功能是学生练习及上交试卷，使用者为学生。我们的app设计时，发布待领养动物和领养动物的系统需要分开设计吗？（一点小疑问，因为我记得我们app定位是由NPO组织来发布待领养动物。
 
 - @Alice
     - 商用版和非商用版区别，不太清楚springboot框架，准备跟课
     - 小程序
     - pm想要做的事情太多，网页ios andorid都想要，对我们太冗杂
     - spring cloud和spring boot的区别
-
 
 ## Discussion
 
@@ -212,68 +217,65 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 - alice：大家还是应该把文档放到git上，在开会之前，google docs完成
 - cherie:文档信息过于分散，git,slack微信,goole docs,zoom软件过多
 
-
 ## 下周任务
+
 - alice:学习spring boot+小程序,数据库
 - 锅巴：mybatis文档，如何部署项目写文档
 - cherie: 项目跑成功,数据库的增删查改
 - shawn,小舒：跑项目并且写to do list实现最基本功能
 - 下周的会议记录由shaw开始。
 
-
 # Date: 23Apr2022
 
 ## 上周任务汇报
 
 - @shaw（微信）
-  - 学习aws
-  
+    - 学习aws
+
 - @luying
-  - aws & AWS CICD 学习
-  - 复习udemy springboot的课程
+    - aws & AWS CICD 学习
+    - 复习udemy springboot的课程
 
 - @锅巴：
-  - Springboot项目学习：[litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql)
-  - 微信开发者工具stable， 微信需要
-  - 专业技术文档
+    - Springboot项目学习：[litemall](https://github.com/linlinjava/litemall)（springboot+vue+mysql)
+    - 微信开发者工具stable， 微信需要
+    - 专业技术文档
 
 - @小舒：
-  - 学习aws
+    - 学习aws
 
 - @Alice
-  - 熟悉aws
-
+    - 熟悉aws
 
 ## Discussion
 
 - 第一阶段工作：
-  - @锅巴：
-    - 先搭框架实现单一功能
-    - 最简单的竞品（？）：展示宠物照片和内容
-  - @cherrie: 
-    - 后端也需要visualisation
-    - 先做一个MVP：minimum viable product 最小化可行产品
-    - 用户发布照片
-  - @Natalia: 4月24日上午的UIUX会议会讨论需求，一周后TPM静静会给完整需求
+    - @锅巴：
+        - 先搭框架实现单一功能
+        - 最简单的竞品（？）：展示宠物照片和内容
+    - @cherrie:
+        - 后端也需要visualisation
+        - 先做一个MVP：minimum viable product 最小化可行产品
+        - 用户发布照片
+    - @Natalia: 4月24日上午的UIUX会议会讨论需求，一周后TPM静静会给完整需求
 
 - 数据库：
-  - @cherie: 
-    - 数据有很多层，最初数据就是log
-    - AI的model需要大量、清晰数据
-    - 前期不可能考虑AI来搭建数据库，后期有需要可以进行数据导出、迁移、清洗
+    - @cherie:
+        - 数据有很多层，最初数据就是log
+        - AI的model需要大量、清晰数据
+        - 前期不可能考虑AI来搭建数据库，后期有需要可以进行数据导出、迁移、清洗
 
 
 - 其他：
 
-  - @cherie:
-    - 如果在aws上进行操作，要小心超预算
-    - 公众号文章推荐：[从0开始小程序](https://mp.weixin.qq.com/s/vfN0WvSYESSHEKYyRhiMRg)
-  - @小舒：上周静静参加会议有讲是先网页开发，再小程序。具体如何？
-    - @Natalia：4月24日上午的会议会reveal整个项目的规划
+    - @cherie:
+        - 如果在aws上进行操作，要小心超预算
+        - 公众号文章推荐：[从0开始小程序](https://mp.weixin.qq.com/s/vfN0WvSYESSHEKYyRhiMRg)
+    - @小舒：上周静静参加会议有讲是先网页开发，再小程序。具体如何？
+        - @Natalia：4月24日上午的会议会reveal整个项目的规划
 
-  - @Alice：微信作为工作工具不是非常上手，但slack国内需要VPN一直在线不方便，而github不适合实时交流
-    - @cherie：可内部先尝试一下各种工具，但最好所有组统一使用相同的工具，方便信息集中共享
-
+    - @Alice：微信作为工作工具不是非常上手，但slack国内需要VPN一直在线不方便，而github不适合实时交流
+        - @cherie：可内部先尝试一下各种工具，但最好所有组统一使用相同的工具，方便信息集中共享
 
 ## 下周任务
 
@@ -281,10 +283,8 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 
 - 根据4月24日上午的会议来确定后端组短期内的时间和要求
 
-  
-
-
 # [Date: 16Apr2022 wechat]
+
 （会后讨论）
 
 @狗跑：
@@ -294,13 +294,9 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 3. 技术选型：后端开发应先当成没有AI组，功能需要逐步迭代；并且前期数据不够。
 4. 可能需要一个技术上更有经验的人做决策。
 
-
-
 @Alice：
 
 经过内部讨论和探讨，决定将语言确定为java，框架spring boot。数据库会在下次和AI、PM的会议中确定。
-
-
 
 # Date: 16Apr2022
 
@@ -309,41 +305,39 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 - @Alice：上周工作比较忙，这周补上
 - @luying(wechat)：fastapi对新手更友好
 
-  - Automatic documentation 
-  - No need of postman
-  - Data validation
+    - Automatic documentation
+    - No need of postman
+    - Data validation
 - @shaw: 没有倾向
 
-  - django：功能完善，但响应速度相对慢
-  - flask、fastapi：自己开发的部分比较多，但更小巧
+    - django：功能完善，但响应速度相对慢
+    - flask、fastapi：自己开发的部分比较多，但更小巧
 - @小舒：
 
-  - django主要支持的是关系型数据库，没有mongodb官方
-  - flask数据库支持mongodb
+    - django主要支持的是关系型数据库，没有mongodb官方
+    - flask数据库支持mongodb
 - 锅巴：aws的使用iam身份认证，权限设置
-  - 已设置1个30gb，另2个1024GB
-  
-
+    - 已设置1个30gb，另2个1024GB
 
 ## Discussion
 
 - @natialia：前端会议做网页，tob toc网页版；第一版会是html
 - 数据库的讨论
-  - 用什么数据库？
-    - 目前来看，我们依旧需要关系型数据库，一对多的关系。
-    - @锅巴：不太确定产品给我们的需求，表结构设定。
-  
-  - 和AI组协作
-    - @狗跑：AI 和后端独立，数据库独立。
-    - @锅巴：需要考虑怎么调用AI的模型，无论是用tensorflow还是pytorch。
-    - @Natalia： Ai组想达到的技术功能，通过照片/视频识别毛色，优化图片的质量，提高动物被领养的几率，推荐算法，领养人的黑名单
-  
+    - 用什么数据库？
+        - 目前来看，我们依旧需要关系型数据库，一对多的关系。
+        - @锅巴：不太确定产品给我们的需求，表结构设定。
+
+    - 和AI组协作
+        - @狗跑：AI 和后端独立，数据库独立。
+        - @锅巴：需要考虑怎么调用AI的模型，无论是用tensorflow还是pytorch。
+        - @Natalia： Ai组想达到的技术功能，通过照片/视频识别毛色，优化图片的质量，提高动物被领养的几率，推荐算法，领养人的黑名单
+
 - CICD
 
-  - @狗跑 的工作经验：
-    - 代码部署：先去检测自动执行，代码打包到aws，代码手动上线到k8s
-    - git actions 自带详细的文档 链接aws
-    - 环境变量：所有可以默认的配置文件，放到github上
+    - @狗跑 的工作经验：
+        - 代码部署：先去检测自动执行，代码打包到aws，代码手动上线到k8s
+        - git actions 自带详细的文档 链接aws
+        - 环境变量：所有可以默认的配置文件，放到github上
 - @Natalia：会议记录轮流记录加在同一个文件；github上专门一个文件来装reference links
 - @Natalia：四月底五月初，uxui会出结果
 
@@ -352,13 +346,11 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 - @Alice：github actions
 
 - @锅巴：aws user；根据CICD文档来部署CICD文档；尝试部署django for testing；
-  - 自己的用户组策略分配(权限json)，数据库的权限策略分配，将会和papa协商
+    - 自己的用户组策略分配(权限json)，数据库的权限策略分配，将会和papa协商
 
 - @小舒 & @shaw：学习aws，python后端开发的知识
 - @狗跑：在仓库里用github actions打包上传
 - jingjing：项目管理留档很重要；团队同频很重要；项目管理工具miro
-
-
 
 # Date: 09Apr2022
 
@@ -366,46 +358,40 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 
 - @锅巴：08Apr2022才得到aws的权限打开，接下来继续完善教程
 - @Alice：git actions调研
-  - Public repository 免费
-  - 前端、后端、AI组都需要建立
-  - 需要继续调研现有workflow来实现CICD
+    - Public repository 免费
+    - 前端、后端、AI组都需要建立
+    - 需要继续调研现有workflow来实现CICD
 - @小舒：数据库
-  - 上周确定nosql后，比较mongodb 和 dynamoDB
+    - 上周确定nosql后，比较mongodb 和 dynamoDB
 
-  - dynamoDB：API和mysql比较相似
+    - dynamoDB：API和mysql比较相似
 
-  - 功能上都可以实现我们的功能，索引上稍微有不同
+    - 功能上都可以实现我们的功能，索引上稍微有不同
 
-  - `mongodb`可以用多种`cloud`，但部署上在AWS上会更麻烦
+    - `mongodb`可以用多种`cloud`，但部署上在AWS上会更麻烦
 
-  - 部署在云端都要收费，
-    - `mongodb`: pay as you go
+    - 部署在云端都要收费，
+        - `mongodb`: pay as you go
 
-    - `dynamodb`: 一开始会更便宜
+        - `dynamodb`: 一开始会更便宜
 - @shaw: TPM 确定是先做小程序
-  - 前端开发框架：
-    - 主流框架：类vue和类react，都支持跨端
-      类VUE: uni-app（支持跨端：支付宝/微信）
-        使用 Vue.js 开发小程序、H5、App的统一前端框架。  
-        *github：https://github.com/dcloudio/uni-app*
-      类React: taro
-        开源的一款使用 React.js 开发微信小程序的前端框架。
-        *github地址：https://github.com/NervJS/taro*
-      类Vue: WePY（最近官方更新：2020.6.4）
-        *github：https://github.com/Tencent/wepy*
-      类VUE: mpvue（已停止维护）
-        美团团队开源的一款使用 Vue.js 开发微信小程序的前端框架。（已经停止维护）
-        *github地址：https://github.com/Meituan-Dianping/mpvue*
-    
-  - 问题：小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
+    - 前端开发框架：
+        - 主流框架：类vue和类react，都支持跨端 类VUE: uni-app（支持跨端：支付宝/微信） 使用 Vue.js 开发小程序、H5、App的统一前端框架。  
+          *github：https://github.com/dcloudio/uni-app*
+          类React: taro 开源的一款使用 React.js 开发微信小程序的前端框架。
+          *github地址：https://github.com/NervJS/taro*
+          类Vue: WePY（最近官方更新：2020.6.4）
+          *github：https://github.com/Tencent/wepy*
+          类VUE: mpvue（已停止维护） 美团团队开源的一款使用 Vue.js 开发微信小程序的前端框架。（已经停止维护）
+          *github地址：https://github.com/Meituan-Dianping/mpvue*
 
-
+    - 问题：小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
 
 ## Discussion
 
 - @Natalia: 要与前端讨论是否一开始使用小程序，应该本周会得出结论
 - 小程序前端限制更多，后端没有限制，选择后端需要做哪些考量？
-  - 前后端分离的话，不需要考虑平台。
+    - 前后端分离的话，不需要考虑平台。
 - framework: 既然确定用python，那需要在Django VS Flask选择
 
 - @锅巴：aws 虚拟机 ubuntu: 18.04
@@ -413,9 +399,9 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 ## 下周任务
 
 - Luying, Shaw, 小舒：
-  - 调研flask和django，记录在hackmd上
-  - 数据库调研@小舒：可以和AI组的Jeni姐妹配合调研，如果有必要的话可以协商@Natalia 约一个后端组与AI组的跨组会议
-  - 调研flask和django，记录在hackmd
+    - 调研flask和django，记录在hackmd上
+    - 数据库调研@小舒：可以和AI组的Jeni姐妹配合调研，如果有必要的话可以协商@Natalia 约一个后端组与AI组的跨组会议
+    - 调研flask和django，记录在hackmd
 - 锅巴：继续aws部署学习
 - Alice: 继续git actions 学习
 
@@ -425,50 +411,50 @@ https://docs.qq.com/sheet/DRU1qYUFUT3p3YWNE)。
 
 - @Shaw
 
-  - 查看了官方文档：完善基本信息进行审核
+    - 查看了官方文档：完善基本信息进行审核
 
-  - 提交源代码审核
+    - 提交源代码审核
 
-  - 开发语言：前端： 微信自己开发 后端
+    - 开发语言：前端： 微信自己开发 后端
 
-  - 现有的程序，有很多已有的领养，用户不活跃
+    - 现有的程序，有很多已有的领养，用户不活跃
 
 - @锅巴：安卓 iOS 官方文档
 
-  - 安卓开发者文档：Kotlin 静态编程语言；运行下载andriod studio 编译， 语言更偏向于java
+    - 安卓开发者文档：Kotlin 静态编程语言；运行下载andriod studio 编译， 语言更偏向于java
 
-  - iOS：开发文档，swift；苹果应用商店注册备案
+    - iOS：开发文档，swift；苹果应用商店注册备案
 
 - @小舒：数据库
 
-  - `mongodb`：开发更快，但开源，不限制平台
+    - `mongodb`：开发更快，但开源，不限制平台
 
-  - `dynamodb`：`aws`专有，需要继续研究
+    - `dynamodb`：`aws`专有，需要继续研究
 
-  - 微信小程序数据库：和`mongodb`差不多
+    - 微信小程序数据库：和`mongodb`差不多
 
 - @Alice：定下aws+k8s的话，我们就需要使用aws的eks
 
 ## 本次会议讨论内容
 
-#### 1.  数据库
+#### 1. 数据库
 
-   - @papa：当数据库确实时，需要和AI组商讨；但需要更倾向于平台不受限的db，just in case of migrating the cloud if necessary.
+- @papa：当数据库确实时，需要和AI组商讨；但需要更倾向于平台不受限的db，just in case of migrating the cloud if necessary.
 
 #### 2. CI/CD:
 
-   - @Alice: 前端后端都需要。
+- @Alice: 前端后端都需要。
 
 #### 3. peer programming and code review
 
-   - Peer programming: 可以，内部或者邀请senior
-   - Code review: 大家都觉得需要
-   - @锅巴：也需要代码规范的确定
+- Peer programming: 可以，内部或者邀请senior
+- Code review: 大家都觉得需要
+- @锅巴：也需要代码规范的确定
 
-#### 4. 语言: 
+#### 4. 语言:
 
-   - AI & 前端更希望python
-   - 内部还需等全组人员到齐商讨
+- AI & 前端更希望python
+- 内部还需等全组人员到齐商讨
 
 #### 5. 第一阶段任务
 
