@@ -1,6 +1,5 @@
 package furiends.backend.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -30,6 +29,16 @@ public class User {
     private Date createdTime;
 
     private Date updatedTime;
+
+    public User () {}
+
+    public User(String wechatId, int userRole, boolean applicationFlag, String mobileNumber, boolean blacklistFlag) {
+        this.wechatId = wechatId;
+        this.userRole = userRole;
+        this.applicationFlag = applicationFlag;
+        this.mobileNumber = mobileNumber;
+        this.createdTime = new Date();
+    }
 
     public String getWechatId() {
         return wechatId;
