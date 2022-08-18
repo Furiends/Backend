@@ -1,5 +1,6 @@
 package furiends.backend.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -8,26 +9,40 @@ import java.util.Date;
 @Entity(name="user")
 public class User {
     @Id
+    @Column(name = "user_uuid", nullable = false, length = 60)
+    private String userUuid;
+
+    @Column(name = "wechat_id", length = 32)
     private String wechatId;
 
+    @Column(name = "user_role", nullable = false)
     private int userRole;
 
+    @Column(name = "wechat_name", length = 32)
     private String wechatName;
 
+    @Column(name = "application_flag", nullable = false)
     private boolean applicationFlag;
 
+    @Column(name = "mobile_number", nullable = false, length = 13)
     private String mobileNumber;
 
+    @Column(name = "email_address", length = 60)
     private String emailAddress;
 
+    @Column(name = "current_province", length = 32)
     private String currentProvince;
 
+    @Column(name = "current_city", length = 32)
     private String currentCity;
 
+    @Column(name = "blacklist_flag", nullable = false)
     private boolean blacklistFlag;
 
+    @Column(name = "created_time", nullable = false)
     private Date createdTime;
 
+    @Column(name = "updated_time")
     private Date updatedTime;
 
     public User () {}
@@ -39,6 +54,10 @@ public class User {
         this.mobileNumber = mobileNumber;
         this.createdTime = new Date();
     }
+
+    public String getUserUuid() { return userUuid; }
+
+    public void setUserUuid(String userUuid) { this.userUuid = userUuid; }
 
     public String getWechatId() {
         return wechatId;
@@ -128,4 +147,3 @@ public class User {
         this.updatedTime = updatedTime;
     }
 }
-
