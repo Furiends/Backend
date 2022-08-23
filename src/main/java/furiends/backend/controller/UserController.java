@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -19,8 +18,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("getUser/{userId}")
-    public ResponseEntity<Optional<User>> get(@PathVariable("userId")String userId) throws NoSuchElementException{
-        return ResponseEntity.ok(userService.findUserById(userId));
+    public ResponseEntity<User> get(@PathVariable("userId")String userId) throws NoSuchElementException{
+        return ResponseEntity.ok(userService.findUserById(userId).get());
 
     }
 

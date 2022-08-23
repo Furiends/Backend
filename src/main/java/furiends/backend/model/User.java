@@ -5,12 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity(name="user")
 public class User {
     @Id
-    @Column(name = "user_uuid", nullable = false, length = 60)
-    private String userUuid;
+    @Column(name = "id", nullable = false)
+    private String id;
+
+    @Column(name = "open_id", nullable = false)
+    private String openId;
 
     @Column(name = "wechat_id", length = 32)
     private String wechatId;
@@ -47,17 +51,25 @@ public class User {
 
     public User () {}
 
-    public User(String wechatId, int userRole, boolean applicationFlag, String mobileNumber, boolean blacklistFlag) {
-        this.wechatId = wechatId;
-        this.userRole = userRole;
-        this.applicationFlag = applicationFlag;
-        this.mobileNumber = mobileNumber;
-        this.createdTime = new Date();
+    public String getId() {
+        return id;
     }
 
-    public String getUserUuid() { return userUuid; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public void setUserUuid(String userUuid) { this.userUuid = userUuid; }
+    public void setId() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getWechatId() {
         return wechatId;
