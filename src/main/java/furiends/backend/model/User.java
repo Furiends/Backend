@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.uuid.Generators;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity(name="user")
 public class User {
@@ -13,8 +13,11 @@ public class User {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @Column(name = "open_id", nullable = false)
+    @Column(name = "open_id", nullable = false, length = 64)
     private String openId;
+
+    @Column(name = "union_id", nullable = false, length = 64)
+    private String unionId;
 
     @Column(name = "wechat_id", length = 32)
     private String wechatId;
@@ -40,6 +43,9 @@ public class User {
     @Column(name = "current_city", length = 32)
     private String currentCity;
 
+    @Column(name = "identification_number", length = 32)
+    private String identificationNumber;
+
     @Column(name = "blacklist_flag", nullable = false)
     private boolean blacklistFlag;
 
@@ -60,7 +66,7 @@ public class User {
     }
 
     public void setId() {
-        this.id = UUID.randomUUID().toString();
+        this.id = Generators.timeBasedGenerator().generate().toString();
     }
 
     public String getOpenId() {
@@ -69,6 +75,14 @@ public class User {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
     public String getWechatId() {
@@ -133,6 +147,14 @@ public class User {
 
     public void setCurrentCity(String currentCity) {
         this.currentCity = currentCity;
+    }
+
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
     }
 
     public boolean isBlacklistFlag() {
