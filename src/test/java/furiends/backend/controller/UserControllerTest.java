@@ -24,8 +24,7 @@ class UserControllerTest {
     @Mock
     private UserService userService;
 
-    private User mockUser = new User("test_user_1",1,true,
-            "12345",false);
+    private User mockUser = new User();
 
     private ArrayList<User> mockUserList = new ArrayList<User>() {{
         add(mockUser);
@@ -38,10 +37,11 @@ class UserControllerTest {
 
     @Test
     void testGet() {
+        mockUser.setId("test_user_1");
         when(userService.findUserById("test_user_1")).thenReturn(Optional.ofNullable(mockUser));
-        ResponseEntity<Optional<User>> response = userController.get("test_user_1");
+        ResponseEntity<User> response = userController.get("test_user_1");
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(response.getBody().get().getWechatId(), mockUser.getWechatId());
+        Assert.assertEquals(response.getBody().getWechatId(), mockUser.getWechatId());
     }
 
     @Test

@@ -25,8 +25,7 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private User mockUser = new User("test_user_1",1,true,
-            "12345",false);
+    private User mockUser = new User();
 
     private ArrayList<User> mockUserList = new ArrayList<User>() {{
         add(mockUser);
@@ -47,6 +46,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserById() {
+        mockUser.setId("test_user_1");
         when(userRepository.findById("test_user_1")).thenReturn(java.util.Optional.ofNullable(mockUser));
         Optional<User> user = userService.findUserById("test_user_1");
         Assert.assertEquals(user.get().getWechatId(), mockUser.getWechatId());
