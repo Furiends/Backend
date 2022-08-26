@@ -1,9 +1,10 @@
 package furiends.backend.model;
 
+import com.fasterxml.uuid.Generators;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity(name = "organization")
 public class Organization {
@@ -41,7 +42,7 @@ public class Organization {
     }
 
     public void setId() {
-        this.id = UUID.randomUUID().toString();
+        this.id = Generators.timeBasedGenerator().generate().toString();
     }
 
     public void setId(String id) {
