@@ -1,3 +1,3 @@
 package furiends.backend.model;
 
-enum Status {YES, NO, UNKNOWN}
+public enum Status {YES, NO, UNKNOWN}

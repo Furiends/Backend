@@ -40,7 +40,9 @@ public class Pet {
     private String city;
     private String currentAddress;
     private Date rescuedTime;
-    private Boolean isPosted;
+    private Boolean isPublished;
+    private Date postCreatedTime;
+    private Date postUpdateTime;
     private Boolean isAdopted;
     private Date adoptedTime;
     private String adoptionApplicationId;
@@ -195,23 +197,23 @@ public class Pet {
         this.rescuedTime = rescuedTime;
     }
 
-    public Boolean getPosted() {
-        return isPosted;
+    public Boolean getIsPublished() {
+        return isPublished;
     }
 
-    public void setPosted(Boolean posted) {
-        isPosted = posted;
+    public void setIsPublished(Boolean isPublished) {
+        this.isPublished = isPublished;
     }
 
     public Boolean getAdopted() {
         return isAdopted;
     }
 
-    public void setAdopted(Boolean adopted) {
+    public void setIsAdopted(Boolean adopted) {
         isAdopted = adopted;
     }
 
-    public Date getAdoptedTime() {
+    public Date getIsAdoptedTime() {
         return adoptedTime;
     }
 
@@ -266,4 +268,31 @@ public class Pet {
     public void setPostPlacementVisitCount(Integer postPlacementVisitCount) {
         this.postPlacementVisitCount = postPlacementVisitCount;
     }
+
+    public Date getPostCreatedTime() {
+        return postCreatedTime;
+    }
+
+    public void setPostCreatedTime(Date postCreatedTime) {
+        this.postCreatedTime = postCreatedTime;
+    }
+
+    public void setPostCreatedTime(){
+        this.postUpdateTime = new Date();
+    }
+
+    public Date getPostUpdateTime() {
+        return postUpdateTime;
+    }
+
+    public void setPostUpdateTime(){
+        this.postUpdateTime = new Date();
+    }
+
+    public void setPostUpdateTime(Date postUpdateTime) {
+        this.postUpdateTime = postUpdateTime;
+    }
+
+
+
 }
