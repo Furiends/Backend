@@ -22,15 +22,15 @@ public class Pet {
     private String breed;
     private Integer weight;
 
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN)")
+    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
     @Enumerated(EnumType.STRING)
     private Status isVaccinated;
 
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN)")
+    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
     @Enumerated(EnumType.STRING)
     private Status isSpayedOrNeutered;
 
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN)")
+    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
     @Enumerated(EnumType.STRING)
     private Status isDewormed;
 
@@ -102,7 +102,10 @@ public class Pet {
     }
 
     public String getSpecies() {
-        return species.name();
+        if (species != null) {
+            return species.name();
+        }
+        return "";
     }
 
     public void setSpecies(String species) {
@@ -126,7 +129,10 @@ public class Pet {
     }
 
     public String getIsVaccinated() {
-        return isVaccinated.name();
+        if (isVaccinated != null) {
+            return isVaccinated.name();
+        }
+        return "";
     }
 
     public void setIsVaccinated(String isVaccinated) {
@@ -134,7 +140,11 @@ public class Pet {
     }
 
     public String getIsSpayedOrNeutered() {
-        return isSpayedOrNeutered.name();
+        if (isSpayedOrNeutered != null) {
+            return isSpayedOrNeutered.name();
+        }
+        return "";
+
     }
 
     public void setIsSpayedOrNeutered(String isSpayedOrNeutered) {
@@ -142,7 +152,11 @@ public class Pet {
     }
 
     public String getIsDewormed() {
-        return isDewormed.name();
+        if (isDewormed != null) {
+            return isDewormed.name();
+        }
+        return "";
+
     }
 
     public void setIsDewormed(String isDewormed) {
@@ -210,10 +224,10 @@ public class Pet {
     }
 
     public void setIsAdopted(Boolean adopted) {
-        isAdopted = adopted;
+        this.isAdopted = adopted;
     }
 
-    public Date getIsAdoptedTime() {
+    public Date getAdoptedTime() {
         return adoptedTime;
     }
 

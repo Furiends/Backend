@@ -20,39 +20,67 @@ public class PetService {
     @Autowired
     private PetTransformer petTransformer;
 
+    public List<Pet> findAllPets() {
+        return petRepository.findAll();
+    }
+
+    // list all pets within the organization
     public List<Pet> findAllPetsWithinOrganization(String organizationId) {
         return petRepository.findAllByOrganization(organizationId);
     }
 
-
-    public List<Pet> findAllByPostStatus(Boolean isPosted, String organizationId){
-        return petRepository.findAllByPostStatus(isPosted, organizationId);
+    // filter pets by post publish status
+    public List<Pet> findAllByPublishStatus(Boolean isPosted){
+        return petRepository.findAllByPublishStatus(isPosted);
     }
 
-
-    public List<Pet> findAllByAdoptionStatus(Boolean isAdopted,  String organizationId){
-        return petRepository.findAllByAdoptionStatus(isAdopted, organizationId);
+    // (by organization) filter pets by post publish status
+    public List<Pet> findAllByPublishStatusOrg(Boolean isPosted, String organizationId){
+        return petRepository.findAllByPublishStatusOrg(isPosted, organizationId);
     }
 
+    // filter pets by adoption status
+    public List<Pet> findAllByAdoptionStatus(Boolean isAdopted){
+        return petRepository.findAllByAdoptionStatus(isAdopted);
+    }
+
+    // (by organization) filter pets by adoption status
+    public List<Pet> findAllByAdoptionStatusOrg(Boolean isAdopted,  String organizationId){
+        return petRepository.findAllByAdoptionStatusOrg(isAdopted, organizationId);
+    }
 
     public Optional<Pet> findPetById(String id){
         return petRepository.findById(id);
     }
 
     public Pet createPet(PetRequest petRequest){
-        Pet newPet = new Pet();
-        newPet.setId();
-        newPet.setPostCreatedTime();
-        newPet.setPostUpdateTime();
-        petTransformer.fromPetRequestToPet(petRequest, newPet);
-        return petRepository.save(newPet);
+//        Pet newPet = new Pet();
+//        newPet.setId();
+//        newPet.setPostCreatedTime();
+//        newPet.setPostUpdateTime();
+//        // does newPet have the timestamps?
+//        System.out.println("1 " + newPet.getPostCreatedTime());
+//        petTransformer.fromPetRequestToPet(petRequest, newPet);
+        Pet pet = petTransformer.createPetFromRequest(petRequest);
+        // does newPet have the timestamps?
+        System.out.println("2 " + pet.getPostCreatedTime());
+        return petRepository.save(pet);
     }
 
-    public Pet updatePet(PetRequest petRequest, String id){
-        Pet pet = findPetById(id).get();
-        pet.setPostUpdateTime();
-        petTransformer.fromPetRequestToPet(petRequest, pet);
-        return petRepository.save(pet);
+    public Optional<Pet> updatePet(PetRequest petRequest, String id){
+        Optional<Pet> optionalPet = findPetById(id);
+        if (optionalPet.isEmpty()) {
+            return Optional.empty();
+        } else {
+            Pet pet = optionalPet.get();
+            pet.setPostUpdateTime();
+            petTransformer.fromPetRequestToPet(petRequest, pet);
+            Pet pet2 = petTransformer.createPetFromRequest(petRequest);
+            pet2.setId(id);
+            petRepository.save(pet2);
+            return Optional.of(petRepository.save(pet));
+        }
+
 
     }
 

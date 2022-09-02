@@ -11,11 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/pets" )
+@RequestMapping(path = "/api/v1/pets" )
 public class PetController {
 
     private static final Logger logger = LogManager.getLogger(PetController.class);
@@ -23,10 +23,22 @@ public class PetController {
     @Autowired
     private PetService petService;
 
-    // list all pet within the organization
+    // list all pets
     @GetMapping("")
-    public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(String organizationId) {
-        return ResponseEntity.ok(petService.findAllPetsWithinOrganization(organizationId));
+    public ResponseEntity<List<Pet>> getAllPets() {
+        try {
+            return ResponseEntity.ok(petService.findAllPets());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // list all pet within the organization
+    @GetMapping("/organization-pets")
+    public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(@RequestBody PetRequest petRequest) {
+        return ResponseEntity.ok(petService.findAllPetsWithinOrganization(petRequest.getOrganizationId()));
     }
 
     // get pet by id
@@ -42,15 +54,29 @@ public class PetController {
     }
 
     // get pets by publish status (in edit or published), ordered by post's last update time
-    @GetMapping("/Published={isPublished}")
-    public ResponseEntity<List<Pet>> getAllPetsByPublishStatus(@PathVariable("isPublished") boolean isPublished, String organizationId) {
-        return ResponseEntity.ok(petService.findAllByPostStatus(isPublished, organizationId));
+    @GetMapping("/published={isPublished}")
+    public ResponseEntity<List<Pet>> getAllPetsByPublishStatus(@PathVariable("isPublished") boolean isPublished) {
+        return ResponseEntity.ok(petService.findAllByPublishStatus(isPublished));
+    }
+
+
+    // (by organization) get pets by publish status (in edit or published), ordered by post's last update time
+    @GetMapping("/by-organization/published={isPublished}")
+    public ResponseEntity<List<Pet>> getAllPetsByPublishStatusOrg(@PathVariable("isPublished") boolean isPublished, @RequestBody PetRequest petRequest) {
+        return ResponseEntity.ok(petService.findAllByPublishStatusOrg(isPublished, petRequest.getOrganizationId()));
     }
 
     // get pets by adoption status, ordered by post's last update time
-    @GetMapping("/Adopted={isAdopted}")
-    public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatus(@PathVariable("isAdopted") boolean isAdopted, String organizationId) {
-        return ResponseEntity.ok(petService.findAllByAdoptionStatus(isAdopted, organizationId));
+    @GetMapping("/adopted={isAdopted}")
+    public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatus(@PathVariable("isAdopted") boolean isAdopted) {
+        return ResponseEntity.ok(petService.findAllByAdoptionStatus(isAdopted));
+    }
+
+
+    // (by organization) get pets by adoption status, ordered by post's last update time
+    @GetMapping("/by-organization/adopted={isAdopted}")
+    public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatusOrg(@PathVariable("isAdopted") boolean isAdopted, @RequestBody PetRequest petRequest) {
+        return ResponseEntity.ok(petService.findAllByAdoptionStatusOrg(isAdopted, petRequest.getOrganizationId()));
     }
 
 
@@ -69,6 +95,10 @@ public class PetController {
     @PutMapping({"/{id}"})
     public ResponseEntity updatePet(@RequestBody PetRequest petRequest, @PathVariable("id") String id) {
         try {
+            Optional<Pet> optionalPet = petService.updatePet(petRequest, id);
+            if (optionalPet.isEmpty()) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(petService.updatePet(petRequest, id));
         } catch (Exception e) {
             logger.error((e.toString()));
@@ -77,7 +107,7 @@ public class PetController {
     }
 
     // delete a pet
-    @PutMapping({"/{id}"})
+    @DeleteMapping ({"/{id}"})
     public ResponseEntity deletePet(@PathVariable("id") String id) {
         try {
             petService.deletePet(id);
