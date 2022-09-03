@@ -1,11 +1,13 @@
 package furiends.backend.model;
 
 import com.fasterxml.uuid.Generators;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
+@ApiModel(value="机构",description="机构organization")
 @Entity(name = "organization")
 public class Organization {
     @Id

@@ -5,8 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import com.fasterxml.uuid.Generators;
+import io.swagger.annotations.ApiModel;
+
 import java.util.Date;
 
+@ApiModel(value="用户",description="用户user")
 @Entity(name="user")
 public class User {
     @Id
