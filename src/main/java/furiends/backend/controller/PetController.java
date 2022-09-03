@@ -95,10 +95,6 @@ public class PetController {
     @PutMapping({"/{id}"})
     public ResponseEntity updatePet(@RequestBody PetRequest petRequest, @PathVariable("id") String id) {
         try {
-            Optional<Pet> optionalPet = petService.updatePet(petRequest, id);
-            if (optionalPet.isEmpty()) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
             return ResponseEntity.ok(petService.updatePet(petRequest, id));
         } catch (Exception e) {
             logger.error((e.toString()));

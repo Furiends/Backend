@@ -54,34 +54,19 @@ public class PetService {
     }
 
     public Pet createPet(PetRequest petRequest){
-//        Pet newPet = new Pet();
-//        newPet.setId();
-//        newPet.setPostCreatedTime();
-//        newPet.setPostUpdateTime();
-//        // does newPet have the timestamps?
-//        System.out.println("1 " + newPet.getPostCreatedTime());
-//        petTransformer.fromPetRequestToPet(petRequest, newPet);
-        Pet pet = petTransformer.createPetFromRequest(petRequest);
-        // does newPet have the timestamps?
-        System.out.println("2 " + pet.getPostCreatedTime());
-        return petRepository.save(pet);
+        Pet newPet = new Pet();
+        newPet.setId();
+        newPet.setPostCreatedTime();
+        newPet.setPostUpdateTime();
+        petTransformer.fromPetRequestToPet(petRequest, newPet);
+        return petRepository.save(newPet);
     }
 
-    public Optional<Pet> updatePet(PetRequest petRequest, String id){
-        Optional<Pet> optionalPet = findPetById(id);
-        if (optionalPet.isEmpty()) {
-            return Optional.empty();
-        } else {
-            Pet pet = optionalPet.get();
-            pet.setPostUpdateTime();
-            petTransformer.fromPetRequestToPet(petRequest, pet);
-            Pet pet2 = petTransformer.createPetFromRequest(petRequest);
-            pet2.setId(id);
-            petRepository.save(pet2);
-            return Optional.of(petRepository.save(pet));
-        }
-
-
+    public Pet updatePet(PetRequest petRequest, String id){
+        Pet pet = findPetById(id).get();
+        pet.setPostUpdateTime();
+        petTransformer.fromPetRequestToPet(petRequest, pet);
+        return petRepository.save(pet);
     }
 
     public void deletePet(String id) {

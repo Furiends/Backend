@@ -219,7 +219,7 @@ public class Pet {
         this.isPublished = isPublished;
     }
 
-    public Boolean getAdopted() {
+    public Boolean getIsAdopted() {
         return isAdopted;
     }
 
@@ -292,7 +292,7 @@ public class Pet {
     }
 
     public void setPostCreatedTime(){
-        this.postUpdateTime = new Date();
+        this.postCreatedTime = new Date();
     }
 
     public Date getPostUpdateTime() {
