@@ -36,9 +36,9 @@ public class PetController {
     }
 
     // list all pet within the organization
-    @GetMapping("/organization-pets")
-    public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(@RequestBody PetRequest petRequest) {
-        return ResponseEntity.ok(petService.findAllPetsWithinOrganization(petRequest.getOrganizationId()));
+    @GetMapping("/organization={organizationId}/pets")
+    public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(@PathVariable("organizationId") String organizationId) {
+        return ResponseEntity.ok(petService.findAllPetsWithinOrganization(organizationId));
     }
 
     // get pet by id
@@ -61,9 +61,9 @@ public class PetController {
 
 
     // (by organization) get pets by publish status (in edit or published), ordered by post's last update time
-    @GetMapping("/by-organization/published={isPublished}")
-    public ResponseEntity<List<Pet>> getAllPetsByPublishStatusOrg(@PathVariable("isPublished") boolean isPublished, @RequestBody PetRequest petRequest) {
-        return ResponseEntity.ok(petService.findAllByPublishStatusOrg(isPublished, petRequest.getOrganizationId()));
+    @GetMapping("/organization={organizationId}/published={isPublished}")
+    public ResponseEntity<List<Pet>> getAllPetsByPublishStatusOrg(@PathVariable("organizationId") String organizationId, @PathVariable("isPublished") boolean isPublished) {
+        return ResponseEntity.ok(petService.findAllByPublishStatusOrg(organizationId, isPublished));
     }
 
     // get pets by adoption status, ordered by post's last update time
@@ -74,9 +74,9 @@ public class PetController {
 
 
     // (by organization) get pets by adoption status, ordered by post's last update time
-    @GetMapping("/by-organization/adopted={isAdopted}")
-    public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatusOrg(@PathVariable("isAdopted") boolean isAdopted, @RequestBody PetRequest petRequest) {
-        return ResponseEntity.ok(petService.findAllByAdoptionStatusOrg(isAdopted, petRequest.getOrganizationId()));
+    @GetMapping("/organization={organizationId}/adopted={isAdopted}")
+    public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatusOrg(@PathVariable ("organizationId") String organizationId, @PathVariable("isAdopted") boolean isAdopted) {
+        return ResponseEntity.ok(petService.findAllByAdoptionStatusOrg(organizationId, isAdopted));
     }
 
 

@@ -14,13 +14,13 @@ public interface PetRepository extends JpaRepository<Pet, String> {
     @Query("SELECT p FROM pet p WHERE p.isPublished = ?1 ORDER BY p.postUpdateTime")
     List<Pet> findAllByPublishStatus(boolean isPublished);
 
-    @Query("SELECT p FROM pet p WHERE p.isPublished = ?1 ORDER BY p.postUpdateTime")
-    List<Pet> findAllByPublishStatusOrg(boolean isPublished, String organizationId);
+    @Query("SELECT p FROM pet p WHERE p.organizationId = ?1 AND p.isPublished = ?2 ORDER BY p.postUpdateTime")
+    List<Pet> findAllByPublishStatusOrg(String organizationId, boolean isPublished);
 
     @Query("SELECT p FROM pet p WHERE p.isAdopted = ?1 ORDER BY p.postUpdateTime")
     List<Pet> findAllByAdoptionStatus(boolean isAdopted);
 
-    @Query("SELECT p FROM pet p WHERE p.organizationId = ?2 AND p.isAdopted = ?1 ORDER BY p.postUpdateTime")
-    List<Pet> findAllByAdoptionStatusOrg(boolean isAdopted, String organizationId);
+    @Query("SELECT p FROM pet p WHERE p.organizationId = ?1 AND p.isAdopted = ?2 ORDER BY p.postUpdateTime")
+    List<Pet> findAllByAdoptionStatusOrg(String organizationId, boolean isAdopted);
 
 }

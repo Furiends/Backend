@@ -30,13 +30,13 @@ public class PetService {
     }
 
     // filter pets by post publish status
-    public List<Pet> findAllByPublishStatus(Boolean isPosted){
-        return petRepository.findAllByPublishStatus(isPosted);
+    public List<Pet> findAllByPublishStatus(Boolean isPublished){
+        return petRepository.findAllByPublishStatus(isPublished);
     }
 
     // (by organization) filter pets by post publish status
-    public List<Pet> findAllByPublishStatusOrg(Boolean isPosted, String organizationId){
-        return petRepository.findAllByPublishStatusOrg(isPosted, organizationId);
+    public List<Pet> findAllByPublishStatusOrg(String organizationId, Boolean isPosted){
+        return petRepository.findAllByPublishStatusOrg(organizationId, isPosted);
     }
 
     // filter pets by adoption status
@@ -45,8 +45,8 @@ public class PetService {
     }
 
     // (by organization) filter pets by adoption status
-    public List<Pet> findAllByAdoptionStatusOrg(Boolean isAdopted,  String organizationId){
-        return petRepository.findAllByAdoptionStatusOrg(isAdopted, organizationId);
+    public List<Pet> findAllByAdoptionStatusOrg(String organizationId, Boolean isAdopted){
+        return petRepository.findAllByAdoptionStatusOrg(organizationId, isAdopted);
     }
 
     public Optional<Pet> findPetById(String id){
