@@ -15,7 +15,7 @@ public class PetRequest {
     private String isSpayedOrNeutered;
     private String isDewormed;
     private String description;
-    private Integer postalCode;
+    private String postalCode;
     private String province;
     private String city;
     private String currentAddress;
@@ -76,7 +76,7 @@ public class PetRequest {
         return description;
     }
 
-    public Integer getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
