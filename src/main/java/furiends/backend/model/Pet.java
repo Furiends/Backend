@@ -35,7 +35,7 @@ public class Pet {
     private Status isDewormed;
 
     private String description;
-    private Integer postalCode;
+    private String postalCode;
     private String province;
     private String city;
     private String currentAddress;
