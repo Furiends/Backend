@@ -1,10 +1,12 @@
 package furiends.backend.model;
 
 import com.fasterxml.uuid.Generators;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@ApiModel(value="宠物",description="宠物pet")
 @Entity(name = "pet")
 public class Pet {
 
