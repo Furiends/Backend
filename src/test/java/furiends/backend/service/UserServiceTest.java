@@ -41,7 +41,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(mockUserList);
         ArrayList<User> userList = userService.findAllUsers();
         Assert.assertEquals(userList.size(), mockUserList.size());
-        Assert.assertEquals(userList.get(0).getWechatId(), mockUserList.get(0).getWechatId());
+        Assert.assertEquals(userList.get(0).getId(), mockUserList.get(0).getId());
     }
 
     @Test
@@ -49,6 +49,6 @@ class UserServiceTest {
         mockUser.setId("test_user_1");
         when(userRepository.findById("test_user_1")).thenReturn(java.util.Optional.ofNullable(mockUser));
         Optional<User> user = userService.findUserById("test_user_1");
-        Assert.assertEquals(user.get().getWechatId(), mockUser.getWechatId());
+        Assert.assertEquals(user.get().getId(), mockUser.getId());
     }
 }
