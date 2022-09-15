@@ -34,6 +34,8 @@ public class Organization {
     private String welfare;
     private String wechatOfficialAccountId;
 
+    private String adoptionProcedure;
+
     public Organization() {
     }
 
@@ -231,6 +233,14 @@ public class Organization {
 
     public void setWechatOfficialAccountId(String wechatOfficialAccountId) {
         this.wechatOfficialAccountId = wechatOfficialAccountId;
+    }
+
+    public String getAdoptionProcedure() {
+        return adoptionProcedure;
+    }
+
+    public void setAdoptionProcedure(String adoptionProcedure) {
+        this.adoptionProcedure = adoptionProcedure;
     }
 }
 
