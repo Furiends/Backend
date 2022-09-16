@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 
-@RestController()
+@RestController
 @RequestMapping(path = "api/v1/users")
 public class UserController {
     private static final Logger logger = LogManager.getLogger(OrganizationController.class);
