@@ -36,19 +36,19 @@ class UserControllerTest {
     }
 
     @Test
-    void testGet() {
+    void testGetUserById() {
         mockUser.setId("test_user_1");
         when(userService.findUserById("test_user_1")).thenReturn(Optional.ofNullable(mockUser));
-        ResponseEntity<User> response = userController.get("test_user_1");
+        ResponseEntity<User> response = userController.getUserById("test_user_1");
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(response.getBody().getWechatId(), mockUser.getWechatId());
+        Assert.assertEquals(response.getBody().getId(), mockUser.getId());
     }
 
     @Test
-    void testGetAll() {
+    void testGetAllUsers() {
         when(userService.findAllUsers()).thenReturn(mockUserList);
-        ResponseEntity<ArrayList<User>> response = userController.getAll();
+        ResponseEntity<ArrayList<User>> response = userController.getAllUsers();
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(response.getBody().get(0).getWechatId(), mockUserList.get(0).getWechatId());
+        Assert.assertEquals(response.getBody().get(0).getId(), mockUserList.get(0).getId());
     }
 }
