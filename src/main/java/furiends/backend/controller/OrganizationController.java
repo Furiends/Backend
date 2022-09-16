@@ -1,5 +1,7 @@
 package furiends.backend.controller;
 
+import furiends.backend.dto.AdoptionProcedure;
+import furiends.backend.dto.AdoptionProcedureStep;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.service.OrganizationService;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController()
+@RestController
 @RequestMapping(path = "api/v1/organizations")
 public class OrganizationController {
     private static final Logger logger = LogManager.getLogger(OrganizationController.class);
@@ -68,6 +70,31 @@ public class OrganizationController {
     public ResponseEntity deleteOrganization(@PathVariable String id) {
         try {
             organizationService.deleteOrganization(id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // get adoption procedure by organization id
+    @GetMapping("{id}/adoptionProcedure")
+    public ResponseEntity<List<AdoptionProcedureStep>> getOrganizationAdoptionProcedure(@PathVariable("id") String id) {
+        List<AdoptionProcedureStep> adoptionProcedureStepList;
+        try {
+            adoptionProcedureStepList = organizationService.listAdoptionProcedureSteps(id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(adoptionProcedureStepList);
+    }
+
+    // update all adoption procedure by organization id (create and delete operations can also use this API to update)
+    @PostMapping("{id}/adoptionProcedure")
+    public ResponseEntity updateOrganizationAdoptionProcedure(@RequestBody AdoptionProcedure adoptionProcedureRequest, @PathVariable("id") String id) {
+        try {
+            organizationService.updateOrganizationAdoptionProcedure(adoptionProcedureRequest, id);
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
