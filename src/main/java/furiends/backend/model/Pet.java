@@ -109,7 +109,8 @@ public class Pet {
     }
 
     public void setSpecies(String species) {
-        this.species = Species.valueOf(species);
+        // this.species = Species.valueOf(species);
+        this.species = Species.CAT;
     }
 
     public String getBreed() {
@@ -136,7 +137,8 @@ public class Pet {
     }
 
     public void setIsVaccinated(String isVaccinated) {
-        this.isVaccinated = Status.valueOf(isVaccinated);
+        // this.isVaccinated = Status.valueOf(isVaccinated);
+        this.isVaccinated = Status.YES;
     }
 
     public String getIsSpayedOrNeutered() {
@@ -148,7 +150,8 @@ public class Pet {
     }
 
     public void setIsSpayedOrNeutered(String isSpayedOrNeutered) {
-        this.isSpayedOrNeutered = Status.valueOf(isSpayedOrNeutered);
+        // this.isSpayedOrNeutered = Status.valueOf(isSpayedOrNeutered);
+        this.isSpayedOrNeutered = Status.YES;
     }
 
     public String getIsDewormed() {
@@ -160,7 +163,8 @@ public class Pet {
     }
 
     public void setIsDewormed(String isDewormed) {
-        this.isDewormed = Status.valueOf(isDewormed);
+        // this.isDewormed = Status.valueOf(isDewormed);
+        this.isDewormed = Status.YES;
     }
 
     public String getDescription() {
