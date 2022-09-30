@@ -206,8 +206,6 @@ class PetServiceTest {
             String petAId = "pet123";
             mockPetA.setId(petAId);
             when(petService.findPetById(petAId)).thenReturn(Optional.ofNullable(mockPetA));
-            // verify if the postUpdateTime is null before calling the method
-            // assert (mockPetA.getPostUpdateTime() == null);
 
             petService.updatePet(petRequest, petAId);
 
