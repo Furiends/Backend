@@ -6,14 +6,14 @@ import java.util.Date;
 public class PetRequest {
     private String organizationId;
     private String name;
-    private String sex;
+    private Integer sex;
     private Integer age;
-    private String species;
+    private Integer species;
     private String breed;
     private Integer weight;
-    private String isVaccinated;
-    private String isSpayedOrNeutered;
-    private String isDewormed;
+    private Integer isVaccinated;
+    private Integer isSpayedOrNeutered;
+    private Integer isDewormed;
     private String description;
     private String postalCode;
     private String province;
@@ -40,18 +40,16 @@ public class PetRequest {
         return name;
     }
 
-    public String getSex() {
+    public Integer getSex() {
         return sex;
     }
-
     public Integer getAge() {
         return age;
     }
 
-    public String getSpecies() {
+    public Integer getSpecies() {
         return species;
     }
-
     public String getBreed() {
         return breed;
     }
@@ -60,15 +58,15 @@ public class PetRequest {
         return weight;
     }
 
-    public String getIsVaccinated() {
+    public Integer getIsVaccinated() {
         return isVaccinated;
     }
 
-    public String getIsSpayedOrNeutered() {
+    public Integer getIsSpayedOrNeutered() {
         return isSpayedOrNeutered;
     }
 
-    public String getIsDewormed() {
+    public Integer getIsDewormed() {
         return isDewormed;
     }
 

@@ -12,28 +12,17 @@ public class Pet {
     private String id;
     private String organizationId;
     private String name;
-    private String sex;
+    // {0: unknown, 1: female, 2: male}
+    private Integer sex;
     private Integer age;
-
-    @Column(columnDefinition = "ENUM('CAT', 'DOG')")
-    @Enumerated(EnumType.STRING)
-    private Species species;
-
+    // {1: dog, 2: cat}
+    private Integer species;
     private String breed;
     private Integer weight;
-
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
-    @Enumerated(EnumType.STRING)
-    private Status isVaccinated;
-
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
-    @Enumerated(EnumType.STRING)
-    private Status isSpayedOrNeutered;
-
-    @Column(columnDefinition = "ENUM('YES', 'NO', 'UNKNOWN')")
-    @Enumerated(EnumType.STRING)
-    private Status isDewormed;
-
+    // {0: unknown, 1: yes, 2: no}
+    private Integer isVaccinated;
+    private Integer isSpayedOrNeutered;
+    private Integer isDewormed;
     private String description;
     private String postalCode;
     private String province;
@@ -85,11 +74,11 @@ public class Pet {
         this.name = name;
     }
 
-    public String getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -101,15 +90,12 @@ public class Pet {
         this.age = age;
     }
 
-    public String getSpecies() {
-        if (species != null) {
-            return species.name();
-        }
-        return "";
+    public Integer getSpecies() {
+        return species;
     }
 
-    public void setSpecies(String species) {
-        this.species = Species.valueOf(species);
+    public void setSpecies(Integer species) {
+        this.species = species;
     }
 
     public String getBreed() {
@@ -128,39 +114,28 @@ public class Pet {
         this.weight = weight;
     }
 
-    public String getIsVaccinated() {
-        if (isVaccinated != null) {
-            return isVaccinated.name();
-        }
-        return "";
+    public Integer getIsVaccinated() {
+        return isVaccinated;
     }
 
-    public void setIsVaccinated(String isVaccinated) {
-        this.isVaccinated = Status.valueOf(isVaccinated);
+    public void setIsVaccinated(Integer isVaccinated) {
+        this.isVaccinated = isVaccinated;
     }
 
-    public String getIsSpayedOrNeutered() {
-        if (isSpayedOrNeutered != null) {
-            return isSpayedOrNeutered.name();
-        }
-        return "";
-
+    public Integer getIsSpayedOrNeutered() {
+        return isSpayedOrNeutered;
     }
 
-    public void setIsSpayedOrNeutered(String isSpayedOrNeutered) {
-        this.isSpayedOrNeutered = Status.valueOf(isSpayedOrNeutered);
+    public void setIsSpayedOrNeutered(Integer isSpayedOrNeutered) {
+        this.isSpayedOrNeutered = isSpayedOrNeutered;
     }
 
-    public String getIsDewormed() {
-        if (isDewormed != null) {
-            return isDewormed.name();
-        }
-        return "";
-
+    public Integer getIsDewormed() {
+        return isDewormed;
     }
 
-    public void setIsDewormed(String isDewormed) {
-        this.isDewormed = Status.valueOf(isDewormed);
+    public void setIsDewormed(Integer isDewormed) {
+        this.isDewormed = isDewormed;
     }
 
     public String getDescription() {
