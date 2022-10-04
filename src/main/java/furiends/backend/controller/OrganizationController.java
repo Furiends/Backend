@@ -2,6 +2,7 @@ package furiends.backend.controller;
 
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.service.OrganizationService;
@@ -95,6 +96,31 @@ public class OrganizationController {
     public ResponseEntity updateOrganizationAdoptionProcedure(@RequestBody AdoptionProcedure adoptionProcedureRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationAdoptionProcedure(adoptionProcedureRequest, id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // get benefits by organization id
+    @GetMapping("{id}/benefits")
+    public ResponseEntity<List<String>> getOrganizationBenefits(@PathVariable("id") String id) {
+        List<String> benefitsList;
+        try {
+            benefitsList = organizationService.listOrganizationBenefits(id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(benefitsList);
+    }
+
+    // update all benefits by organization id (create and delete operations can also use this API to update)
+    @PostMapping("{id}/benefits")
+    public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits organizationBenefitsRequest, @PathVariable("id") String id) {
+        try {
+            organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -31,7 +31,7 @@ public class Organization {
     private Integer postPlacementVisitCounts;
     private String organizationFromAddress;
     private Integer adoptionPetCounts;
-    private String welfare;
+    private String benefits;
     private String wechatOfficialAccountId;
 
     private String adoptionProcedure;
@@ -219,12 +219,12 @@ public class Organization {
         this.adoptionPetCounts = adoptionPetCounts;
     }
 
-    public String getWelfare() {
-        return welfare;
+    public String getBenefits() {
+        return benefits;
     }
 
-    public void setWelfare(String welfare) {
-        this.welfare = welfare;
+    public void setBenefits(String benefits) {
+        this.benefits = benefits;
     }
 
     public String getWechatOfficialAccountId() {
