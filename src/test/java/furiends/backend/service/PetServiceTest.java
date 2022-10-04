@@ -1,19 +1,16 @@
 package furiends.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.repository.PetRepository;
 import furiends.backend.transformer.PetTransformer;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +50,7 @@ class PetServiceTest {
         when(petRepository.findAll()).thenReturn(mockPetList);
         List<Pet> allPets = petService.findAllPets();
         assertEquals(allPets.size(), mockPetList.size());
-        if (allPets.size() > 0 && mockPetList.size() > 0) {
+        if (allPets.size() > 0) {
             assertEquals(allPets.get(0).getId(), mockPetList.get(0).getId());
         }
     }
@@ -165,8 +162,7 @@ class PetServiceTest {
     }
 
     @Test
-    void createPet() {
-        try {
+    void createPet() throws JsonProcessingException {
             String name = "Kit";
             int age = 2;
             String breed = "German Shepherd";
@@ -188,15 +184,10 @@ class PetServiceTest {
             assert(!petCaptorValue.getId().isEmpty());
             assert(petCaptorValue.getPostUpdateTime() != null);
             assert(petCaptorValue.getPostCreatedTime() != null);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
-    void updatePet() {
-        try {
+    void updatePet() throws JsonProcessingException {
             String name = "Kit";
             int age = 2;
             String breed = "German Shepherd";
@@ -216,9 +207,6 @@ class PetServiceTest {
             Mockito.verify(petRepository, times(1)).save(any(Pet.class));
             Pet petCaptorValue = petCaptor.getValue();
             assert (petCaptorValue.getPostUpdateTime() != null);
-        }  catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test

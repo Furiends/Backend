@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.service.PetService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -127,40 +126,31 @@ class PetControllerTest {
     }
 
     @Test
-    void createPet() {
-        try {
-            String name = "Kit";
-            int age = 2;
-            String breed = "German Shepherd";
-            String jsonInString = "{\"name\":\"" + name + "\",\"age\":\"" + age + "\",\"breed\":\"" + breed + "\"}";
-            PetRequest petRequest = mapper.readValue(jsonInString, PetRequest.class);
+    void createPet() throws JsonProcessingException {
+        String name = "Kit";
+        int age = 2;
+        String breed = "German Shepherd";
+        String jsonInString = "{\"name\":\"" + name + "\",\"age\":\"" + age + "\",\"breed\":\"" + breed + "\"}";
+        PetRequest petRequest = mapper.readValue(jsonInString, PetRequest.class);
 
-            when(petService.createPet(petRequest)).thenReturn(mockPetA);
-            ResponseEntity responseEntity = petController.createPet(petRequest);
-            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-            assertEquals(mockPetA, responseEntity.getBody());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
+        when(petService.createPet(petRequest)).thenReturn(mockPetA);
+        ResponseEntity responseEntity = petController.createPet(petRequest);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockPetA, responseEntity.getBody());
     }
 
     @Test
-    void updatePet() {
-        try {
-            String id = "123456";
-            String name = "Kit";
-            int age = 2;
-            String breed = "German Shepherd";
-            String jsonInString = "{\"name\":\"" + name + "\",\"age\":\"" + age + "\",\"breed\":\"" + breed + "\"}";
-            PetRequest petRequest = mapper.readValue(jsonInString, PetRequest.class);
+    void updatePet() throws JsonProcessingException {
+        String id = "123456";
+        String name = "Kit";
+        int age = 2;
+        String breed = "German Shepherd";
+        String jsonInString = "{\"name\":\"" + name + "\",\"age\":\"" + age + "\",\"breed\":\"" + breed + "\"}";
+        PetRequest petRequest = mapper.readValue(jsonInString, PetRequest.class);
 
-            when(petService.updatePet(petRequest, id)).thenReturn(mockPetA);
-            ResponseEntity responseEntity = petController.updatePet(petRequest, id);
-            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        when(petService.updatePet(petRequest, id)).thenReturn(mockPetA);
+        ResponseEntity responseEntity = petController.updatePet(petRequest, id);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
     }
 
