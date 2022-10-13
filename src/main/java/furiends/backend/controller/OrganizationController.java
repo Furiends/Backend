@@ -77,6 +77,30 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // register an organization by Wechat
+    @PostMapping("orgRegisterByWechat/{code}")
+    public ResponseEntity orgRegisterByWechat(@RequestBody OrganizationRequest organizationRequest, @PathVariable String code){
+        try {
+            organizationService.registerOrganizationByWechat(organizationRequest, code);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    //login an organization by WeChat
+    @PostMapping("orgLoginByWechat/{code}")
+    public ResponseEntity<Organization> orgLoginByWechat(@PathVariable String code){
+        Organization organization ;
+        try {
+            organization = organizationService.loginOrganizationByWechat(code);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return  ResponseEntity.ok(organization);
+    }
     // get adoption procedure by organization id
     @GetMapping("{id}/adoptionProcedure")
     public ResponseEntity<List<AdoptionProcedureStep>> getOrganizationAdoptionProcedure(@PathVariable("id") String id) {
