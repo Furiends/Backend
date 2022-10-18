@@ -2,6 +2,7 @@ package furiends.backend.controller;
 
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.service.OrganizationService;
@@ -79,10 +80,10 @@ public class OrganizationController {
 
     // register an organization by WeChat
     @PostMapping("orgRegisterByWechat/{code}")
-    public ResponseEntity orgRegisterByWechat(@RequestBody OrganizationRequest organizationRequest, @PathVariable String code){
+    public ResponseEntity orgRegisterByWechat(@RequestBody OrganizationRequest organizationRequest, @PathVariable String code) {
         try {
             organizationService.registerOrganizationByWechat(organizationRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,16 +92,17 @@ public class OrganizationController {
 
     //login an organization by WeChat
     @PostMapping("orgLoginByWechat/{code}")
-    public ResponseEntity<Organization> orgLoginByWechat(@PathVariable String code){
-        Organization organization ;
+    public ResponseEntity<Organization> orgLoginByWechat(@PathVariable String code) {
+        Organization organization;
         try {
             organization = organizationService.loginOrganizationByWechat(code);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return  ResponseEntity.ok(organization);
+        return ResponseEntity.ok(organization);
     }
+
     // get adoption procedure by organization id
     @GetMapping("{id}/adoptionProcedure")
     public ResponseEntity<List<AdoptionProcedureStep>> getOrganizationAdoptionProcedure(@PathVariable("id") String id) {
@@ -126,12 +128,40 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
+
     @GetMapping("verifyInvitationCode/{code}")
     public ResponseEntity verifyInvitationCode(@PathVariable("code") String code) {
-       boolean flag = organizationService.verifyInvitationCode(code);
-       if(!flag){
-           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-       }
-       return new ResponseEntity<>(HttpStatus.OK);
+        boolean flag = organizationService.verifyInvitationCode(code);
+        if (!flag) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-}
+
+    @GetMapping("{id}/benefits")
+        public ResponseEntity<List<String>> getOrganizationBenefits (@PathVariable("id") String id){
+            List<String> benefitsList;
+            try {
+                benefitsList = organizationService.listOrganizationBenefits(id);
+            } catch (Exception e) {
+                logger.error(e.toString());
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return ResponseEntity.ok(benefitsList);
+        }
+
+        // update all benefits by organization id (create and delete operations can also use this API to update)
+        @PostMapping("{id}/benefits")
+        public ResponseEntity updateOrganizationBenefits (@RequestBody OrganizationBenefits
+        organizationBenefitsRequest, @PathVariable("id") String id){
+            try {
+                organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
+            } catch (Exception e) {
+                logger.error(e.toString());
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity(HttpStatus.OK);
+
+        }
+    }

@@ -3,6 +3,7 @@ package furiends.backend.service;
 import com.alibaba.fastjson.JSONObject;
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
@@ -95,10 +96,28 @@ public class OrganizationService {
         organizationRepository.save(organization);
     }
 
-    public boolean verifyInvitationCode(String invitationCode){
+
+    public boolean verifyInvitationCode(String invitationCode) {
         //TODO replace INVITATION_CODE
         String INVITATION_CODE = "FuriendsCodeForOrg";
         return invitationCode.equals(INVITATION_CODE);
+
+    }
+
+    public List<String> listOrganizationBenefits(String organizationId) {
+        Organization organization = findOrganizationById(organizationId).get();
+        String benefitsString = organization.getBenefits();
+        List<String> benefitsList = organizationTransformer.fromJsonStringToBenefitsList(benefitsString);
+        return benefitsList;
+    }
+
+    public void updateOrganizationBenefits(OrganizationBenefits benefitsRequest, String organizationId) {
+        Organization organization = findOrganizationById(organizationId).get();
+        if (organization == null) return;
+        String benefitsString = organizationTransformer.fromOrganizationBenefitsToJsonString(benefitsRequest);
+        organization.setBenefits(benefitsString);
+        organizationRepository.save(organization);
+
     }
 }
 
