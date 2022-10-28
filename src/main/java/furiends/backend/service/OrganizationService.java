@@ -42,6 +42,7 @@ public class OrganizationService {
     public void updateOrganization(OrganizationRequest organizationRequest, String id) {
         Organization organizationInstance = findOrganizationById(id).get();
         organizationTransformer.fromOrganizationRequestToOrganization(organizationRequest, organizationInstance);
+        // TODO: add org photo upload; update new url for org icon
         organizationRepository.save(organizationInstance);
     }
 

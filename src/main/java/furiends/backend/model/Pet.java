@@ -18,6 +18,8 @@ public class Pet {
     // {1: dog, 2: cat}
     private Integer species;
     private String breed;
+    // {1: small; 2: medium; 3: large}
+    private Integer size;
     private Integer weight;
     // {0: unknown, 1: yes, 2: no}
     private Integer isVaccinated;
@@ -105,6 +107,10 @@ public class Pet {
     public void setBreed(String breed) {
         this.breed = breed;
     }
+
+    public Integer getSize() { return size; }
+
+    public void setSize(Integer size) { this.size = size; }
 
     public Integer getWeight() {
         return weight;

@@ -14,6 +14,7 @@ public class PetTransformer {
         newPet.setAge(petRequest.getAge());
         newPet.setSpecies(petRequest.getSpecies());
         newPet.setBreed(petRequest.getBreed());
+        newPet.setSize(petRequest.getSize());
         newPet.setWeight(petRequest.getWeight());
         newPet.setIsVaccinated(petRequest.getIsVaccinated());
         newPet.setIsSpayedOrNeutered(petRequest.getIsSpayedOrNeutered());
