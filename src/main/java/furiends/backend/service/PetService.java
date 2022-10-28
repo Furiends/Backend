@@ -49,6 +49,17 @@ public class PetService {
         return petRepository.findAllByAdoptionStatusOrg(organizationId, isAdopted);
     }
 
+    // find all dogs
+    public List<Pet> findAllDogs(){
+        return petRepository.findAllDogs();
+    }
+
+    // find all cats
+    public List<Pet> findAllCats(){
+        return petRepository.findAllCats();
+    }
+
+    // find a pet with pet ID
     public Optional<Pet> findPetById(String id){
         return petRepository.findById(id);
     }
