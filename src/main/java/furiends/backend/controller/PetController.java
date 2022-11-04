@@ -35,11 +35,24 @@ public class PetController {
         }
     }
 
-    // list all pet within the organization
+    // list all pets within the organization
     @GetMapping("/organization={organizationId}/pets")
     public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(@PathVariable("organizationId") String organizationId) {
         return ResponseEntity.ok(petService.findAllPetsWithinOrganization(organizationId));
     }
+
+    // list all dogs
+    @GetMapping("/dogs")
+    public ResponseEntity<List<Pet>> getAllDogs() {
+        return ResponseEntity.ok(petService.findAllDogs());
+    }
+
+    // list all dogs
+    @GetMapping("/cats")
+    public ResponseEntity<List<Pet>> getAllCats() {
+        return ResponseEntity.ok(petService.findAllCats());
+    }
+
 
     // get pet by id
     @GetMapping("/{id}")

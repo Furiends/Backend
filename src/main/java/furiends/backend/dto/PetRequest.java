@@ -10,6 +10,7 @@ public class PetRequest {
     private Integer age;
     private Integer species;
     private String breed;
+    private Integer size;
     private Integer weight;
     private Integer isVaccinated;
     private Integer isSpayedOrNeutered;
@@ -54,6 +55,7 @@ public class PetRequest {
         return breed;
     }
 
+    public Integer getSize() { return  size;}
     public Integer getWeight() {
         return weight;
     }
