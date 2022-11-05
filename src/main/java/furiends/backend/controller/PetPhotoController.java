@@ -54,17 +54,4 @@ public class PetPhotoController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
-
-    // update pet photos for a pet
-    @PutMapping("{petId}")
-    public ResponseEntity updatePetPhotoByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
-        try {
-            petPhotoService.createCosClient();
-            petPhotoService.updatePetPhotos(petId, petPhotoList);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity(HttpStatus.OK);
-    }
 }

@@ -37,7 +37,8 @@ public class PetPhotoTransformer {
 
     public PetPhotoResponse fromPetPhotoToResponse(String petId, List<String> keyList,
                                                    COSClient cosClient, String bucketName) {
-        List<String> newUrlList = new ArrayList<String>();
+        List<String> newUrlList = new ArrayList<>();
+        // get urls for each photo of the pet from cos
         for (int i = 0; i < keyList.size(); i++) {
             Date expirationDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
             URL url = cosClient.generatePresignedUrl(bucketName, keyList.get(i), expirationDate, HttpMethodName.GET);

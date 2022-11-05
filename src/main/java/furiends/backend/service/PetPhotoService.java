@@ -5,6 +5,8 @@ import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.http.HttpProtocol;
+import com.qcloud.cos.model.DeleteObjectsRequest;
+import com.qcloud.cos.model.DeleteObjectsRequest.KeyVersion;
 import com.qcloud.cos.region.Region;
 import furiends.backend.dto.PetPhotoResponse;
 import furiends.backend.model.PetPhoto;
@@ -42,6 +44,10 @@ public class PetPhotoService {
         cosClient = new COSClient(cred, clientConfig);
     }
 
+    public void shutDownCosClient () {
+        cosClient.shutdown();
+    }
+
     public List<PetPhoto> findAllPetPhotos() {
         return petPhotoRepository.findAll();
     }
@@ -53,7 +59,7 @@ public class PetPhotoService {
     }
 
     public List<PetPhotoResponse> findAllCoverForPetList(List<String> petIdList) {
-        List<PetPhotoResponse> petPhotoResponsesList =  new ArrayList<PetPhotoResponse>();
+        List<PetPhotoResponse> petPhotoResponsesList =  new ArrayList<>();
         for (String petId : petIdList) {
             List<String> coverList = petPhotoRepository.findById(petId).get().getPetPhotoKeyList().subList(0,1);
             PetPhotoResponse newPetPhotoResponse = petPhotoTransformer.fromPetPhotoToResponse(petId, coverList, cosClient, bucketName);
@@ -70,9 +76,21 @@ public class PetPhotoService {
     }
 
     public void updatePetPhotos(String petId, List<MultipartFile> petPhotoList) throws IOException{
+        deletePetPhotos(petId);
         PetPhoto petPhoto = petPhotoRepository.findById(petId).get();
         petPhotoTransformer.fromRequestToPetPhoto(petPhotoList, petPhoto, cosClient, bucketName);
         petPhotoRepository.save(petPhoto);
+    }
+
+    public void deletePetPhotos(String petId) {
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName);
+        List<String> keyStringList = petPhotoRepository.findById(petId).get().getPetPhotoKeyList();
+        List<KeyVersion> keyList = new ArrayList<>();
+        for (String key : keyStringList) {
+            keyList.add(new KeyVersion(key));
+        }
+        deleteObjectsRequest.setKeys(keyList);
+        cosClient.deleteObjects(deleteObjectsRequest);
     }
 }
 
