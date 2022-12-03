@@ -24,6 +24,10 @@ public class PetService {
         return petRepository.findAll();
     }
 
+    public List<String> findAllPetIds() {
+        return petRepository.findAllIds();
+    }
+
     // list all pets within the organization
     public List<Pet> findAllPetsWithinOrganization(String organizationId) {
         return petRepository.findAllByOrganization(organizationId);
