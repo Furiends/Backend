@@ -3,6 +3,7 @@ package furiends.backend.controller;
 import furiends.backend.dto.PetPhotoResponse;
 import furiends.backend.model.PetPhoto;
 import furiends.backend.service.PetPhotoService;
+import furiends.backend.service.PetService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PetPhotoController {
     private static final Logger logger = LogManager.getLogger(PetPhotoController.class);
     @Autowired
     private PetPhotoService petPhotoService;
+
+    @Autowired
+    private PetService petService;
 
     // get a list of all pet ids and their photos
     @GetMapping("")
@@ -43,7 +47,21 @@ public class PetPhotoController {
         return ResponseEntity.ok(petPhotoResponse);
     }
 
-    // TODO: find all covers for all pets
+    // find all covers for all pets
+    @GetMapping(value = "/allCovers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PetPhotoResponse>> getAllCoversForAllPets() {
+        List<PetPhotoResponse> allCoversForAllPets;
+        try {
+            petPhotoService.createCosClient();
+            List<String> petIdList = petService.findAllPetIds();
+            allCoversForAllPets = petPhotoService.findAllCoverForPetList(petIdList);
+            petPhotoService.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(allCoversForAllPets);
+    }
 
     // create pet photos for a pet
     @PostMapping(value = "/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -59,7 +77,19 @@ public class PetPhotoController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // TODO: update pet photos for a pet
+    // update pet photos for a pet
+    @PostMapping(value = "/update/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updatePetPhotosByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
+        try {
+            petPhotoService.createCosClient();
+            petPhotoService.updatePetPhotos(petId, petPhotoList);
+            petPhotoService.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     // delete pet photos for a pet
     @DeleteMapping(value = "/{petId}")
