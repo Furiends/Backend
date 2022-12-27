@@ -25,7 +25,7 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
-    // list all organizations
+    // list all applicants to one specific organization
     @GetMapping("application/organizationId={organizationId}")
     public ResponseEntity<List<Application>> findAllApplicantsByOrganization(@PathVariable("organizationId") String organizationId) {
         try {
