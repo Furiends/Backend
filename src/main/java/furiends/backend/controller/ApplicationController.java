@@ -25,6 +25,18 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
+    // list all organizations
+    @GetMapping("application/organizationId={organizationId}")
+    public ResponseEntity<List<Application>> findAllApplicantsByOrganization(@PathVariable("organizationId") String organizationId) {
+        try {
+            return ResponseEntity.ok(applicationService.findAllApplicantsByOrganization(organizationId));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("application/pet={petId}")
     public ResponseEntity<List<Application>> findApplicationByPetId(@PathVariable("petId") String petId){
         try {

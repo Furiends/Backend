@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface ApplicationRepository extends JpaRepository<Application, String> {
     List<Application> findApplicationByPetId(String PetId);
+
     List<Application> findApplicationByUserId(String UserId);
+
+    List<Application> findAllApplicantsByOrganization(String organizationId);
 
     @Query("SELECT a FROM application a WHERE a.userId = ?1 AND a.applicationStatus = ?2")
     List<Application> listApplicationWithStatus(String userId,int status);
-
 }

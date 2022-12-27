@@ -25,5 +25,9 @@ public class ApplicationService {
         return applicationRepository.listApplicationWithStatus(UserId, status);
     }
 
+    public List<Application> findAllApplicantsByOrganization(String organizationId) {
+        return applicationRepository.findAllApplicantsByOrganization(organizationId);
+    }
+
 
 }
