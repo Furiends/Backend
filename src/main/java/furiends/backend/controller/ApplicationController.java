@@ -1,20 +1,15 @@
 package furiends.backend.controller;
 
 import furiends.backend.model.Application;
-import furiends.backend.model.Organization;
 import furiends.backend.service.ApplicationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/application")
@@ -70,4 +65,24 @@ public class ApplicationController {
         }
     }
 
+    @GetMapping("application/applicationId={applicationId}")
+    public ResponseEntity<Application>findApplicationById(@PathVariable("applicationId") String applicationId){
+        try {
+            return ResponseEntity.ok(applicationService.findApplicationById(applicationId).get());
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("application/applicationId={applicationId}/status={status}")
+    public ResponseEntity updateApplicationStatus(@PathVariable("applicationId") String applicationId, @PathVariable("status") int status){
+        try {
+            applicationService.updateApplicationStatus(applicationId, status);
+        } catch (Exception e){
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
