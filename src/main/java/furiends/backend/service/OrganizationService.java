@@ -1,17 +1,19 @@
 package furiends.backend.service;
 
-import furiends.backend.dto.AdoptionProcedure;
-import furiends.backend.dto.AdoptionProcedureStep;
-import furiends.backend.dto.OrganizationBenefits;
-import furiends.backend.dto.OrganizationRequest;
+import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
 import furiends.backend.transformer.OrganizationTransformer;
+import furiends.backend.utils.CloudAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -80,6 +82,68 @@ public class OrganizationService {
         String benefitsString = organizationTransformer.fromOrganizationBenefitsToJsonString(benefitsRequest);
         organization.setBenefits(benefitsString);
         organizationRepository.save(organization);
+    }
+
+    // find adoption agreements by organization id
+    // if onlyLatest is true, only return the first agreement; otherwise return all
+    public List<AdoptionAgreement> findAdoptionAgreementByOrgId (String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(organizationId).get();
+        String adoptionAgreementsString = organization.getAdoptionAgreements();
+        List<AdoptionAgreement> adoptionAgreementList = (organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementsString));
+        List<AdoptionAgreement> response = new ArrayList<AdoptionAgreement>();
+        if (onlyLatest) {
+            response.add(adoptionAgreementList.get(0));
+        } else {
+            for (AdoptionAgreement agreement : adoptionAgreementList) {
+                agreement.setUrl(cloudAPI.readFromCloud(agreement.getKey()));
+                response.add(agreement);
+            }
+        }
+        return response;
+    }
+
+    public List<AdoptionAgreement> addOrganizationAdoptionAgreement (String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
+        String category = "AdoptionAgreement";
+        // TODO: add error handling
+        Organization organization = findOrganizationById(organizationId).get();
+        String adoptionAgreementString = organization.getAdoptionAgreements();
+        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementString);
+        // upload to cloud
+        Map<String, String> agreementData = cloudAPI.uploadToCloud(newAgreement, organizationId, category);
+        AdoptionAgreement newAdoptionAgreement = new AdoptionAgreement(agreementData.get("key"), agreementData.get("fileName"), agreementData.get("uploadDate"));
+        // add the new agreement to the start of the agreement list
+        adoptionAgreementList.add(0, newAdoptionAgreement);
+        // update adoption agreements of the current organization
+        String newAdoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
+        organization.setAdoptionAgreements(newAdoptionAgreementString);
+        organizationRepository.save(organization);
+
+        return findAdoptionAgreementByOrgId(organizationId, false, cloudAPI);
+    }
+
+    // update: change agreements order or delete one agreement
+    public void updateOrganizationAdoptionAgreement(String organizationId, String key, Boolean toDelete, CloudAPI cloudAPI) {
+        Organization organization =  findOrganizationById(organizationId).get();
+        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
+        AdoptionAgreement temp = null;
+        for (AdoptionAgreement agreement : adoptionAgreementList) {
+            if (agreement.getKey().equals(key)) {
+                temp = agreement;
+                adoptionAgreementList.remove(agreement);
+            }
+        }
+        if (toDelete) {
+            List<String> toDeleteList = new ArrayList<>();
+            toDeleteList.add(key);
+            cloudAPI.deleteFile(toDeleteList);
+        } else {
+            // move the agreement to the top(start) of the list
+            adoptionAgreementList.add(0, temp);
+        }
+        String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
+        organization.setAdoptionAgreements(adoptionAgreementString);
+        organizationRepository.save(organization);
+
     }
 }
 

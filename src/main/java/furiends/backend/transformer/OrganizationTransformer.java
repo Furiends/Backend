@@ -3,10 +3,7 @@ package furiends.backend.transformer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import furiends.backend.dto.AdoptionProcedure;
-import furiends.backend.dto.AdoptionProcedureStep;
-import furiends.backend.dto.OrganizationBenefits;
-import furiends.backend.dto.OrganizationRequest;
+import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import org.springframework.stereotype.Component;
 
@@ -92,5 +89,32 @@ public class OrganizationTransformer {
             e.printStackTrace();
         }
         return benefitsString;
+    }
+
+
+    public String fromAdoptionAgreementListToJsonString (List<AdoptionAgreement> adoptionAgreementList) {
+        if (adoptionAgreementList == null) return "";
+        String adoptionAgreementString = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            adoptionAgreementString = mapper.writeValueAsString(adoptionAgreementList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return adoptionAgreementString;
+    }
+
+
+    public List<AdoptionAgreement> fromJsonStringToAdoptionAgreementList(String adoptionAgreementsString) {
+        List<AdoptionAgreement> adoptionAgreementList = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        if (adoptionAgreementsString == null || adoptionAgreementsString.length() == 0) return adoptionAgreementList;
+        try {
+            adoptionAgreementList = mapper.readValue(adoptionAgreementsString, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return adoptionAgreementList;
     }
 }

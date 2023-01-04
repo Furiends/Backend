@@ -1,17 +1,16 @@
 package furiends.backend.controller;
 
-import furiends.backend.dto.AdoptionProcedure;
-import furiends.backend.dto.AdoptionProcedureStep;
-import furiends.backend.dto.OrganizationBenefits;
-import furiends.backend.dto.OrganizationRequest;
+import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import furiends.backend.service.OrganizationService;
+import furiends.backend.utils.CloudAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = "api/v1/organizations")
 public class OrganizationController {
+    String bucket = "";
+    String secretId = "";
+    String secretKey = "";
     private static final Logger logger = LogManager.getLogger(OrganizationController.class);
     @Autowired
     private OrganizationService organizationService;
@@ -127,4 +129,61 @@ public class OrganizationController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
+    // get all adoption agreements by organization id
+    // When only the current effective agreement is requested, onlyLatest should be True
+    @GetMapping("{id}/adoptionAgreement/onlyLatest={onlyLatest}")
+    public ResponseEntity<List<AdoptionAgreement>> getOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("onlyLatest") Boolean onlyLatest) {
+        List<AdoptionAgreement> adoptionAgreementList;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            adoptionAgreementList = organizationService.findAdoptionAgreementByOrgId(id, onlyLatest, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(adoptionAgreementList);
+    }
+
+    @PostMapping("{id}/adoptionAgreement")
+    public ResponseEntity<List<AdoptionAgreement>> addOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody MultipartFile newAgreement) {
+        List<AdoptionAgreement> adoptionAgreementList;
+        try {
+//             TODO: Is there a concurrency issue?
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            adoptionAgreementList = organizationService.addOrganizationAdoptionAgreement(id, newAgreement, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(adoptionAgreementList);
+    }
+
+    // update adoption agreements (pin an existing agreement to the top OR delete an agreement)
+    @PutMapping("{id}/adoptionAgreement")
+    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id,  @RequestParam String key, @RequestParam Boolean toDelete) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            organizationService.updateOrganizationAdoptionAgreement(id, key,  toDelete, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
 }

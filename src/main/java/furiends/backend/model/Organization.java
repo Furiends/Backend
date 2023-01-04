@@ -33,8 +33,8 @@ public class Organization {
     private Integer adoptionPetCounts;
     private String benefits;
     private String wechatOfficialAccountId;
-
     private String adoptionProcedure;
+    private String adoptionAgreements;
 
     public Organization() {
     }
@@ -242,5 +242,15 @@ public class Organization {
     public void setAdoptionProcedure(String adoptionProcedure) {
         this.adoptionProcedure = adoptionProcedure;
     }
+
+    public String getAdoptionAgreements() {
+        return adoptionAgreements;
+    }
+
+    public void setAdoptionAgreements(String adoptionAgreements) {
+        this.adoptionAgreements = adoptionAgreements;
+    }
+
+
 }
 
