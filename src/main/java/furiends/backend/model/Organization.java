@@ -2,6 +2,7 @@ package furiends.backend.model;
 
 import com.fasterxml.uuid.Generators;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class Organization {
     private String benefits;
     private String wechatOfficialAccountId;
     private String adoptionProcedure;
+    @Column(columnDefinition = "TEXT")
     private String adoptionAgreements;
 
     public Organization() {

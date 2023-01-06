@@ -172,11 +172,11 @@ public class OrganizationController {
             cloudAPI.createCosClient(bucket, secretId, secretKey);
             organizationService.updateOrganizationAdoptionAgreement(id, key,  toDelete, cloudAPI);
             cloudAPI.shutDownCosClient();
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
 

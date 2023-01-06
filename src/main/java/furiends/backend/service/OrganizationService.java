@@ -11,10 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrganizationService {
@@ -91,12 +88,11 @@ public class OrganizationService {
         String adoptionAgreementsString = organization.getAdoptionAgreements();
         List<AdoptionAgreement> adoptionAgreementList = (organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementsString));
         List<AdoptionAgreement> response = new ArrayList<AdoptionAgreement>();
-        if (onlyLatest) {
-            response.add(adoptionAgreementList.get(0));
-        } else {
-            for (AdoptionAgreement agreement : adoptionAgreementList) {
-                agreement.setUrl(cloudAPI.readFromCloud(agreement.getKey()));
-                response.add(agreement);
+        for (AdoptionAgreement agreement : adoptionAgreementList) {
+            agreement.setUrl(cloudAPI.readFromCloud(agreement.getKey()));
+            response.add(agreement);
+            if (onlyLatest) {
+                return response;
             }
         }
         return response;
@@ -126,10 +122,12 @@ public class OrganizationService {
         Organization organization =  findOrganizationById(organizationId).get();
         List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
         AdoptionAgreement temp = null;
-        for (AdoptionAgreement agreement : adoptionAgreementList) {
+        Iterator<AdoptionAgreement> it = adoptionAgreementList.iterator();
+        while (it.hasNext()) {
+            AdoptionAgreement agreement = it.next();
             if (agreement.getKey().equals(key)) {
                 temp = agreement;
-                adoptionAgreementList.remove(agreement);
+                it.remove();
             }
         }
         if (toDelete) {
