@@ -21,7 +21,7 @@ public class OrganizationRequest {
     private Integer postPlacementVisitCounts;
     private String organizationFromAddress;
     private Integer adoptionPetCounts;
-    private String welfare;
+    private String benefits;
     private String wechatOfficialAccountId;
 
     public String getName() {
@@ -96,8 +96,8 @@ public class OrganizationRequest {
         return adoptionPetCounts;
     }
 
-    public String getWelfare() {
-        return welfare;
+    public String getBenefits() {
+        return benefits;
     }
 
     public String getWechatOfficialAccountId() {
