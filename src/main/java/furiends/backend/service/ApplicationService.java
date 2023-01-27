@@ -1,9 +1,7 @@
 package furiends.backend.service;
 
 import furiends.backend.model.Application;
-import furiends.backend.model.User;
 import furiends.backend.repository.ApplicationRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +26,4 @@ public class ApplicationService {
     public List<Application> findAllApplicantsByOrganization(String organizationId) {
         return applicationRepository.findAllApplicantsByOrganization(organizationId);
     }
-
-
 }
