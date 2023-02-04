@@ -58,8 +58,7 @@ public class CloudAPI {
             Map<String, String> result = new HashMap<>();
             // generate an object key to locate the file in the cloud
             String key = entityId + "_" + category + "_"
-                    + Generators.timeBasedGenerator().generate().toString() + "_"
-                    + FilenameUtils.getName(file.getOriginalFilename());
+                    + Generators.timeBasedGenerator().generate().toString();
             result.put("key", key);
             // record file name
             String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());

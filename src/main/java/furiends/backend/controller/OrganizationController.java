@@ -148,11 +148,12 @@ public class OrganizationController {
         return ResponseEntity.ok(adoptionAgreementList);
     }
 
+
+    // add a new adoption agreement
     @PostMapping("{id}/adoptionAgreement")
     public ResponseEntity<List<AdoptionAgreement>> addOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody MultipartFile newAgreement) {
         List<AdoptionAgreement> adoptionAgreementList;
         try {
-//             TODO: Is there a concurrency issue?
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
             adoptionAgreementList = organizationService.addOrganizationAdoptionAgreement(id, newAgreement, cloudAPI);
@@ -164,13 +165,26 @@ public class OrganizationController {
         return ResponseEntity.ok(adoptionAgreementList);
     }
 
-    // update adoption agreements (pin an existing agreement to the top OR delete an agreement)
+    // update the order of adoption agreements (by pinning an existing agreement to the top)
     @PutMapping("{id}/adoptionAgreement")
-    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id,  @RequestParam String key, @RequestParam Boolean toDelete) {
+    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
+        try {
+            organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // delete one adoption agreement
+    @DeleteMapping("{id}/adoptionAgreement/{key}")
+    public ResponseEntity deleteOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("key") String key) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
-            organizationService.updateOrganizationAdoptionAgreement(id, key,  toDelete, cloudAPI);
+            organizationService.deleteOrganizationAdoptionAgreement(id, key, cloudAPI);
             cloudAPI.shutDownCosClient();
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
@@ -178,6 +192,8 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
 
 

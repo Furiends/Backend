@@ -117,31 +117,27 @@ public class OrganizationService {
         return findAdoptionAgreementByOrgId(organizationId, false, cloudAPI);
     }
 
-    // update: change agreements order or delete one agreement
-    public void updateOrganizationAdoptionAgreement(String organizationId, String key, Boolean toDelete, CloudAPI cloudAPI) {
+
+    // update: change agreements order by topping one of them
+    public void updateOrganizationAdoptionAgreement(String organizationId, List<AdoptionAgreement> updatedAdoptionAgreementList) {
+        Organization organization =  findOrganizationById(organizationId).get();
+        String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(updatedAdoptionAgreementList);
+        organization.setAdoptionAgreements(adoptionAgreementString);
+        organizationRepository.save(organization);
+    }
+
+
+    // delete one agreement
+    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
         Organization organization =  findOrganizationById(organizationId).get();
         List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
-        AdoptionAgreement temp = null;
-        Iterator<AdoptionAgreement> it = adoptionAgreementList.iterator();
-        while (it.hasNext()) {
-            AdoptionAgreement agreement = it.next();
-            if (agreement.getKey().equals(key)) {
-                temp = agreement;
-                it.remove();
-            }
-        }
-        if (toDelete) {
-            List<String> toDeleteList = new ArrayList<>();
-            toDeleteList.add(key);
-            cloudAPI.deleteFile(toDeleteList);
-        } else {
-            // move the agreement to the top(start) of the list
-            adoptionAgreementList.add(0, temp);
-        }
+        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
+        List<String> toDeleteList = new ArrayList<>();
+        toDeleteList.add(key);
+        cloudAPI.deleteFile(toDeleteList);
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
         organizationRepository.save(organization);
-
     }
 }
 
