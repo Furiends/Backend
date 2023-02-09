@@ -16,6 +16,7 @@ import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.region.Region;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +28,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-// TODO: which tag to use?
-@Service
+@Component
 public class CloudAPI {
     COSClient cosClient = null;
     String bucket = null;
@@ -75,13 +75,10 @@ public class CloudAPI {
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, inputStream, objectMetadata);
             cosClient.putObject(putObjectRequest);
             return result;
-        } catch (CosServiceException e) {
-            e.printStackTrace();
         } catch (CosClientException e) {
             e.printStackTrace();
+            throw e;
         }
-        // TODO: return null?
-        return null;
     }
 
     // read a file from the cloud
@@ -91,9 +88,8 @@ public class CloudAPI {
             return cosClient.generatePresignedUrl(bucket, objectKey, expirationDate, HttpMethodName.GET);
         } catch (CosClientException e) {
             e.printStackTrace();
+            throw e;
         }
-        // TODO: return null?
-        return null;
     }
 
     // delete a file by objectKey
@@ -110,9 +106,10 @@ public class CloudAPI {
             // 如果部分删除成功部分失败, 返回 MultiObjectDeleteException
             List<DeleteObjectsResult.DeletedObject> deleteObjects = mde.getDeletedObjects();
             List<MultiObjectDeleteException.DeleteError> deleteErrors = mde.getErrors();
-        } catch (CosServiceException e) {
-            e.printStackTrace();
+            // Failure in deleting files from the cloud won't affect user's experience, therefore we log the error without throwing.
+            mde.printStackTrace();
         } catch (CosClientException e) {
+            // Failure in deleting files from the cloud won't affect user's experience, therefore we log the error without throwing.
             e.printStackTrace();
         }
 

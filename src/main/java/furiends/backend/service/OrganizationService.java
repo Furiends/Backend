@@ -100,7 +100,6 @@ public class OrganizationService {
 
     public List<AdoptionAgreement> addOrganizationAdoptionAgreement (String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
         String category = "AdoptionAgreement";
-        // TODO: add error handling
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementString = organization.getAdoptionAgreements();
         List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementString);
