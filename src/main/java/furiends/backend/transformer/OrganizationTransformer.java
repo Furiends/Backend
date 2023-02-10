@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,6 @@ public class OrganizationTransformer {
         newOrganization.setLastPostPlacementVisitDate(organizationRequest.getLastPostPlacementVisitDate());
         newOrganization.setOrganizationFromAddress(organizationRequest.getOrganizationFromAddress());
         newOrganization.setPostPlacementVisitCounts(organizationRequest.getPostPlacementVisitCounts());
-        newOrganization.setWelfare(organizationRequest.getWelfare());
         newOrganization.setWechatOfficialAccountId(organizationRequest.getWechatOfficialAccountId());
     }
 
@@ -64,5 +64,33 @@ public class OrganizationTransformer {
             e.printStackTrace();
         }
         return adoptionProcedureString;
+    }
+
+    public List<String> fromJsonStringToBenefitsList(String benefitsString) {
+        List<String> benefitsList = new ArrayList<>();
+        if (benefitsString == null || benefitsString.length() == 0) return benefitsList;
+        OrganizationBenefits benefitsInstance;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            benefitsInstance = mapper.readValue(benefitsString, new TypeReference<>() {
+            });
+            benefitsList = benefitsInstance.getBenefits();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return benefitsList;
+    }
+
+    public String fromOrganizationBenefitsToJsonString(OrganizationBenefits benefits) {
+        if (benefits == null) return "";
+        String benefitsString = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            benefitsString = mapper.writeValueAsString(benefits);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return benefitsString;
     }
 }

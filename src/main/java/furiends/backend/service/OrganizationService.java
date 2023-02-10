@@ -2,6 +2,7 @@ package furiends.backend.service;
 
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
@@ -41,6 +42,7 @@ public class OrganizationService {
     public void updateOrganization(OrganizationRequest organizationRequest, String id) {
         Organization organizationInstance = findOrganizationById(id).get();
         organizationTransformer.fromOrganizationRequestToOrganization(organizationRequest, organizationInstance);
+        // TODO: add org photo upload; update new url for org icon
         organizationRepository.save(organizationInstance);
     }
 
@@ -62,6 +64,21 @@ public class OrganizationService {
         if (organization == null) return;
         String adoptionProcedureString = organizationTransformer.fromAdoptionProcedureToJsonString(adoptionProcedureRequest);
         organization.setAdoptionProcedure(adoptionProcedureString);
+        organizationRepository.save(organization);
+    }
+
+    public List<String> listOrganizationBenefits(String organizationId) {
+        Organization organization = findOrganizationById(organizationId).get();
+        String benefitsString = organization.getBenefits();
+        List<String> benefitsList = organizationTransformer.fromJsonStringToBenefitsList(benefitsString);
+        return benefitsList;
+    }
+
+    public void updateOrganizationBenefits(OrganizationBenefits benefitsRequest, String organizationId) {
+        Organization organization = findOrganizationById(organizationId).get();
+        if (organization == null) return;
+        String benefitsString = organizationTransformer.fromOrganizationBenefitsToJsonString(benefitsRequest);
+        organization.setBenefits(benefitsString);
         organizationRepository.save(organization);
     }
 }
