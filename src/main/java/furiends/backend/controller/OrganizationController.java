@@ -77,11 +77,11 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // register an organization by Wechat
+    // register an organization by WeChat
     @PostMapping("orgRegisterByWechat/{code}")
     public ResponseEntity orgRegisterByWechat(@RequestBody OrganizationRequest organizationRequest, @PathVariable String code){
         try {
-            organizationService.registerOrganizationByWechat(organizationRequest, code);
+            organizationService.registerOrganizationByWechat(organizationRequest);
         }catch (Exception e){
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -124,5 +124,14 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("verifyInvitationCode/{code}")
+    public ResponseEntity verifyInvitationCode(@PathVariable("code") String code) {
+       boolean flag = organizationService.verifyInvitationCode(code);
+       if(!flag){
+           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+       return new ResponseEntity<>(HttpStatus.OK);
     }
 }

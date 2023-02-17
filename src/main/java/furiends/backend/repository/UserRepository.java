@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     @Override
     ArrayList<User> findAll();
+
+    User findUserByOpenIdAndUnionId(String openId, String unionId);
 }

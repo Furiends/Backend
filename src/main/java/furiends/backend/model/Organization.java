@@ -12,8 +12,6 @@ public class Organization {
     private String id;
 
     private String name;
-    private String union_id;
-    private String open_id;
     private String description;
     private String icon;
     private String representativeUserId;
@@ -61,22 +59,6 @@ public class Organization {
         this.name = name;
     }
 
-    public String getUnion_id() {
-        return union_id;
-    }
-
-    public void setUnion_id(String union_id) {
-        this.union_id = union_id;
-    }
-
-    public String getOpen_id() {
-        return open_id;
-    }
-
-    public void setOpen_id(String open_id) {
-        this.open_id = open_id;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -117,8 +99,8 @@ public class Organization {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setUpdatedTime() {
+        new Date();
     }
 
     public String getProvince() {

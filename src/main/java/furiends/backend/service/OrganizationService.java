@@ -6,6 +6,7 @@ import furiends.backend.dto.AdoptionProcedureStep;
 import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
+import furiends.backend.repository.UserRepository;
 import furiends.backend.transformer.OrganizationTransformer;
 import furiends.backend.utils.WeChatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class OrganizationService {
     @Resource
     private OrganizationRepository organizationRepository;
 
+    @Resource
+    private UserRepository userRepository;
+
     @Autowired
     private OrganizationTransformer organizationTransformer;
 
@@ -33,12 +37,13 @@ public class OrganizationService {
         return organizationRepository.findById(id);
     }
 
-    public void createOrganization(OrganizationRequest organizationRequest) {
+
+    public Organization createOrganization(OrganizationRequest organizationRequest) {
         Organization newOrganization = new Organization();
         newOrganization.setId();
         newOrganization.setCreatedTime();
         organizationTransformer.fromOrganizationRequestToOrganization(organizationRequest, newOrganization);
-        organizationRepository.save(newOrganization);
+        return  newOrganization;
     }
 
     public void updateOrganization(OrganizationRequest organizationRequest, String id) {
@@ -53,16 +58,9 @@ public class OrganizationService {
         }
     }
 
-    public void registerOrganizationByWechat(OrganizationRequest organizationRequest, String code){
-
-        createOrganization(organizationRequest);
-
-        String wechatOfficialAccountId = organizationRequest.getWechatOfficialAccountId();
-        Organization organization = organizationRepository.findOrganizationByWechatOfficialAccountId(wechatOfficialAccountId);
-
-        JSONObject jsonObject = WeChatUtil.getJSONObject(code);
-        organization.setOpen_id(WeChatUtil.getOpenId(jsonObject));
-        organization.setUnion_id(WeChatUtil.getUnionId(jsonObject));
+    public void registerOrganizationByWechat(OrganizationRequest organizationRequest){
+        Organization organization = createOrganization(organizationRequest);
+        organization.setUpdatedTime();
         organizationRepository.save(organization);
     }
 
@@ -70,16 +68,13 @@ public class OrganizationService {
         JSONObject jsonObject = WeChatUtil.getJSONObject(code);
         String open_id = jsonObject.getString("open_id");
         String union_id = jsonObject.getString("union_id");
-
         if (open_id.isBlank() || union_id.isBlank()) {
             throw new RuntimeException();
         }
-        Organization organization =  organizationRepository.findOrganizationByUnion_idAndOpen_id(open_id, union_id);
-        if(organization == null){
-            throw new RuntimeException();
-        }
 
-        organization.setUpdatedTime(new Date());
+        String representativeUserId = userRepository.findUserByOpenIdAndUnionId(open_id,union_id).getWechatId();
+        Organization organization = organizationRepository.findOrganizationByRepresentativeUserId(representativeUserId);
+        organization.setUpdatedTime();
         organizationRepository.save(organization);
         return organization;
     }
@@ -95,10 +90,15 @@ public class OrganizationService {
 
     public void updateOrganizationAdoptionProcedure(AdoptionProcedure adoptionProcedureRequest, String organizationId) {
         Organization organization = findOrganizationById(organizationId).get();
-        if (organization == null) return;
         String adoptionProcedureString = organizationTransformer.fromAdoptionProcedureToJsonString(adoptionProcedureRequest);
         organization.setAdoptionProcedure(adoptionProcedureString);
         organizationRepository.save(organization);
+    }
+
+    public boolean verifyInvitationCode(String invitationCode){
+        //TODO replace INVITATION_CODE
+        String INVITATION_CODE = "FuriendsCodeForOrg";
+        return invitationCode.equals(INVITATION_CODE);
     }
 }
 

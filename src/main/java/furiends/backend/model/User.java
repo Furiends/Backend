@@ -25,8 +25,8 @@ public class User {
     @Column(name = "user_role", nullable = false)
     private int userRole;
 
-    @Column(name = "wechat_name", length = 32)
-    private String wechatName;
+    @Column(name = "user_name", length = 32)
+    private String userName;
 
     @Column(name = "application_flag", nullable = false)
     private boolean applicationFlag;
@@ -101,12 +101,12 @@ public class User {
         this.userRole = userRole;
     }
 
-    public String getWechatName() {
-        return wechatName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setWechatName(String wechatName) {
-        this.wechatName = wechatName;
+    public void setUser_name(String userName) {
+        this.userName = userName;
     }
 
     public boolean isApplicationFlag() {
@@ -169,15 +169,15 @@ public class User {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    public void setCreatedTime() {
+        this.createdTime = new Date();
     }
 
     public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setUpdatedTime() {
+        this.updatedTime = new Date();
     }
 }
