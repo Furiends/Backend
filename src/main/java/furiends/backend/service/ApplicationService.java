@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 @Service
 public class ApplicationService {
@@ -24,6 +25,14 @@ public class ApplicationService {
     public List<Application> listApplicationWithStatus(String UserId, int status){
         return applicationRepository.listApplicationWithStatus(UserId, status);
     }
+
+    public Application updateRejectReason(String ApplicationId,  String rejectReason){
+        Application application = applicationRepository.findApplicationByApplicationId(ApplicationId);
+        application.setRejectionReason(rejectReason);
+        application.setUpdatedTime();
+        return applicationRepository.save(application);
+    }
+
 
 
 }

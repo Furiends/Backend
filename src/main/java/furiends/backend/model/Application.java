@@ -1,5 +1,7 @@
 package furiends.backend.model;
 
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -145,8 +147,8 @@ public class Application {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setUpdatedTime() {
+        this.updatedTime = new Date();
     }
 
     public String getPostPlacementVisitFormId() {
