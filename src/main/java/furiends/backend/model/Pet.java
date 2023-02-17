@@ -9,38 +9,91 @@ import java.util.Date;
 public class Pet {
 
     @Id
+    @Column(name = "id", nullable = false)
     private String id;
+
+    @Column(name = "organization_id", nullable = false, length = 64)
     private String organizationId;
+
+    @Column(name = "name", nullable = false)
     private String name;
-    // {0: unknown, 1: female, 2: male}
-    private Integer sex;
+
+    @Column(name = "sex", nullable = false)
+    private Integer sex;  // {0: unknown, 1: female, 2: male}
+
+    @Column(name = "age", nullable = false)
     private Integer age;
-    // {1: dog, 2: cat}
-    private Integer species;
+
+    @Column(name = "species", nullable = false)
+    private Integer species;  // {1: dog, 2: cat}
+
+    @Column(name = "breed", nullable = false, length = 64)
     private String breed;
-    // {1: small; 2: medium; 3: large}
-    private Integer size;
+
+    @Column(name = "size", nullable = false)
+    private Integer size; // {1: small; 2: medium; 3: large}
+
+    @Column(name = "weight")
     private Integer weight;
-    // {0: unknown, 1: yes, 2: no}
-    private Integer isVaccinated;
-    private Integer isSpayedOrNeutered;
-    private Integer isDewormed;
+
+    @Column(name = "is_vaccinated", nullable = false)
+    private Integer isVaccinated;  // {0: unknown, 1: yes, 2: no}
+
+    @Column(name = "is_spayed_or_neutered", nullable = false)
+    private Integer isSpayedOrNeutered;  // {0: unknown, 1: yes, 2: no}
+
+    @Column(name = "is_dewormed", nullable = false)
+    private Integer isDewormed;  // {0: unknown, 1: yes, 2: no}
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "postal_code", nullable = false, length = 64)
     private String postalCode;
+
+    @Column(name = "province", nullable = false, length = 64)
     private String province;
+
+    @Column(name = "city", nullable = false, length = 64)
     private String city;
+
+    @Column(name = "current_address", nullable = false)
     private String currentAddress;
+
+    @Column(name = "rescued_time", nullable = false)
     private Date rescuedTime;
+
+    @Column(name = "is_published", nullable = false)
     private Boolean isPublished;
+
+    @Column(name = "post_created_time")
     private Date postCreatedTime;
+
+    @Column(name = "post_update_time")
     private Date postUpdateTime;
+
+    @Column(name = "is_adopted")
     private Boolean isAdopted;
+
+    @Column(name = "adopted_time")
     private Date adoptedTime;
+
+    @Column(name = "adoption_application_id")
     private String adoptionApplicationId;
+
+    @Column(name = "return_count")
     private Integer returnCount;
+
+    @Column(name = "application_count")
     private Integer applicationCount;
+
+    @Column(name = "last_post_placement_visit_form_id")
     private String lastPostPlacementVisitFormId;
+
+    @Column(name = "last_post_placement_visit_date")
     private Date lastPostPlacementVisitDate;
+
+    @Column(name = "post_placement_visit_count")
     private Integer postPlacementVisitCount;
 
     public Pet() {
