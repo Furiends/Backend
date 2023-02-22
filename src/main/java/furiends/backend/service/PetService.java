@@ -1,13 +1,24 @@
 package furiends.backend.service;
 
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.http.HttpProtocol;
+import com.qcloud.cos.model.DeleteObjectsRequest;
+import com.qcloud.cos.region.Region;
+import furiends.backend.dto.PetPhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.repository.PetRepository;
 import furiends.backend.transformer.PetTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +30,11 @@ public class PetService {
 
     @Autowired
     private PetTransformer petTransformer;
+
+    private COSClient cosClient = null;
+
+    private String bucketName = "furiends-photos-1312443161";
+
 
     public List<Pet> findAllPets() {
         return petRepository.findAll();
@@ -90,8 +106,61 @@ public class PetService {
         }
     }
 
+    public void createCosClient () {
+        String secretId = "";
+        String secretKey = "";
+        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
+        Region region = new Region("ap-guangzhou");
+        ClientConfig clientConfig = new ClientConfig(region);
+        clientConfig.setHttpProtocol(HttpProtocol.https);
+        cosClient = new COSClient(cred, clientConfig);
+    }
 
+    public void shutDownCosClient () {
+        cosClient.shutdown();
+    }
 
+    public PetPhotoResponse findPetPhotosByPetId(String petId) {
+        List<String> keyList = petRepository.findById(petId).get().getPetPhotoKeyList();
+        PetPhotoResponse newPetPhotoResponse = petTransformer.fromPetPhotoToResponse(petId, keyList, cosClient, bucketName);
+        return newPetPhotoResponse;
+    }
 
+    public List<PetPhotoResponse> findAllCoverForPetList(List<String> petIdList) {
+        List<PetPhotoResponse> petPhotoResponsesList =  new ArrayList<>();
+        for (String petId : petIdList) {
+            List<String> coverList = petRepository.findById(petId).get().getPetPhotoKeyList().subList(0,1);
+            PetPhotoResponse newPetPhotoResponse = petTransformer.fromPetPhotoToResponse(petId, coverList, cosClient, bucketName);
+            petPhotoResponsesList.add(newPetPhotoResponse);
+        }
+        return petPhotoResponsesList;
+    }
 
+    public void createPetPhotos(String petId, List<MultipartFile> petPhotoList) throws IOException {
+        Pet pet = petRepository.findById(petId).get();
+        petTransformer.fromRequestToPetPhoto(petPhotoList, pet, cosClient, bucketName);
+        petRepository.save(pet);
+    }
+
+    public void updatePetPhotos(String petId, List<MultipartFile> petPhotoList) throws IOException {
+        deletePetPhotos(petId);
+        Pet pet = petRepository.findById(petId).get();
+        petTransformer.fromRequestToPetPhoto(petPhotoList, pet, cosClient, bucketName);
+        petRepository.save(pet);
+    }
+
+    public void deletePetPhotos(String petId) {
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName);
+        Pet pet = petRepository.findById(petId).get();
+        List<String> keyStringList = pet.getPetPhotoKeyList();
+        List<DeleteObjectsRequest.KeyVersion> keyList = new ArrayList<>();
+        for (String key : keyStringList) {
+            keyList.add(new DeleteObjectsRequest.KeyVersion(key));
+        }
+        deleteObjectsRequest.setKeys(keyList);
+        cosClient.deleteObjects(deleteObjectsRequest);
+        keyStringList.clear();
+        pet.setPetPhotoKeyList(keyStringList);
+        petRepository.save(pet);
+    }
 }

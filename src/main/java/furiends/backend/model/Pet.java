@@ -4,6 +4,7 @@ import com.fasterxml.uuid.Generators;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "pet")
 public class Pet {
@@ -42,6 +43,8 @@ public class Pet {
     private String lastPostPlacementVisitFormId;
     private Date lastPostPlacementVisitDate;
     private Integer postPlacementVisitCount;
+    @ElementCollection
+    private List<String> petPhotoKeyList;
 
     public Pet() {
     }
@@ -288,6 +291,12 @@ public class Pet {
         this.postUpdateTime = postUpdateTime;
     }
 
+    public List<String> getPetPhotoKeyList() {
+        return petPhotoKeyList;
+    }
 
+    public void setPetPhotoKeyList(List<String> petPhotoKeyList) {
+        this.petPhotoKeyList = petPhotoKeyList;
+    }
 
 }
