@@ -30,10 +30,10 @@ public class Pet {
     @Column(name = "breed", nullable = false, length = 64)
     private String breed;
 
-    @Column(name = "size", nullable = false)
+    @Column(name = "size")
     private Integer size; // {1: small; 2: medium; 3: large}
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     private Integer weight;
 
     @Column(name = "is_vaccinated", nullable = false)
@@ -48,7 +48,7 @@ public class Pet {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "postal_code", nullable = false, length = 64)
+    @Column(name = "postal_code", length = 64)
     private String postalCode;
 
     @Column(name = "province", nullable = false, length = 64)
@@ -63,7 +63,7 @@ public class Pet {
     @Column(name = "rescued_time", nullable = false)
     private Date rescuedTime;
 
-    @Column(name = "is_published", nullable = false)
+    @Column(name = "is_published")
     private Boolean isPublished;
 
     @Column(name = "post_created_time")
@@ -95,6 +95,7 @@ public class Pet {
 
     @Column(name = "post_placement_visit_count")
     private Integer postPlacementVisitCount;
+
 
     public Pet() {
     }
@@ -340,7 +341,5 @@ public class Pet {
     public void setPostUpdateTime(Date postUpdateTime) {
         this.postUpdateTime = postUpdateTime;
     }
-
-
 
 }
