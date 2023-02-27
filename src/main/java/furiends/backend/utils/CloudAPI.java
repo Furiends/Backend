@@ -18,6 +18,7 @@ import com.qcloud.cos.region.Region;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.beans.JavaBean;
@@ -57,8 +58,9 @@ public class CloudAPI {
         try {
             Map<String, String> result = new HashMap<>();
             // generate an object key to locate the file in the cloud
+            String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
             String key = entityId + "_" + category + "_"
-                    + Generators.timeBasedGenerator().generate().toString();
+                    + Generators.timeBasedGenerator().generate().toString() + "." + extension;
             result.put("key", key);
             // record file name
             String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
