@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -128,14 +129,71 @@ public class OrganizationService {
 
     // delete one agreement
     public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
-        Organization organization =  findOrganizationById(organizationId).get();
-        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
-        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
+        // delete the agreement from the cloud database
         List<String> toDeleteList = new ArrayList<>();
         toDeleteList.add(key);
         cloudAPI.deleteFile(toDeleteList);
+        // update the organization
+        Organization organization =  findOrganizationById(organizationId).get();
+        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
+        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
+        organizationRepository.save(organization);
+    }
+
+    // get the photos of an organization by id
+    public PhotoResponse getOrganizationPhotos(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        String photoKeyListString = organization.getOrgPhotoKeyList();
+        List<String> photoKeyList = organizationTransformer.fromJsonStringToPhotoKeyList(photoKeyListString);
+        PhotoResponse photoResponse = new PhotoResponse();
+        photoResponse.setId(id);
+        List<URL> urlList = new ArrayList<>();
+        for (String key : photoKeyList) {
+            urlList.add(cloudAPI.readFromCloud(key));
+            photoResponse.setUrlList(urlList);
+        }
+        return photoResponse;
+    }
+
+
+    // add photos of an organization
+    public PhotoResponse addOrganizationPhotos (String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+        String category = "OrgPhoto";
+        Organization organization = findOrganizationById(organizationId).get();
+        List<String> photoKeyList = new ArrayList<>();
+        // upload to cloud
+        for (MultipartFile photo : photos) {
+            Map<String, String> photoData = cloudAPI.uploadToCloud(photo, organizationId, category);
+            photoKeyList.add(photoData.get("key"));
+        }
+        // update photoKeyList of the organization
+        String newPhotoKeyList = organizationTransformer.fromPhotoKeyListToJsonString(photoKeyList);
+        organization.setOrgPhotoKeyList(newPhotoKeyList);
+        organizationRepository.save(organization);
+
+        return getOrganizationPhotos(organizationId, cloudAPI);
+    }
+
+
+    // update photos of an organization
+    public PhotoResponse updateOrganizationPhotos(String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+        // delete all the existing photos
+        deleteOrganizationPhotos(organizationId, cloudAPI);
+        // upload the new photos
+        return addOrganizationPhotos(organizationId, photos, cloudAPI);
+    }
+
+
+    // delete photos of an organization
+    public void deleteOrganizationPhotos(String organizationId, CloudAPI cloudAPI) {
+        Organization organization =  findOrganizationById(organizationId).get();
+        List<String> photoKeyList = organizationTransformer.fromJsonStringToPhotoKeyList(organization.getOrgPhotoKeyList());
+        // delete the organization's photos from cloud
+        cloudAPI.deleteFile(photoKeyList);
+        // update the organization
+        organization.setOrgPhotoKeyList("");
         organizationRepository.save(organization);
     }
 }

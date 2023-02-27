@@ -28,12 +28,12 @@ public class OrganizationController {
     // get organization by id
     @GetMapping("{id}")
     public ResponseEntity<Organization> getOrganization(@PathVariable("id") String id) {
-        Optional<Organization> organization = null;
+        Optional<Organization> organization;
         try {
             organization = organizationService.findOrganizationById(id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(organization.get());
     }
@@ -46,38 +46,38 @@ public class OrganizationController {
 
     // create an organization
     @PostMapping("")
-    public ResponseEntity createOrganization(@RequestBody OrganizationRequest organizationRequest) {
+    public ResponseEntity<HttpStatus> createOrganization(@RequestBody OrganizationRequest organizationRequest) {
         try {
             organizationService.createOrganization(organizationRequest);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // update an organization's info
     @PutMapping("{id}")
-    public ResponseEntity updateOrganization(@RequestBody OrganizationRequest organizationRequest, @PathVariable String id) {
+    public ResponseEntity<HttpStatus> updateOrganization(@RequestBody OrganizationRequest organizationRequest, @PathVariable String id) {
         try {
             organizationService.updateOrganization(organizationRequest, id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // delete an organization
     @DeleteMapping("{id}")
-    public ResponseEntity deleteOrganization(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> deleteOrganization(@PathVariable String id) {
         try {
             organizationService.deleteOrganization(id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // get adoption procedure by organization id
@@ -88,21 +88,21 @@ public class OrganizationController {
             adoptionProcedureStepList = organizationService.listAdoptionProcedureSteps(id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(adoptionProcedureStepList);
     }
 
     // update all adoption procedure by organization id (create and delete operations can also use this API to update)
     @PostMapping("{id}/adoptionProcedure")
-    public ResponseEntity updateOrganizationAdoptionProcedure(@RequestBody AdoptionProcedure adoptionProcedureRequest, @PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> updateOrganizationAdoptionProcedure(@RequestBody AdoptionProcedure adoptionProcedureRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationAdoptionProcedure(adoptionProcedureRequest, id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // get benefits by organization id
@@ -113,21 +113,21 @@ public class OrganizationController {
             benefitsList = organizationService.listOrganizationBenefits(id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(benefitsList);
     }
 
     // update all benefits by organization id (create and delete operations can also use this API to update)
     @PostMapping("{id}/benefits")
-    public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits organizationBenefitsRequest, @PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> updateOrganizationBenefits(@RequestBody OrganizationBenefits organizationBenefitsRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -143,7 +143,7 @@ public class OrganizationController {
             cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(adoptionAgreementList);
     }
@@ -160,31 +160,96 @@ public class OrganizationController {
             cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(adoptionAgreementList);
     }
 
     // update the order of adoption agreements (by pinning an existing agreement to the top)
     @PutMapping("{id}/adoptionAgreement")
-    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
+    public ResponseEntity<HttpStatus> updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
         try {
             organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
     // delete one adoption agreement
     @DeleteMapping("{id}/adoptionAgreement/{key}")
-    public ResponseEntity deleteOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("key") String key) {
+    public ResponseEntity<HttpStatus> deleteOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("key") String key) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
             organizationService.deleteOrganizationAdoptionAgreement(id, key, cloudAPI);
+            cloudAPI.shutDownCosClient();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // get an organization's photos by id
+    @GetMapping("{id}/photos")
+    public ResponseEntity<PhotoResponse> getOrganizationPhotos(@PathVariable("id") String id) {
+        PhotoResponse photoResponse;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            photoResponse = organizationService.getOrganizationPhotos(id, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(photoResponse);
+    }
+
+
+    // add photos of an organization
+    @PostMapping("{id}/photos")
+    public ResponseEntity<HttpStatus> addOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos) {
+        PhotoResponse photoResponse;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            photoResponse = organizationService.addOrganizationPhotos(id, photos, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+    // update the photos of an organization
+    @PutMapping("{id}/photos")
+    public ResponseEntity<HttpStatus> updateOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos ) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            organizationService.updateOrganizationPhotos(id, photos, cloudAPI);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // delete the photos of an organization
+    @DeleteMapping("{id}/photos")
+    public ResponseEntity deleteOrganizationPhotos(@PathVariable("id") String id) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            organizationService.deleteOrganizationPhotos(id, cloudAPI);
             cloudAPI.shutDownCosClient();
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
@@ -192,12 +257,6 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
-
 
 
 

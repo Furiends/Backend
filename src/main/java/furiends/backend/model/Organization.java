@@ -35,8 +35,12 @@ public class Organization {
     private String benefits;
     private String wechatOfficialAccountId;
     private String adoptionProcedure;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "adoption_agreements", columnDefinition = "TEXT")
     private String adoptionAgreements;
+    @Column(name = "org_photo_key_list", columnDefinition = "TEXT")
+    private String orgPhotoKeyList;
+
+
 
     public Organization() {
     }
@@ -253,6 +257,13 @@ public class Organization {
         this.adoptionAgreements = adoptionAgreements;
     }
 
+    public String getOrgPhotoKeyList() {
+        return orgPhotoKeyList;
+    }
+
+    public void setOrgPhotoKeyList(String orgPhotoKeyList) {
+        this.orgPhotoKeyList = orgPhotoKeyList;
+    }
 
 }
 
