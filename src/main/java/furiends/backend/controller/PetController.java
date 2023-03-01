@@ -5,6 +5,7 @@ import furiends.backend.dto.PetPhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.service.PetService;
+import furiends.backend.utils.CloudAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/pets" )
 public class PetController {
-
+    String bucket = "";
+    String secretId = "";
+    String secretKey = "";
     private static final Logger logger = LogManager.getLogger(PetController.class);
 
     @Autowired
@@ -133,9 +136,10 @@ public class PetController {
     public ResponseEntity<PetPhotoResponse> getPetPhotosByPetId(@PathVariable("petId") String petId) {
         PetPhotoResponse petPhotoResponse;
         try {
-            petService.createCosClient();
-            petPhotoResponse = petService.findPetPhotosByPetId(petId);
-            petService.shutDownCosClient();
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petPhotoResponse = petService.findPetPhotosByPetId(petId,cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -148,10 +152,11 @@ public class PetController {
     public ResponseEntity<List<PetPhotoResponse>> getAllCoversForAllPets() {
         List<PetPhotoResponse> allCoversForAllPets;
         try {
-            petService.createCosClient();
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
             List<String> petIdList = petService.findAllPetIds();
-            allCoversForAllPets = petService.findAllCoverForPetList(petIdList);
-            petService.shutDownCosClient();
+            allCoversForAllPets = petService.findAllCoverForPetList(petIdList, cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -163,9 +168,10 @@ public class PetController {
     @PostMapping(value = "pet-photo/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity createPetPhotosByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
         try {
-            petService.createCosClient();
-            petService.createPetPhotos(petId, petPhotoList);
-            petService.shutDownCosClient();
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.createPetPhotos(petId, petPhotoList, cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -177,9 +183,10 @@ public class PetController {
     @PutMapping(value = "pet-photo/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity updatePetPhotosByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
         try {
-            petService.createCosClient();
-            petService.updatePetPhotos(petId, petPhotoList);
-            petService.shutDownCosClient();
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.updatePetPhotos(petId, petPhotoList, cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -191,9 +198,10 @@ public class PetController {
     @DeleteMapping(value = "pet-photo/{petId}")
     public ResponseEntity deletePetPhotosByPetId(@PathVariable String petId) {
         try {
-            petService.createCosClient();
-            petService.deletePetPhotos(petId);
-            petService.shutDownCosClient();
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.deletePetPhotos(petId,cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

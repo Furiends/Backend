@@ -1,26 +1,19 @@
 package furiends.backend.service;
 
-import com.qcloud.cos.COSClient;
-import com.qcloud.cos.ClientConfig;
-import com.qcloud.cos.auth.BasicCOSCredentials;
-import com.qcloud.cos.auth.COSCredentials;
-import com.qcloud.cos.http.HttpProtocol;
-import com.qcloud.cos.model.DeleteObjectsRequest;
-import com.qcloud.cos.region.Region;
 import furiends.backend.dto.PetPhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.repository.PetRepository;
 import furiends.backend.transformer.PetTransformer;
+import furiends.backend.utils.CloudAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.net.URL;
+import java.util.*;
 
 @Service
 public class PetService {
@@ -30,10 +23,6 @@ public class PetService {
 
     @Autowired
     private PetTransformer petTransformer;
-
-    private COSClient cosClient = null;
-
-    private String bucketName = "furiends-photos-1312443161";
 
 
     public List<Pet> findAllPets() {
@@ -106,59 +95,72 @@ public class PetService {
         }
     }
 
-    public void createCosClient () {
-        String secretId = "";
-        String secretKey = "";
-        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
-        Region region = new Region("ap-guangzhou");
-        ClientConfig clientConfig = new ClientConfig(region);
-        clientConfig.setHttpProtocol(HttpProtocol.https);
-        cosClient = new COSClient(cred, clientConfig);
-    }
-
-    public void shutDownCosClient () {
-        cosClient.shutdown();
-    }
-
-    public PetPhotoResponse findPetPhotosByPetId(String petId) {
+    public PetPhotoResponse findPetPhotosByPetId(String petId, CloudAPI cloudAPI) {
         List<String> keyList = petRepository.findById(petId).get().getPetPhotoKeyList();
-        PetPhotoResponse newPetPhotoResponse = petTransformer.fromPetPhotoToResponse(petId, keyList, cosClient, bucketName);
+        List<String> newUrlList = new ArrayList<>();
+        // get urls for each photo of the pet from cos
+        for (int i = 0; i < keyList.size(); i++) {
+            URL url = cloudAPI.readFromCloud(keyList.get(i));
+            newUrlList.add(String.valueOf(url));
+        }
+        PetPhotoResponse newPetPhotoResponse = new PetPhotoResponse();
+        newPetPhotoResponse.setPetId(petId);
+        newPetPhotoResponse.setPetPhotoUrlList(newUrlList);
         return newPetPhotoResponse;
-    }
+}
 
-    public List<PetPhotoResponse> findAllCoverForPetList(List<String> petIdList) {
+    public List<PetPhotoResponse> findAllCoverForPetList(List<String> petIdList, CloudAPI cloudAPI) {
         List<PetPhotoResponse> petPhotoResponsesList =  new ArrayList<>();
+        // get url for each cover of the pet from cos
         for (String petId : petIdList) {
             List<String> coverList = petRepository.findById(petId).get().getPetPhotoKeyList().subList(0,1);
-            PetPhotoResponse newPetPhotoResponse = petTransformer.fromPetPhotoToResponse(petId, coverList, cosClient, bucketName);
+            List<String> newUrlList = new ArrayList<>();
+            URL url = cloudAPI.readFromCloud(coverList.get(0));
+            newUrlList.add(String.valueOf(url));
+            PetPhotoResponse newPetPhotoResponse = new PetPhotoResponse();
+            newPetPhotoResponse.setPetId(petId);
+            newPetPhotoResponse.setPetPhotoUrlList(newUrlList);
             petPhotoResponsesList.add(newPetPhotoResponse);
         }
         return petPhotoResponsesList;
     }
 
-    public void createPetPhotos(String petId, List<MultipartFile> petPhotoList) throws IOException {
+    public void createPetPhotos(String petId, List<MultipartFile> petPhotoList, CloudAPI cloudAPI) throws IOException {
+        String category = "PetPhoto";
         Pet pet = petRepository.findById(petId).get();
-        petTransformer.fromRequestToPetPhoto(petPhotoList, pet, cosClient, bucketName);
+        List<String> newKeyList = new ArrayList<>();
+        // upload pet photos to cos and save the key of photos
+        for (int i = 0; i < petPhotoList.size(); i++) {
+            String key = pet.getId() + "_" + category + "_"+ i + ".jpg";
+            cloudAPI.uploadPhotoToCloud(petPhotoList.get(i), key);
+            newKeyList.add(key);
+        }
+        pet.setPetPhotoKeyList(newKeyList);
         petRepository.save(pet);
     }
 
-    public void updatePetPhotos(String petId, List<MultipartFile> petPhotoList) throws IOException {
-        deletePetPhotos(petId);
+    public void updatePetPhotos(String petId, List<MultipartFile> petPhotoList, CloudAPI cloudAPI) throws IOException {
+        String category = "PetPhoto";
         Pet pet = petRepository.findById(petId).get();
-        petTransformer.fromRequestToPetPhoto(petPhotoList, pet, cosClient, bucketName);
+        //delete all photos of pet
+        cloudAPI.deleteFile(pet.getPetPhotoKeyList());
+        List<String> newKeyList = new ArrayList<>();
+        // upload pet photos to cos and save the key of photos
+        for (int i = 0; i < petPhotoList.size(); i++) {
+            String key = pet.getId() + "_" + category + "_"+ i + ".jpg";
+            cloudAPI.uploadPhotoToCloud(petPhotoList.get(i), key);
+            newKeyList.add(key);
+        }
+        pet.setPetPhotoKeyList(newKeyList);
         petRepository.save(pet);
     }
 
-    public void deletePetPhotos(String petId) {
-        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName);
+    public void deletePetPhotos(String petId, CloudAPI cloudAPI) {
         Pet pet = petRepository.findById(petId).get();
         List<String> keyStringList = pet.getPetPhotoKeyList();
-        List<DeleteObjectsRequest.KeyVersion> keyList = new ArrayList<>();
-        for (String key : keyStringList) {
-            keyList.add(new DeleteObjectsRequest.KeyVersion(key));
-        }
-        deleteObjectsRequest.setKeys(keyList);
-        cosClient.deleteObjects(deleteObjectsRequest);
+        //delete photos of pet
+        cloudAPI.deleteFile(keyStringList);
+        //delete petPhotoKeyList in database
         keyStringList.clear();
         pet.setPetPhotoKeyList(keyStringList);
         petRepository.save(pet);
