@@ -46,7 +46,11 @@ class ApplicationControllerTest {
         assertEquals(mockApplicationList.size(), responseEntity.getBody().size());
     }
 
+<<<<<<< HEAD
 
 
 
 }
+=======
+}
+>>>>>>> origin/gz-application-v2
