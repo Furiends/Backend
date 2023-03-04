@@ -7,8 +7,7 @@ import furiends.backend.repository.PetRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ApplicationService {
@@ -38,19 +37,22 @@ public class ApplicationService {
     }
 
     // 2: Complete; 3: Rejected;
-    public void updateApplicationStatus(String ApplicationId, int status){
+    public Application updateApplicationStatus(String ApplicationId, int status){
         Application application = findApplicationById(ApplicationId).get();
+
+        HashSet<Integer> allStatus = new HashSet<>(Arrays.asList(0, 1, 2, 3));
+        if (!allStatus.contains(status)){
+            throw new RuntimeException("invalid status input");
+        }
 
         if (status == 3) {
             application.setApplicationStatus(3);
             applicationRepository.save(application);
+            return application;
         } else if (status == 2) {
             String petId = application.getPetId();
             Pet pet = petRepository.findById(petId).get();
             List<Application> applications = findApplicationByPetId(petId);
-
-            application.setApplicationStatus(2);
-            applicationRepository.save(application);
             //update pet isAdopted
             pet.setIsAdopted(true);
             petRepository.save(pet);
@@ -62,6 +64,13 @@ public class ApplicationService {
                 app.setApplicationStatus(3);
                 applicationRepository.save(app);
             }
+
+            application.setApplicationStatus(2);
+            applicationRepository.save(application);
+            return application;
         }
+        return application;
     }
+
+
 }

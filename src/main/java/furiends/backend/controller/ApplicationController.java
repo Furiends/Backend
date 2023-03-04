@@ -21,7 +21,7 @@ public class ApplicationController {
     private ApplicationService applicationService;
 
     // list all applicants to one specific organization
-    @GetMapping("application/organizationId={organizationId}")
+    @GetMapping("/organizationId={organizationId}")
     public ResponseEntity<List<Application>> findAllApplicantsByOrganization(@PathVariable("organizationId") String organizationId) {
         try {
             return ResponseEntity.ok(applicationService.findAllApplicantsByOrganization(organizationId));
@@ -32,7 +32,7 @@ public class ApplicationController {
         }
     }
 
-    @GetMapping("application/pet={petId}")
+    @GetMapping("/pet={petId}")
     public ResponseEntity<List<Application>> findApplicationByPetId(@PathVariable("petId") String petId){
         try {
             return ResponseEntity.ok(applicationService.findApplicationByPetId(petId));
@@ -43,7 +43,7 @@ public class ApplicationController {
         }
     }
 
-    @GetMapping("application/user={userId}")
+    @GetMapping("/user={userId}")
     public ResponseEntity<List<Application>> findApplicationByUserId(@PathVariable("userId") String userId) {
         try {
             return ResponseEntity.ok(applicationService.findApplicationByUserId(userId));
@@ -54,7 +54,7 @@ public class ApplicationController {
         }
     }
 
-    @GetMapping("application/process={userId}/status = {status}")
+    @GetMapping("/process={userId}/status = {status}")
     public ResponseEntity<List<Application>>findApplicationWithStatus(@PathVariable("userId") String userId, @PathVariable("status") int status) {
         try {
             return ResponseEntity.ok(applicationService.listApplicationWithStatus(userId, status));
@@ -65,7 +65,7 @@ public class ApplicationController {
         }
     }
 
-    @GetMapping("application/applicationId={applicationId}")
+    @GetMapping("/applicationId={applicationId}")
     public ResponseEntity<Application>findApplicationById(@PathVariable("applicationId") String applicationId){
         try {
             return ResponseEntity.ok(applicationService.findApplicationById(applicationId).get());
@@ -75,14 +75,14 @@ public class ApplicationController {
         }
     }
 
-    @PostMapping("application/applicationId={applicationId}/status={status}")
+    @PostMapping("/applicationId={applicationId}/status={status}")
     public ResponseEntity updateApplicationStatus(@PathVariable("applicationId") String applicationId, @PathVariable("status") int status){
         try {
-            applicationService.updateApplicationStatus(applicationId, status);
+            return ResponseEntity.ok(applicationService.updateApplicationStatus(applicationId, status));
         } catch (Exception e){
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
+
     }
 }
