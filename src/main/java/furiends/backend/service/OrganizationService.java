@@ -196,5 +196,38 @@ public class OrganizationService {
         organization.setOrgPhotoKeyList("");
         organizationRepository.save(organization);
     }
+
+    public URL getOrganizationIcon(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        String iconKey = organization.getIcon();
+        return cloudAPI.readFromCloud(iconKey);
+    }
+
+    public URL addOrganizationIcon(String id, MultipartFile icon, CloudAPI cloudAPI) throws IOException {
+        String category = "OrgIcon";
+        Organization organization = findOrganizationById(id).get();
+        // upload to cloud
+        Map<String, String> iconData = cloudAPI.uploadToCloud(icon, id, category);
+        // update organization
+        organization.setIcon(iconData.get("key"));
+        organizationRepository.save(organization);
+        return getOrganizationIcon(id, cloudAPI);
+    }
+
+    public URL updateOrganizationIcon(String id, MultipartFile icon, CloudAPI cloudAPI) throws IOException {
+        deleteOrganizationIcon(id, cloudAPI);
+        return addOrganizationIcon(id, icon, cloudAPI);
+    }
+
+    public void deleteOrganizationIcon(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        List<String> toDelete = new ArrayList<>();
+        toDelete.add(organization.getIcon());
+        // delete the organization's icon from cloud
+        cloudAPI.deleteFile(toDelete);
+        // update the organization
+        organization.setIcon("");
+        organizationRepository.save(organization);
+    }
 }
 

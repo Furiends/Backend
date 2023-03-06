@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -212,7 +213,7 @@ public class OrganizationController {
 
     // add photos of an organization
     @PostMapping("{id}/photos")
-    public ResponseEntity<HttpStatus> addOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos) {
+    public ResponseEntity<PhotoResponse> addOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos) {
         PhotoResponse photoResponse;
         try {
             CloudAPI cloudAPI = new CloudAPI();
@@ -223,23 +224,25 @@ public class OrganizationController {
             logger.error(e.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(photoResponse);
     }
 
 
 
     // update the photos of an organization
     @PutMapping("{id}/photos")
-    public ResponseEntity<HttpStatus> updateOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos ) {
+    public ResponseEntity<PhotoResponse> updateOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos ) {
+        PhotoResponse photoResponse;
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
-            organizationService.updateOrganizationPhotos(id, photos, cloudAPI);
-            return new ResponseEntity<>(HttpStatus.OK);
+            photoResponse = organizationService.updateOrganizationPhotos(id, photos, cloudAPI);
+            cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return ResponseEntity.ok(photoResponse);
     }
 
 
@@ -258,6 +261,73 @@ public class OrganizationController {
         }
     }
 
+
+    // get an organization's icon by id
+    @GetMapping("{id}/icon")
+    public ResponseEntity<URL> getOrganizationIcon(@PathVariable("id") String id) {
+        URL iconURL;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            iconURL = organizationService.getOrganizationIcon(id, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(iconURL);
+    }
+
+
+    // add icon to an organization
+    @PostMapping("{id}/icon")
+    public ResponseEntity<URL> addOrganizationIcon(@PathVariable("id") String id, @RequestBody MultipartFile icon) {
+        URL iconURL;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            iconURL = organizationService.addOrganizationIcon(id, icon, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(iconURL);
+    }
+
+
+
+    // update the icon of an organization
+    @PutMapping("{id}/icon")
+    public ResponseEntity<URL> updateOrganizationIcon(@PathVariable("id") String id, @RequestBody MultipartFile icon ) {
+        URL iconURL;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            iconURL = organizationService.updateOrganizationIcon(id, icon, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(iconURL);
+    }
+
+
+    // delete the icon of an organization
+    @DeleteMapping("{id}/icon")
+    public ResponseEntity deleteOrganizationIcon(@PathVariable("id") String id) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            organizationService.deleteOrganizationIcon(id, cloudAPI);
+            cloudAPI.shutDownCosClient();
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 
