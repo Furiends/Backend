@@ -1,6 +1,6 @@
 package furiends.backend.service;
 
-import furiends.backend.dto.PetPhotoResponse;
+import furiends.backend.dto.PhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.repository.PetRepository;
@@ -95,7 +95,7 @@ public class PetService {
         }
     }
 
-    public PetPhotoResponse findPetPhotosByPetId(String petId, CloudAPI cloudAPI) {
+    public PhotoResponse findPetPhotosByPetId(String petId, CloudAPI cloudAPI) {
         List<String> keyList = petRepository.findById(petId).get().getPetPhotoKeyList();
         List<String> newUrlList = new ArrayList<>();
         // get urls for each photo of the pet from cos
@@ -103,26 +103,26 @@ public class PetService {
             URL url = cloudAPI.readFromCloud(keyList.get(i));
             newUrlList.add(String.valueOf(url));
         }
-        PetPhotoResponse newPetPhotoResponse = new PetPhotoResponse();
-        newPetPhotoResponse.setPetId(petId);
-        newPetPhotoResponse.setPetPhotoUrlList(newUrlList);
-        return newPetPhotoResponse;
+        PhotoResponse newPhotoResponse = new PhotoResponse();
+        newPhotoResponse.setId(petId);
+        newPhotoResponse.setPhotoUrlList(newUrlList);
+        return newPhotoResponse;
 }
 
-    public List<PetPhotoResponse> findAllCoverForPetList(List<String> petIdList, CloudAPI cloudAPI) {
-        List<PetPhotoResponse> petPhotoResponsesList =  new ArrayList<>();
+    public List<PhotoResponse> findAllCoverForPetList(List<String> petIdList, CloudAPI cloudAPI) {
+        List<PhotoResponse> photoResponsesList =  new ArrayList<>();
         // get url for each cover of the pet from cos
         for (String petId : petIdList) {
             List<String> coverList = petRepository.findById(petId).get().getPetPhotoKeyList().subList(0,1);
             List<String> newUrlList = new ArrayList<>();
             URL url = cloudAPI.readFromCloud(coverList.get(0));
             newUrlList.add(String.valueOf(url));
-            PetPhotoResponse newPetPhotoResponse = new PetPhotoResponse();
-            newPetPhotoResponse.setPetId(petId);
-            newPetPhotoResponse.setPetPhotoUrlList(newUrlList);
-            petPhotoResponsesList.add(newPetPhotoResponse);
+            PhotoResponse newPhotoResponse = new PhotoResponse();
+            newPhotoResponse.setId(petId);
+            newPhotoResponse.setPhotoUrlList(newUrlList);
+            photoResponsesList.add(newPhotoResponse);
         }
-        return petPhotoResponsesList;
+        return photoResponsesList;
     }
 
     public void createPetPhotos(String petId, List<MultipartFile> petPhotoList, CloudAPI cloudAPI) throws IOException {
