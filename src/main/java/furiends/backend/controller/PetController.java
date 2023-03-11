@@ -1,7 +1,7 @@
 package furiends.backend.controller;
 
 
-import furiends.backend.dto.PetPhotoResponse;
+import furiends.backend.dto.PhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.service.PetService;
@@ -133,24 +133,24 @@ public class PetController {
 
     // get pet photos for a pet by its pet id
     @GetMapping(value = "pet-photo/{petId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PetPhotoResponse> getPetPhotosByPetId(@PathVariable("petId") String petId) {
-        PetPhotoResponse petPhotoResponse;
+    public ResponseEntity<PhotoResponse> getPetPhotosByPetId(@PathVariable("petId") String petId) {
+        PhotoResponse photoResponse;
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
-            petPhotoResponse = petService.findPetPhotosByPetId(petId,cloudAPI);
+            photoResponse = petService.findPetPhotosByPetId(petId,cloudAPI);
             cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(petPhotoResponse);
+        return ResponseEntity.ok(photoResponse);
     }
 
     // find all covers for all pets
     @GetMapping(value = "pet-photo/allCovers", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PetPhotoResponse>> getAllCoversForAllPets() {
-        List<PetPhotoResponse> allCoversForAllPets;
+    public ResponseEntity<List<PhotoResponse>> getAllCoversForAllPets() {
+        List<PhotoResponse> allCoversForAllPets;
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
