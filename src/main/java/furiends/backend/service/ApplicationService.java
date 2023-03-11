@@ -72,5 +72,11 @@ public class ApplicationService {
         return application;
     }
 
+    public Application updateRejectReason(String ApplicationId,  String rejectReason){
+        Application application = applicationRepository.findApplicationByApplicationId(ApplicationId);
+        application.setRejectionReason(rejectReason);
+        application.setUpdatedTime();
+        return applicationRepository.save(application);
+    }
 
 }

@@ -85,4 +85,14 @@ public class ApplicationController {
         }
 
     }
+
+    @PostMapping("applicationId={applicationId}/rejectReason={rejectReason}")
+    public ResponseEntity updateRejectReason(@PathVariable("applicationId") String applicationId, @PathVariable("rejectReason") String rejectReason){
+        try {
+            return ResponseEntity.ok(applicationService.updateRejectReason(applicationId, rejectReason));
+        } catch (Exception e) {
+            logger.error((e.toString()));
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
