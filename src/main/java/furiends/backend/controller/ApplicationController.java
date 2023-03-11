@@ -54,7 +54,7 @@ public class ApplicationController {
         }
     }
 
-    @GetMapping("/process={userId}/status = {status}")
+    @GetMapping("/process={userId}/status={status}")
     public ResponseEntity<List<Application>>findApplicationWithStatus(@PathVariable("userId") String userId, @PathVariable("status") int status) {
         try {
             return ResponseEntity.ok(applicationService.listApplicationWithStatus(userId, status));

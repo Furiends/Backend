@@ -45,11 +45,7 @@ public class ApplicationService {
             throw new RuntimeException("invalid status input");
         }
 
-        if (status == 3) {
-            application.setApplicationStatus(3);
-            applicationRepository.save(application);
-            return application;
-        } else if (status == 2) {
+        if (status == 2) {
             String petId = application.getPetId();
             Pet pet = petRepository.findById(petId).get();
             List<Application> applications = findApplicationByPetId(petId);
@@ -67,8 +63,12 @@ public class ApplicationService {
 
             application.setApplicationStatus(2);
             applicationRepository.save(application);
-            return application;
+        } else {
+            System.out.println(status);
+            application.setApplicationStatus(status);
+            applicationRepository.save(application);
         }
+
         return application;
     }
 

@@ -98,8 +98,4 @@ class ApplicationControllerTest {
         assertEquals(mockApplication, responseEntity.getBody());
 
     }
-
-
-
-
 }
