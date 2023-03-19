@@ -113,7 +113,11 @@ public class PetService {
         List<PhotoResponse> photoResponsesList =  new ArrayList<>();
         // get url for each cover of the pet from cos
         for (String petId : petIdList) {
-            List<String> coverList = petRepository.findById(petId).get().getPetPhotoKeyList().subList(0,1);
+            List<String> petPhotoList = petRepository.findById(petId).get().getPetPhotoKeyList();
+            if (petPhotoList.isEmpty()) {
+                continue;
+            }
+            List<String> coverList = petPhotoList.subList(0,1);
             List<String> newUrlList = new ArrayList<>();
             URL url = cloudAPI.readFromCloud(coverList.get(0));
             newUrlList.add(String.valueOf(url));
