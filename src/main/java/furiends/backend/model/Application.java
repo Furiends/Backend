@@ -1,5 +1,7 @@
 package furiends.backend.model;
 
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -33,6 +35,7 @@ public class Application {
     private String breedPreference;
     // 0: Small; 1: Medium; 2: Large;
     private Integer dogSize;
+    private String organizationId;
 
     public Application() {
     }
@@ -145,8 +148,8 @@ public class Application {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setUpdatedTime() {
+        this.updatedTime = new Date();
     }
 
     public String getPostPlacementVisitFormId() {
@@ -227,5 +230,13 @@ public class Application {
 
     public void setDogSize(Integer dogSize) {
         this.dogSize = dogSize;
+    }
+
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 }
