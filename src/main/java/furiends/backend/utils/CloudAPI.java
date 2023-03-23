@@ -81,6 +81,32 @@ public class CloudAPI {
         }
     }
 
+    // upload a photo to the cloud
+    public Map<String, String> uploadPhotoToCloud(MultipartFile file, String key) throws IOException {
+        try {
+            Map<String, String> result = new HashMap<>();
+            result.put("key", key);
+            // record file name
+            String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+            result.put("fileName", fileName);
+            // record upload date
+            LocalDate dateObj = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            String uploadDate = dateObj.format(formatter);
+            result.put("uploadDate", uploadDate);
+            // upload to cloud
+            InputStream inputStream = file.getInputStream();
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(inputStream.available());
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, inputStream, objectMetadata);
+            cosClient.putObject(putObjectRequest);
+            return result;
+        } catch (CosClientException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // read a file from the cloud
     public URL readFromCloud(String objectKey){
         try {
@@ -114,7 +140,5 @@ public class CloudAPI {
         }
 
     }
-
-
 
 }
