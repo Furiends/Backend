@@ -136,9 +136,8 @@ public class PetService {
         List<String> newKeyList = new ArrayList<>();
         // upload pet photos to cos and save the key of photos
         for (int i = 0; i < petPhotoList.size(); i++) {
-            String key = pet.getId() + "_" + category + "_"+ i + ".jpg";
-            cloudAPI.uploadPhotoToCloud(petPhotoList.get(i), key);
-            newKeyList.add(key);
+            Map<String, String> result = cloudAPI.uploadToCloud(petPhotoList.get(i), petId, category);
+            newKeyList.add(result.get("key"));
         }
         pet.setPetPhotoKeyList(newKeyList);
         petRepository.save(pet);
@@ -152,9 +151,8 @@ public class PetService {
         List<String> newKeyList = new ArrayList<>();
         // upload pet photos to cos and save the key of photos
         for (int i = 0; i < petPhotoList.size(); i++) {
-            String key = pet.getId() + "_" + category + "_"+ i + ".jpg";
-            cloudAPI.uploadPhotoToCloud(petPhotoList.get(i), key);
-            newKeyList.add(key);
+            Map<String, String> result = cloudAPI.uploadToCloud(petPhotoList.get(i), petId, category);
+            newKeyList.add(result.get("key"));
         }
         pet.setPetPhotoKeyList(newKeyList);
         petRepository.save(pet);
