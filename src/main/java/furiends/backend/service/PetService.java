@@ -1,15 +1,19 @@
 package furiends.backend.service;
 
+import furiends.backend.dto.PhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.repository.PetRepository;
 import furiends.backend.transformer.PetTransformer;
+import furiends.backend.utils.CloudAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 @Service
 public class PetService {
@@ -20,8 +24,13 @@ public class PetService {
     @Autowired
     private PetTransformer petTransformer;
 
+
     public List<Pet> findAllPets() {
         return petRepository.findAll();
+    }
+
+    public List<String> findAllPetIds() {
+        return petRepository.findAllIds();
     }
 
     // list all pets within the organization
@@ -86,8 +95,77 @@ public class PetService {
         }
     }
 
+    public PhotoResponse findPetPhotosByPetId(String petId, CloudAPI cloudAPI) {
+        List<String> keyList = petRepository.findById(petId).get().getPetPhotoKeyList();
+        List<String> newUrlList = new ArrayList<>();
+        // get urls for each photo of the pet from cos
+        for (int i = 0; i < keyList.size(); i++) {
+            URL url = cloudAPI.readFromCloud(keyList.get(i));
+            newUrlList.add(String.valueOf(url));
+        }
+        PhotoResponse newPhotoResponse = new PhotoResponse();
+        newPhotoResponse.setId(petId);
+        newPhotoResponse.setPhotoUrlList(newUrlList);
+        return newPhotoResponse;
+}
 
+    public List<PhotoResponse> findAllCoverForPetList(List<String> petIdList, CloudAPI cloudAPI) {
+        List<PhotoResponse> photoResponsesList =  new ArrayList<>();
+        // get url for each cover of the pet from cos
+        for (String petId : petIdList) {
+            List<String> petPhotoList = petRepository.findById(petId).get().getPetPhotoKeyList();
+            List<String> newUrlList = new ArrayList<>();
+            PhotoResponse newPhotoResponse = new PhotoResponse();
+            if (petPhotoList.isEmpty()) {
+                newUrlList.add(null);
+            } else {
+                List<String> coverList = petPhotoList.subList(0, 1);
+                URL url = cloudAPI.readFromCloud(coverList.get(0));
+                newUrlList.add(String.valueOf(url));
+            }
+            newPhotoResponse.setId(petId);
+            newPhotoResponse.setPhotoUrlList(newUrlList);
+            photoResponsesList.add(newPhotoResponse);
+        }
+        return photoResponsesList;
+    }
 
+    public void createPetPhotos(String petId, List<MultipartFile> petPhotoList, CloudAPI cloudAPI) throws IOException {
+        String category = "PetPhoto";
+        Pet pet = petRepository.findById(petId).get();
+        List<String> newKeyList = new ArrayList<>();
+        // upload pet photos to cos and save the key of photos
+        for (int i = 0; i < petPhotoList.size(); i++) {
+            Map<String, String> result = cloudAPI.uploadToCloud(petPhotoList.get(i), petId, category);
+            newKeyList.add(result.get("key"));
+        }
+        pet.setPetPhotoKeyList(newKeyList);
+        petRepository.save(pet);
+    }
 
+    public void updatePetPhotos(String petId, List<MultipartFile> petPhotoList, CloudAPI cloudAPI) throws IOException {
+        String category = "PetPhoto";
+        Pet pet = petRepository.findById(petId).get();
+        //delete all photos of pet
+        cloudAPI.deleteFile(pet.getPetPhotoKeyList());
+        List<String> newKeyList = new ArrayList<>();
+        // upload pet photos to cos and save the key of photos
+        for (int i = 0; i < petPhotoList.size(); i++) {
+            Map<String, String> result = cloudAPI.uploadToCloud(petPhotoList.get(i), petId, category);
+            newKeyList.add(result.get("key"));
+        }
+        pet.setPetPhotoKeyList(newKeyList);
+        petRepository.save(pet);
+    }
 
+    public void deletePetPhotos(String petId, CloudAPI cloudAPI) {
+        Pet pet = petRepository.findById(petId).get();
+        List<String> keyStringList = pet.getPetPhotoKeyList();
+        //delete photos of pet
+        cloudAPI.deleteFile(keyStringList);
+        //delete petPhotoKeyList in database
+        keyStringList.clear();
+        pet.setPetPhotoKeyList(keyStringList);
+        petRepository.save(pet);
+    }
 }
