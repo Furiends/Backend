@@ -5,13 +5,17 @@ import java.util.Date;
 public class OrganizationRequest {
     private String name;
     private String description;
+    private String type;
     private String icon;
     private String representativeUserId;
     private String province;
     private String city;
     private String district;
+    private String postcode;
     private String address;
     private String phoneNumber;
+    private String email;
+    private String wechatId;
     private Boolean statusFlag;
     private Date establishDate;
     private Integer rescuePetCounts;
@@ -102,5 +106,21 @@ public class OrganizationRequest {
 
     public String getWechatOfficialAccountId() {
         return wechatOfficialAccountId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getWechatId() {
+        return wechatId;
     }
 }
