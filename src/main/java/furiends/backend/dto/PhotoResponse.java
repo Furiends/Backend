@@ -1,11 +1,11 @@
 package furiends.backend.dto;
 
-import java.net.URL;
 import java.util.List;
 
 public class PhotoResponse {
-    String id;
-    List<URL> urlList;
+
+    private String id;
+    private List<String> photoUrlList;
 
     public String getId() {
         return id;
@@ -15,11 +15,12 @@ public class PhotoResponse {
         this.id = id;
     }
 
-    public List<URL> getUrlList() {
-        return urlList;
+
+    public List<String> getPhotoUrlList() {
+        return photoUrlList;
     }
 
-    public void setUrlList(List<URL> urlList) {
-        this.urlList = urlList;
+    public void setPhotoUrlList(List<String> photoUrlList) {
+        this.photoUrlList = photoUrlList;
     }
 }

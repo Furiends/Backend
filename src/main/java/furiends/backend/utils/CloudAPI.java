@@ -52,7 +52,6 @@ public class CloudAPI {
     }
 
 
-
     // upload a file to the cloud
     public Map<String, String> uploadToCloud(MultipartFile file, String entityId, String category) throws IOException {
         try {
@@ -124,7 +123,5 @@ public class CloudAPI {
         }
 
     }
-
-
 
 }
