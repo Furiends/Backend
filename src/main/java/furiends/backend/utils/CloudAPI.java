@@ -18,6 +18,7 @@ import com.qcloud.cos.region.Region;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.beans.JavaBean;
@@ -51,40 +52,14 @@ public class CloudAPI {
     }
 
 
-
     // upload a file to the cloud
     public Map<String, String> uploadToCloud(MultipartFile file, String entityId, String category) throws IOException {
         try {
             Map<String, String> result = new HashMap<>();
             // generate an object key to locate the file in the cloud
+            String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
             String key = entityId + "_" + category + "_"
-                    + Generators.timeBasedGenerator().generate().toString();
-            result.put("key", key);
-            // record file name
-            String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
-            result.put("fileName", fileName);
-            // record upload date
-            LocalDate dateObj = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            String uploadDate = dateObj.format(formatter);
-            result.put("uploadDate", uploadDate);
-            // upload to cloud
-            InputStream inputStream = file.getInputStream();
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(inputStream.available());
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, inputStream, objectMetadata);
-            cosClient.putObject(putObjectRequest);
-            return result;
-        } catch (CosClientException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    // upload a photo to the cloud
-    public Map<String, String> uploadPhotoToCloud(MultipartFile file, String key) throws IOException {
-        try {
-            Map<String, String> result = new HashMap<>();
+                    + Generators.timeBasedGenerator().generate().toString() + "." + extension;
             result.put("key", key);
             // record file name
             String fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
