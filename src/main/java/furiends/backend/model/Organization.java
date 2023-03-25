@@ -10,32 +10,64 @@ import java.util.Date;
 @Entity(name = "organization")
 public class Organization {
     @Id
+    @Column(name = "id", nullable = false)
     private String id;
-
+    @Column(name = "name", length = 32)
     private String name;
+    @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "type")
+    private String type;
+    @Column(name = "icon")
     private String icon;
+    @Column(name = "representativeUserId", nullable = false)
     private String representativeUserId;
+    @Column(name = "createdTime", nullable = false)
     private Date createdTime;
+    @Column(name = "updatedTime")
     private Date updatedTime;
+    @Column(name = "province", length = 32)
     private String province;
+    @Column(name = "city", length = 32)
     private String city;
+    @Column(name = "district", length = 32)
     private String district;
+    @Column(name = "postcode", length = 6)
+    private String postcode;
+    @Column(name = "address")
     private String address;
+    @Column(name = "phoneNumber")
     private String phoneNumber;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "wechatId")
+    private String wechatId;
+    @Column(name = "statusFlag")
     private Boolean statusFlag;
+    @Column(name = "establishDate")
     private Date establishDate;
+    @Column(name = "rescuePetCounts")
     private Integer rescuePetCounts;
+    @Column(name = "volunteerCounts")
     private Integer volunteerCounts;
+    @Column(name = "lastPostPlacementVisitPetId")
     private String lastPostPlacementVisitPetId;
+    @Column(name = "lastPostPlacementVisitDate")
     private Date lastPostPlacementVisitDate;
+    @Column(name = "postPlacementVisitCounts")
     private Integer postPlacementVisitCounts;
+    @Column(name = "organizationFromAddress")
     private String organizationFromAddress;
+    @Column(name = "adoptionPetCounts")
     private Integer adoptionPetCounts;
+    @Column(name = "benefits")
     private String benefits;
+    @Column(name = "wechatOfficialAccountId")
     private String wechatOfficialAccountId;
+    @Column(name = "adoptionProcedure")
+
     private String adoptionProcedure;
-    @Column(columnDefinition = "TEXT")
+    @Column(name ="adoptionAgreements", columnDefinition = "TEXT")
     private String adoptionAgreements;
 
     public Organization() {
@@ -253,6 +285,36 @@ public class Organization {
         this.adoptionAgreements = adoptionAgreements;
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWechatId() {
+        return wechatId;
+    }
+
+    public void setWechatId(String wechatId) {
+        this.wechatId = wechatId;
+    }
 }
 
