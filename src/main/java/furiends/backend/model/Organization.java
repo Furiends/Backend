@@ -16,6 +16,8 @@ public class Organization {
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "type")
+    private String type;
     @Column(name = "icon")
     private String icon;
     @Column(name = "representativeUserId", nullable = false)
@@ -30,10 +32,16 @@ public class Organization {
     private String city;
     @Column(name = "district", length = 32)
     private String district;
+    @Column(name = "postcode", length = 6)
+    private String postcode;
     @Column(name = "address")
     private String address;
     @Column(name = "phoneNumber")
     private String phoneNumber;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "wechatId")
+    private String wechatId;
     @Column(name = "statusFlag")
     private Boolean statusFlag;
     @Column(name = "establishDate")
@@ -275,6 +283,38 @@ public class Organization {
 
     public void setAdoptionAgreements(String adoptionAgreements) {
         this.adoptionAgreements = adoptionAgreements;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWechatId() {
+        return wechatId;
+    }
+
+    public void setWechatId(String wechatId) {
+        this.wechatId = wechatId;
     }
 }
 
