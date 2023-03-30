@@ -22,6 +22,7 @@ public class OrganizationController {
     String bucket = "";
     String secretId = "";
     String secretKey = "";
+
     private static final Logger logger = LogManager.getLogger(OrganizationController.class);
     @Autowired
     private OrganizationService organizationService;
@@ -213,51 +214,50 @@ public class OrganizationController {
 
     // add photos of an organization
     @PostMapping("{id}/photos")
-    public ResponseEntity<PhotoResponse> addOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos) {
-        PhotoResponse photoResponse;
+    public ResponseEntity<HttpStatus> addOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos) {
+
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
-            photoResponse = organizationService.addOrganizationPhotos(id, photos, cloudAPI);
+            organizationService.addOrganizationPhotos(id, photos, cloudAPI);
             cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(photoResponse);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
 
     // update the photos of an organization
     @PutMapping("{id}/photos")
-    public ResponseEntity<PhotoResponse> updateOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos ) {
-        PhotoResponse photoResponse;
+    public ResponseEntity<HttpStatus> updateOrganizationPhotos(@PathVariable("id") String id, @RequestBody List<MultipartFile> photos ) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
-            photoResponse = organizationService.updateOrganizationPhotos(id, photos, cloudAPI);
+            organizationService.updateOrganizationPhotos(id, photos, cloudAPI);
             cloudAPI.shutDownCosClient();
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(photoResponse);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     // delete the photos of an organization
     @DeleteMapping("{id}/photos")
-    public ResponseEntity deleteOrganizationPhotos(@PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> deleteOrganizationPhotos(@PathVariable("id") String id) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
             organizationService.deleteOrganizationPhotos(id, cloudAPI);
             cloudAPI.shutDownCosClient();
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -316,16 +316,16 @@ public class OrganizationController {
 
     // delete the icon of an organization
     @DeleteMapping("{id}/icon")
-    public ResponseEntity deleteOrganizationIcon(@PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> deleteOrganizationIcon(@PathVariable("id") String id) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
             cloudAPI.createCosClient(bucket, secretId, secretKey);
             organizationService.deleteOrganizationIcon(id, cloudAPI);
             cloudAPI.shutDownCosClient();
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -149,17 +149,17 @@ public class OrganizationService {
         List<String> photoKeyList = organizationTransformer.fromJsonStringToPhotoKeyList(photoKeyListString);
         PhotoResponse photoResponse = new PhotoResponse();
         photoResponse.setId(id);
-        List<URL> urlList = new ArrayList<>();
+        List<String> urlList = new ArrayList<>();
         for (String key : photoKeyList) {
-            urlList.add(cloudAPI.readFromCloud(key));
-            photoResponse.setUrlList(urlList);
+            urlList.add(String.valueOf(cloudAPI.readFromCloud(key)));
         }
+        photoResponse.setPhotoUrlList(urlList);
         return photoResponse;
     }
 
 
     // add photos of an organization
-    public PhotoResponse addOrganizationPhotos (String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+    public void addOrganizationPhotos (String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
         String category = "OrgPhoto";
         Organization organization = findOrganizationById(organizationId).get();
         List<String> photoKeyList = new ArrayList<>();
@@ -172,17 +172,15 @@ public class OrganizationService {
         String newPhotoKeyList = organizationTransformer.fromPhotoKeyListToJsonString(photoKeyList);
         organization.setOrgPhotoKeyList(newPhotoKeyList);
         organizationRepository.save(organization);
-
-        return getOrganizationPhotos(organizationId, cloudAPI);
     }
 
 
     // update photos of an organization
-    public PhotoResponse updateOrganizationPhotos(String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+    public void updateOrganizationPhotos(String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
         // delete all the existing photos
         deleteOrganizationPhotos(organizationId, cloudAPI);
         // upload the new photos
-        return addOrganizationPhotos(organizationId, photos, cloudAPI);
+        addOrganizationPhotos(organizationId, photos, cloudAPI);
     }
 
 
