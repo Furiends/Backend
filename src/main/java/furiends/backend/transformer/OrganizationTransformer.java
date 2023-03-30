@@ -33,6 +33,10 @@ public class OrganizationTransformer {
         newOrganization.setOrganizationFromAddress(organizationRequest.getOrganizationFromAddress());
         newOrganization.setPostPlacementVisitCounts(organizationRequest.getPostPlacementVisitCounts());
         newOrganization.setWechatOfficialAccountId(organizationRequest.getWechatOfficialAccountId());
+        newOrganization.setType(organizationRequest.getType());
+        newOrganization.setEmail(organizationRequest.getEmail());
+        newOrganization.setWechatId(organizationRequest.getWechatId());
+        newOrganization.setPostcode(organizationRequest.getPostcode());
     }
 
     public List<AdoptionProcedureStep> fromJsonStringToAdoptionProcedureStepList(String adoptionProcedureString) {
