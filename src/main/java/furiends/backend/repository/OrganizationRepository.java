@@ -4,5 +4,5 @@ import furiends.backend.model.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrganizationRepository extends JpaRepository<Organization, String> {
-
+    Organization findOrganizationByRepresentativeUserId(String representativeUserId);
 }

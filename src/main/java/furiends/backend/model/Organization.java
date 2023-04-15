@@ -133,8 +133,8 @@ public class Organization {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setUpdatedTime() {
+        new Date();
     }
 
     public String getProvince() {

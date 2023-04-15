@@ -1,23 +1,35 @@
 package furiends.backend.service;
 
+import com.alibaba.fastjson.JSONObject;
+import furiends.backend.dto.AdoptionProcedure;
+import furiends.backend.dto.AdoptionProcedureStep;
+import furiends.backend.dto.OrganizationBenefits;
+import furiends.backend.dto.OrganizationRequest;
 import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
+import furiends.backend.repository.UserRepository;
 import furiends.backend.transformer.OrganizationTransformer;
+import furiends.backend.utils.WeChatUtil;
 import furiends.backend.utils.CloudAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
 import java.io.IOException;
 import java.util.*;
+
 
 @Service
 public class OrganizationService {
 
     @Resource
     private OrganizationRepository organizationRepository;
+
+    @Resource
+    private UserRepository userRepository;
 
     @Autowired
     private OrganizationTransformer organizationTransformer;
@@ -30,12 +42,13 @@ public class OrganizationService {
         return organizationRepository.findById(id);
     }
 
-    public void createOrganization(OrganizationRequest organizationRequest) {
+
+    public Organization createOrganization(OrganizationRequest organizationRequest) {
         Organization newOrganization = new Organization();
         newOrganization.setId();
         newOrganization.setCreatedTime();
         organizationTransformer.fromOrganizationRequestToOrganization(organizationRequest, newOrganization);
-        organizationRepository.save(newOrganization);
+        return newOrganization;
     }
 
     public void updateOrganization(OrganizationRequest organizationRequest, String id) {
@@ -51,6 +64,28 @@ public class OrganizationService {
         }
     }
 
+    public void registerOrganizationByWechat(OrganizationRequest organizationRequest) {
+        Organization organization = createOrganization(organizationRequest);
+        organization.setUpdatedTime();
+        organizationRepository.save(organization);
+    }
+
+    public Organization loginOrganizationByWechat(String code) {
+        JSONObject jsonObject = WeChatUtil.getJSONObject(code);
+        String open_id = jsonObject.getString("open_id");
+        String union_id = jsonObject.getString("union_id");
+        if (open_id.isBlank() || union_id.isBlank()) {
+            throw new RuntimeException();
+        }
+
+        String representativeUserId = userRepository.findUserByOpenIdAndUnionId(open_id, union_id).getWechatId();
+        Organization organization = organizationRepository.findOrganizationByRepresentativeUserId(representativeUserId);
+        organization.setUpdatedTime();
+        organizationRepository.save(organization);
+        return organization;
+    }
+
+
     public List<AdoptionProcedureStep> listAdoptionProcedureSteps(String organizationId) {
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionProcedureString = organization.getAdoptionProcedure();
@@ -60,10 +95,17 @@ public class OrganizationService {
 
     public void updateOrganizationAdoptionProcedure(AdoptionProcedure adoptionProcedureRequest, String organizationId) {
         Organization organization = findOrganizationById(organizationId).get();
-        if (organization == null) return;
         String adoptionProcedureString = organizationTransformer.fromAdoptionProcedureToJsonString(adoptionProcedureRequest);
         organization.setAdoptionProcedure(adoptionProcedureString);
         organizationRepository.save(organization);
+    }
+
+
+    public boolean verifyInvitationCode(String invitationCode) {
+        //TODO replace INVITATION_CODE
+        String INVITATION_CODE = "FuriendsCodeForOrg";
+        return invitationCode.equals(INVITATION_CODE);
+
     }
 
     public List<String> listOrganizationBenefits(String organizationId) {
@@ -83,7 +125,7 @@ public class OrganizationService {
 
     // find adoption agreements by organization id
     // if onlyLatest is true, only return the first agreement; otherwise return all
-    public List<AdoptionAgreement> findAdoptionAgreementByOrgId (String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
+    public List<AdoptionAgreement> findAdoptionAgreementByOrgId(String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementsString = organization.getAdoptionAgreements();
         List<AdoptionAgreement> adoptionAgreementList = (organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementsString));
@@ -98,7 +140,7 @@ public class OrganizationService {
         return response;
     }
 
-    public List<AdoptionAgreement> addOrganizationAdoptionAgreement (String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
+    public List<AdoptionAgreement> addOrganizationAdoptionAgreement(String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
         String category = "AdoptionAgreement";
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementString = organization.getAdoptionAgreements();
@@ -119,7 +161,7 @@ public class OrganizationService {
 
     // update: change agreements order by topping one of them
     public void updateOrganizationAdoptionAgreement(String organizationId, List<AdoptionAgreement> updatedAdoptionAgreementList) {
-        Organization organization =  findOrganizationById(organizationId).get();
+        Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(updatedAdoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
         organizationRepository.save(organization);
@@ -127,8 +169,8 @@ public class OrganizationService {
 
 
     // delete one agreement
-    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
-        Organization organization =  findOrganizationById(organizationId).get();
+    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(organizationId).get();
         List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
         adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
         List<String> toDeleteList = new ArrayList<>();
@@ -137,6 +179,8 @@ public class OrganizationService {
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
         organizationRepository.save(organization);
+
+
     }
 }
 

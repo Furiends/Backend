@@ -80,6 +80,31 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // register an organization by WeChat
+    @PostMapping("orgRegisterByWechat/{code}")
+    public ResponseEntity orgRegisterByWechat(@RequestBody OrganizationRequest organizationRequest, @PathVariable String code) {
+        try {
+            organizationService.registerOrganizationByWechat(organizationRequest);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    //login an organization by WeChat
+    @PostMapping("orgLoginByWechat/{code}")
+    public ResponseEntity<Organization> orgLoginByWechat(@PathVariable String code) {
+        Organization organization;
+        try {
+            organization = organizationService.loginOrganizationByWechat(code);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(organization);
+    }
+
     // get adoption procedure by organization id
     @GetMapping("{id}/adoptionProcedure")
     public ResponseEntity<List<AdoptionProcedureStep>> getOrganizationAdoptionProcedure(@PathVariable("id") String id) {
@@ -105,22 +130,19 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // get benefits by organization id
-    @GetMapping("{id}/benefits")
-    public ResponseEntity<List<String>> getOrganizationBenefits(@PathVariable("id") String id) {
-        List<String> benefitsList;
-        try {
-            benefitsList = organizationService.listOrganizationBenefits(id);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    @GetMapping("verifyInvitationCode/{code}")
+    public ResponseEntity verifyInvitationCode(@PathVariable("code") String code) {
+        boolean flag = organizationService.verifyInvitationCode(code);
+        if (!flag) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(benefitsList);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // update all benefits by organization id (create and delete operations can also use this API to update)
     @PostMapping("{id}/benefits")
-    public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits organizationBenefitsRequest, @PathVariable("id") String id) {
+    public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits
+                                                             organizationBenefitsRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
         } catch (Exception e) {
@@ -128,8 +150,8 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity(HttpStatus.OK);
-    }
 
+    }
 
     // get all adoption agreements by organization id
     // When only the current effective agreement is requested, onlyLatest should be True
@@ -148,6 +170,18 @@ public class OrganizationController {
         return ResponseEntity.ok(adoptionAgreementList);
     }
 
+    // get benefits by organization id
+    @GetMapping("{id}/benefits")
+    public ResponseEntity<List<String>> getOrganizationBenefits(@PathVariable("id") String id) {
+        List<String> benefitsList;
+        try {
+            benefitsList = organizationService.listOrganizationBenefits(id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(benefitsList);
+    }
 
     // add a new adoption agreement
     @PostMapping("{id}/adoptionAgreement")
@@ -167,7 +201,7 @@ public class OrganizationController {
 
     // update the order of adoption agreements (by pinning an existing agreement to the top)
     @PutMapping("{id}/adoptionAgreement")
-    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
+    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList) {
         try {
             organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
             return new ResponseEntity(HttpStatus.OK);
@@ -192,14 +226,15 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
