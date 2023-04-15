@@ -130,8 +130,6 @@ public class OrganizationController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-
-
     @GetMapping("verifyInvitationCode/{code}")
     public ResponseEntity verifyInvitationCode(@PathVariable("code") String code) {
         boolean flag = organizationService.verifyInvitationCode(code);
@@ -141,49 +139,49 @@ public class OrganizationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // update all benefits by organization id (create and delete operations can also use this API to update)
+    @PostMapping("{id}/benefits")
+    public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits
+                                                             organizationBenefitsRequest, @PathVariable("id") String id) {
+        try {
+            organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
+
+    // get all adoption agreements by organization id
+    // When only the current effective agreement is requested, onlyLatest should be True
+    @GetMapping("{id}/adoptionAgreement/onlyLatest={onlyLatest}")
+    public ResponseEntity<List<AdoptionAgreement>> getOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("onlyLatest") Boolean onlyLatest) {
+        List<AdoptionAgreement> adoptionAgreementList;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            adoptionAgreementList = organizationService.findAdoptionAgreementByOrgId(id, onlyLatest, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(adoptionAgreementList);
+    }
+
+    // get benefits by organization id
     @GetMapping("{id}/benefits")
-        public ResponseEntity<List<String>> getOrganizationBenefits (@PathVariable("id") String id){
-            List<String> benefitsList;
-            try {
-                benefitsList = organizationService.listOrganizationBenefits(id);
-            } catch (Exception e) {
-                logger.error(e.toString());
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return ResponseEntity.ok(benefitsList);
-        }
-
-        // update all benefits by organization id (create and delete operations can also use this API to update)
-        @PostMapping("{id}/benefits")
-        public ResponseEntity updateOrganizationBenefits (@RequestBody OrganizationBenefits
-        organizationBenefitsRequest, @PathVariable("id") String id){
-            try {
-                organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
-            } catch (Exception e) {
-                logger.error(e.toString());
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity(HttpStatus.OK);
-
-        }
-
-    // get all adoption agreements by organization id
-    // When only the current effective agreement is requested, onlyLatest should be True
-    @GetMapping("{id}/adoptionAgreement/onlyLatest={onlyLatest}")
-    public ResponseEntity<List<AdoptionAgreement>> getOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("onlyLatest") Boolean onlyLatest) {
-        List<AdoptionAgreement> adoptionAgreementList;
+    public ResponseEntity<List<String>> getOrganizationBenefits(@PathVariable("id") String id) {
+        List<String> benefitsList;
         try {
-            CloudAPI cloudAPI = new CloudAPI();
-            cloudAPI.createCosClient(bucket, secretId, secretKey);
-            adoptionAgreementList = organizationService.findAdoptionAgreementByOrgId(id, onlyLatest, cloudAPI);
-            cloudAPI.shutDownCosClient();
+            benefitsList = organizationService.listOrganizationBenefits(id);
         } catch (Exception e) {
             logger.error(e.toString());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(adoptionAgreementList);
+        return ResponseEntity.ok(benefitsList);
     }
-
 
     // add a new adoption agreement
     @PostMapping("{id}/adoptionAgreement")
@@ -203,7 +201,7 @@ public class OrganizationController {
 
     // update the order of adoption agreements (by pinning an existing agreement to the top)
     @PutMapping("{id}/adoptionAgreement")
-    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
+    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList) {
         try {
             organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
             return new ResponseEntity(HttpStatus.OK);
@@ -228,80 +226,10 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-    // get all adoption agreements by organization id
-    // When only the current effective agreement is requested, onlyLatest should be True
-    @GetMapping("{id}/adoptionAgreement/onlyLatest={onlyLatest}")
-    public ResponseEntity<List<AdoptionAgreement>> getOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("onlyLatest") Boolean onlyLatest) {
-        List<AdoptionAgreement> adoptionAgreementList;
-        try {
-            CloudAPI cloudAPI = new CloudAPI();
-            cloudAPI.createCosClient(bucket, secretId, secretKey);
-            adoptionAgreementList = organizationService.findAdoptionAgreementByOrgId(id, onlyLatest, cloudAPI);
-            cloudAPI.shutDownCosClient();
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return ResponseEntity.ok(adoptionAgreementList);
-    }
-
-
-    // add a new adoption agreement
-    @PostMapping("{id}/adoptionAgreement")
-    public ResponseEntity<List<AdoptionAgreement>> addOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody MultipartFile newAgreement) {
-        List<AdoptionAgreement> adoptionAgreementList;
-        try {
-            CloudAPI cloudAPI = new CloudAPI();
-            cloudAPI.createCosClient(bucket, secretId, secretKey);
-            adoptionAgreementList = organizationService.addOrganizationAdoptionAgreement(id, newAgreement, cloudAPI);
-            cloudAPI.shutDownCosClient();
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return ResponseEntity.ok(adoptionAgreementList);
-    }
-
-    // update the order of adoption agreements (by pinning an existing agreement to the top)
-    @PutMapping("{id}/adoptionAgreement")
-    public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
-        try {
-            organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    // delete one adoption agreement
-    @DeleteMapping("{id}/adoptionAgreement/{key}")
-    public ResponseEntity deleteOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("key") String key) {
-        try {
-            CloudAPI cloudAPI = new CloudAPI();
-            cloudAPI.createCosClient(bucket, secretId, secretKey);
-            organizationService.deleteOrganizationAdoptionAgreement(id, key, cloudAPI);
-            cloudAPI.shutDownCosClient();
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error(e.toString());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
 
 
 

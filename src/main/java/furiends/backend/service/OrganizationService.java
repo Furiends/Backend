@@ -1,39 +1,26 @@
 package furiends.backend.service;
 
-<<<<<<< HEAD
 import com.alibaba.fastjson.JSONObject;
 import furiends.backend.dto.AdoptionProcedure;
 import furiends.backend.dto.AdoptionProcedureStep;
 import furiends.backend.dto.OrganizationBenefits;
 import furiends.backend.dto.OrganizationRequest;
-=======
->>>>>>> 2770e0c (Added services for organization adoption agreement (#23))
 import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import furiends.backend.repository.OrganizationRepository;
 import furiends.backend.repository.UserRepository;
 import furiends.backend.transformer.OrganizationTransformer;
-<<<<<<< HEAD
 import furiends.backend.utils.WeChatUtil;
-=======
->>>>>>> 2770e0c (Added services for organization adoption agreement (#23))
 import furiends.backend.utils.CloudAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-<<<<<<< HEAD
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import java.io.IOException;
 import java.util.*;
 
-=======
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.*;
->>>>>>> 2770e0c (Added services for organization adoption agreement (#23))
 
 @Service
 public class OrganizationService {
@@ -61,7 +48,7 @@ public class OrganizationService {
         newOrganization.setId();
         newOrganization.setCreatedTime();
         organizationTransformer.fromOrganizationRequestToOrganization(organizationRequest, newOrganization);
-        return  newOrganization;
+        return newOrganization;
     }
 
     public void updateOrganization(OrganizationRequest organizationRequest, String id) {
@@ -77,13 +64,13 @@ public class OrganizationService {
         }
     }
 
-    public void registerOrganizationByWechat(OrganizationRequest organizationRequest){
+    public void registerOrganizationByWechat(OrganizationRequest organizationRequest) {
         Organization organization = createOrganization(organizationRequest);
         organization.setUpdatedTime();
         organizationRepository.save(organization);
     }
 
-    public Organization loginOrganizationByWechat(String code){
+    public Organization loginOrganizationByWechat(String code) {
         JSONObject jsonObject = WeChatUtil.getJSONObject(code);
         String open_id = jsonObject.getString("open_id");
         String union_id = jsonObject.getString("union_id");
@@ -91,13 +78,12 @@ public class OrganizationService {
             throw new RuntimeException();
         }
 
-        String representativeUserId = userRepository.findUserByOpenIdAndUnionId(open_id,union_id).getWechatId();
+        String representativeUserId = userRepository.findUserByOpenIdAndUnionId(open_id, union_id).getWechatId();
         Organization organization = organizationRepository.findOrganizationByRepresentativeUserId(representativeUserId);
         organization.setUpdatedTime();
         organizationRepository.save(organization);
         return organization;
     }
-
 
 
     public List<AdoptionProcedureStep> listAdoptionProcedureSteps(String organizationId) {
@@ -135,12 +121,11 @@ public class OrganizationService {
         String benefitsString = organizationTransformer.fromOrganizationBenefitsToJsonString(benefitsRequest);
         organization.setBenefits(benefitsString);
         organizationRepository.save(organization);
-
     }
 
     // find adoption agreements by organization id
     // if onlyLatest is true, only return the first agreement; otherwise return all
-    public List<AdoptionAgreement> findAdoptionAgreementByOrgId (String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
+    public List<AdoptionAgreement> findAdoptionAgreementByOrgId(String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementsString = organization.getAdoptionAgreements();
         List<AdoptionAgreement> adoptionAgreementList = (organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementsString));
@@ -155,7 +140,7 @@ public class OrganizationService {
         return response;
     }
 
-    public List<AdoptionAgreement> addOrganizationAdoptionAgreement (String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
+    public List<AdoptionAgreement> addOrganizationAdoptionAgreement(String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
         String category = "AdoptionAgreement";
         Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementString = organization.getAdoptionAgreements();
@@ -176,7 +161,7 @@ public class OrganizationService {
 
     // update: change agreements order by topping one of them
     public void updateOrganizationAdoptionAgreement(String organizationId, List<AdoptionAgreement> updatedAdoptionAgreementList) {
-        Organization organization =  findOrganizationById(organizationId).get();
+        Organization organization = findOrganizationById(organizationId).get();
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(updatedAdoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
         organizationRepository.save(organization);
@@ -184,8 +169,8 @@ public class OrganizationService {
 
 
     // delete one agreement
-    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
-        Organization organization =  findOrganizationById(organizationId).get();
+    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(organizationId).get();
         List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
         adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
         List<String> toDeleteList = new ArrayList<>();
@@ -194,64 +179,8 @@ public class OrganizationService {
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
         organizationRepository.save(organization);
-    }
-
-    // find adoption agreements by organization id
-    // if onlyLatest is true, only return the first agreement; otherwise return all
-    public List<AdoptionAgreement> findAdoptionAgreementByOrgId (String organizationId, Boolean onlyLatest, CloudAPI cloudAPI) {
-        Organization organization = findOrganizationById(organizationId).get();
-        String adoptionAgreementsString = organization.getAdoptionAgreements();
-        List<AdoptionAgreement> adoptionAgreementList = (organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementsString));
-        List<AdoptionAgreement> response = new ArrayList<AdoptionAgreement>();
-        for (AdoptionAgreement agreement : adoptionAgreementList) {
-            agreement.setUrl(cloudAPI.readFromCloud(agreement.getKey()));
-            response.add(agreement);
-            if (onlyLatest) {
-                return response;
-            }
-        }
-        return response;
-    }
-
-    public List<AdoptionAgreement> addOrganizationAdoptionAgreement (String organizationId, MultipartFile newAgreement, CloudAPI cloudAPI) throws IOException {
-        String category = "AdoptionAgreement";
-        Organization organization = findOrganizationById(organizationId).get();
-        String adoptionAgreementString = organization.getAdoptionAgreements();
-        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(adoptionAgreementString);
-        // upload to cloud
-        Map<String, String> agreementData = cloudAPI.uploadToCloud(newAgreement, organizationId, category);
-        AdoptionAgreement newAdoptionAgreement = new AdoptionAgreement(agreementData.get("key"), agreementData.get("fileName"), agreementData.get("uploadDate"));
-        // add the new agreement to the start of the agreement list
-        adoptionAgreementList.add(0, newAdoptionAgreement);
-        // update adoption agreements of the current organization
-        String newAdoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
-        organization.setAdoptionAgreements(newAdoptionAgreementString);
-        organizationRepository.save(organization);
-
-        return findAdoptionAgreementByOrgId(organizationId, false, cloudAPI);
-    }
 
 
-    // update: change agreements order by topping one of them
-    public void updateOrganizationAdoptionAgreement(String organizationId, List<AdoptionAgreement> updatedAdoptionAgreementList) {
-        Organization organization =  findOrganizationById(organizationId).get();
-        String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(updatedAdoptionAgreementList);
-        organization.setAdoptionAgreements(adoptionAgreementString);
-        organizationRepository.save(organization);
-    }
-
-
-    // delete one agreement
-    public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
-        Organization organization =  findOrganizationById(organizationId).get();
-        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
-        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
-        List<String> toDeleteList = new ArrayList<>();
-        toDeleteList.add(key);
-        cloudAPI.deleteFile(toDeleteList);
-        String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
-        organization.setAdoptionAgreements(adoptionAgreementString);
-        organizationRepository.save(organization);
     }
 }
 

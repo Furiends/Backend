@@ -23,7 +23,6 @@ public interface PetRepository extends JpaRepository<Pet, String> {
     @Query("SELECT p FROM pet p WHERE p.organizationId = ?1 AND p.isAdopted = ?2 ORDER BY p.postUpdateTime")
     List<Pet> findAllByAdoptionStatusOrg(String organizationId, boolean isAdopted);
 
-
     @Query("SELECT p FROM pet p WHERE p.species = 1 ORDER BY p.postUpdateTime")
     List<Pet> findAllDogs();
 
