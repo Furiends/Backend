@@ -1,26 +1,31 @@
 package furiends.backend.controller;
 
 
+import furiends.backend.dto.PhotoResponse;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.service.PetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import furiends.backend.utils.CloudAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/pets" )
 @Api(value = "宠物", tags = "宠物")
 public class PetController {
-
+    String bucket = "";
+    String secretId = "";
+    String secretKey = "";
     private static final Logger logger = LogManager.getLogger(PetController.class);
 
     @Autowired
@@ -33,7 +38,6 @@ public class PetController {
         try {
             return ResponseEntity.ok(petService.findAllPets());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -140,4 +144,86 @@ public class PetController {
         }
     }
 
+    // get pet photos for a pet by its pet id
+    @GetMapping(value = "pet-photo/{petId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="根据宠物id获取宠物图片")
+    public ResponseEntity<PhotoResponse> getPetPhotosByPetId(@PathVariable("petId") String petId) {
+        PhotoResponse photoResponse;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            photoResponse = petService.findPetPhotosByPetId(petId,cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(photoResponse);
+    }
+
+    // find all covers for all pets
+    @GetMapping(value = "pet-photo/allCovers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value="获取所有宠物的封面")
+    public ResponseEntity<List<PhotoResponse>> getAllCoversForAllPets() {
+        List<PhotoResponse> allCoversForAllPets;
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            List<String> petIdList = petService.findAllPetIds();
+            allCoversForAllPets = petService.findAllCoverForPetList(petIdList, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(allCoversForAllPets);
+    }
+
+    // create pet photos for a pet
+    @PostMapping(value = "pet-photo/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value="根据宠物id创建宠物图片")
+    public ResponseEntity createPetPhotosByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.createPetPhotos(petId, petPhotoList, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // update pet photos for a pet
+    @PutMapping(value = "pet-photo/{petId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value="根据宠物id更新宠物图片")
+    public ResponseEntity updatePetPhotosByPetId(@PathVariable String petId, @RequestBody List<MultipartFile> petPhotoList) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.updatePetPhotos(petId, petPhotoList, cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // delete pet photos for a pet
+    @DeleteMapping(value = "pet-photo/{petId}")
+    @ApiOperation(value="根据宠物id删除宠物图片")
+    public ResponseEntity deletePetPhotosByPetId(@PathVariable String petId) {
+        try {
+            CloudAPI cloudAPI = new CloudAPI();
+            cloudAPI.createCosClient(bucket, secretId, secretKey);
+            petService.deletePetPhotos(petId,cloudAPI);
+            cloudAPI.shutDownCosClient();
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
