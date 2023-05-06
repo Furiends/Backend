@@ -4,6 +4,8 @@ package furiends.backend.controller;
 import furiends.backend.dto.PetRequest;
 import furiends.backend.model.Pet;
 import furiends.backend.service.PetService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/pets" )
+@Api(value = "宠物", tags = "宠物")
 public class PetController {
 
     private static final Logger logger = LogManager.getLogger(PetController.class);
@@ -25,6 +28,7 @@ public class PetController {
 
     // list all pets
     @GetMapping("")
+    @ApiOperation(value="获取所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPets() {
         try {
             return ResponseEntity.ok(petService.findAllPets());
@@ -37,6 +41,7 @@ public class PetController {
 
     // list all pets within the organization
     @GetMapping("/organization={organizationId}/pets")
+    @ApiOperation(value="根据机构id获取机构所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPetsWithinOrganization(@PathVariable("organizationId") String organizationId) {
         return ResponseEntity.ok(petService.findAllPetsWithinOrganization(organizationId));
     }
@@ -56,6 +61,7 @@ public class PetController {
 
     // get pet by id
     @GetMapping("/{id}")
+    @ApiOperation(value="根据宠物id获取宠物")
     public ResponseEntity<Pet> getPetById(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(petService.findPetById(id).get());
@@ -68,6 +74,7 @@ public class PetController {
 
     // get pets by publish status (in edit or published), ordered by post's last update time
     @GetMapping("/published={isPublished}")
+    @ApiOperation(value="根据发布状态获取所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPetsByPublishStatus(@PathVariable("isPublished") boolean isPublished) {
         return ResponseEntity.ok(petService.findAllByPublishStatus(isPublished));
     }
@@ -75,12 +82,14 @@ public class PetController {
 
     // (by organization) get pets by publish status (in edit or published), ordered by post's last update time
     @GetMapping("/organization={organizationId}/published={isPublished}")
+    @ApiOperation(value="根据机构id和发布状态获取所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPetsByPublishStatusOrg(@PathVariable("organizationId") String organizationId, @PathVariable("isPublished") boolean isPublished) {
         return ResponseEntity.ok(petService.findAllByPublishStatusOrg(organizationId, isPublished));
     }
 
     // get pets by adoption status, ordered by post's last update time
     @GetMapping("/adopted={isAdopted}")
+    @ApiOperation(value="根据领养状态获取所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatus(@PathVariable("isAdopted") boolean isAdopted) {
         return ResponseEntity.ok(petService.findAllByAdoptionStatus(isAdopted));
     }
@@ -88,6 +97,7 @@ public class PetController {
 
     // (by organization) get pets by adoption status, ordered by post's last update time
     @GetMapping("/organization={organizationId}/adopted={isAdopted}")
+    @ApiOperation(value="根据机构id和领养状态获取所有宠物列表")
     public ResponseEntity<List<Pet>> getAllPetsByAdoptionStatusOrg(@PathVariable ("organizationId") String organizationId, @PathVariable("isAdopted") boolean isAdopted) {
         return ResponseEntity.ok(petService.findAllByAdoptionStatusOrg(organizationId, isAdopted));
     }
@@ -95,6 +105,7 @@ public class PetController {
 
     // create a pet
     @PostMapping("")
+    @ApiOperation(value="创建宠物")
     public ResponseEntity createPet(@RequestBody PetRequest petRequest) {
         try {
             return ResponseEntity.ok(petService.createPet(petRequest));
@@ -106,6 +117,7 @@ public class PetController {
 
     // update a pet's info
     @PutMapping({"/{id}"})
+    @ApiOperation(value="更新宠物信息")
     public ResponseEntity updatePet(@RequestBody PetRequest petRequest, @PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(petService.updatePet(petRequest, id));
@@ -117,6 +129,7 @@ public class PetController {
 
     // delete a pet
     @DeleteMapping ({"/{id}"})
+    @ApiOperation(value="根据id删除宠物")
     public ResponseEntity deletePet(@PathVariable("id") String id) {
         try {
             petService.deletePet(id);

@@ -4,6 +4,8 @@ import furiends.backend.dto.*;
 import furiends.backend.model.Organization;
 import furiends.backend.service.OrganizationService;
 import furiends.backend.utils.CloudAPI;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/organizations")
+@Api(value = "机构", tags = "机构")
 public class OrganizationController {
     String bucket = "";
     String secretId = "";
@@ -27,6 +30,7 @@ public class OrganizationController {
 
     // get organization by id
     @GetMapping("{id}")
+    @ApiOperation(value="根据id获取机构")
     public ResponseEntity<Organization> getOrganization(@PathVariable("id") String id) {
         Optional<Organization> organization = null;
         try {
@@ -40,12 +44,14 @@ public class OrganizationController {
 
     // list all organizations
     @GetMapping("")
+    @ApiOperation(value="获取所有机构列表")
     public ResponseEntity<List<Organization>> getAllOrganization() {
         return ResponseEntity.ok(organizationService.findAllOrganizations());
     }
 
     // create an organization
     @PostMapping("")
+    @ApiOperation(value="创建机构")
     public ResponseEntity createOrganization(@RequestBody OrganizationRequest organizationRequest) {
         try {
             organizationService.createOrganization(organizationRequest);
@@ -58,6 +64,7 @@ public class OrganizationController {
 
     // update an organization's info
     @PutMapping("{id}")
+    @ApiOperation(value="更新机构信息")
     public ResponseEntity updateOrganization(@RequestBody OrganizationRequest organizationRequest, @PathVariable String id) {
         try {
             organizationService.updateOrganization(organizationRequest, id);
@@ -70,6 +77,7 @@ public class OrganizationController {
 
     // delete an organization
     @DeleteMapping("{id}")
+    @ApiOperation(value="删除机构")
     public ResponseEntity deleteOrganization(@PathVariable String id) {
         try {
             organizationService.deleteOrganization(id);
@@ -82,6 +90,7 @@ public class OrganizationController {
 
     // get adoption procedure by organization id
     @GetMapping("{id}/adoptionProcedure")
+    @ApiOperation(value="获取申请流程")
     public ResponseEntity<List<AdoptionProcedureStep>> getOrganizationAdoptionProcedure(@PathVariable("id") String id) {
         List<AdoptionProcedureStep> adoptionProcedureStepList;
         try {
@@ -95,6 +104,7 @@ public class OrganizationController {
 
     // update all adoption procedure by organization id (create and delete operations can also use this API to update)
     @PostMapping("{id}/adoptionProcedure")
+    @ApiOperation(value="更新申请流程")
     public ResponseEntity updateOrganizationAdoptionProcedure(@RequestBody AdoptionProcedure adoptionProcedureRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationAdoptionProcedure(adoptionProcedureRequest, id);
@@ -107,6 +117,7 @@ public class OrganizationController {
 
     // get benefits by organization id
     @GetMapping("{id}/benefits")
+    @ApiOperation(value="获取机构福利")
     public ResponseEntity<List<String>> getOrganizationBenefits(@PathVariable("id") String id) {
         List<String> benefitsList;
         try {
@@ -120,6 +131,7 @@ public class OrganizationController {
 
     // update all benefits by organization id (create and delete operations can also use this API to update)
     @PostMapping("{id}/benefits")
+    @ApiOperation(value="更新机构福利")
     public ResponseEntity updateOrganizationBenefits(@RequestBody OrganizationBenefits organizationBenefitsRequest, @PathVariable("id") String id) {
         try {
             organizationService.updateOrganizationBenefits(organizationBenefitsRequest, id);
@@ -134,6 +146,7 @@ public class OrganizationController {
     // get all adoption agreements by organization id
     // When only the current effective agreement is requested, onlyLatest should be True
     @GetMapping("{id}/adoptionAgreement/onlyLatest={onlyLatest}")
+    @ApiOperation(value="根据机构id获取所有领养协议")
     public ResponseEntity<List<AdoptionAgreement>> getOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("onlyLatest") Boolean onlyLatest) {
         List<AdoptionAgreement> adoptionAgreementList;
         try {
@@ -151,6 +164,7 @@ public class OrganizationController {
 
     // add a new adoption agreement
     @PostMapping("{id}/adoptionAgreement")
+    @ApiOperation(value="新增机构领养协议")
     public ResponseEntity<List<AdoptionAgreement>> addOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody MultipartFile newAgreement) {
         List<AdoptionAgreement> adoptionAgreementList;
         try {
@@ -167,6 +181,7 @@ public class OrganizationController {
 
     // update the order of adoption agreements (by pinning an existing agreement to the top)
     @PutMapping("{id}/adoptionAgreement")
+    @ApiOperation(value="更新机构领养协议")
     public ResponseEntity updateOrganizationAdoptionAgreement(@PathVariable("id") String id, @RequestBody List<AdoptionAgreement> updatedAdoptionAgreementList ) {
         try {
             organizationService.updateOrganizationAdoptionAgreement(id, updatedAdoptionAgreementList);
@@ -180,6 +195,7 @@ public class OrganizationController {
 
     // delete one adoption agreement
     @DeleteMapping("{id}/adoptionAgreement/{key}")
+    @ApiOperation(value="删除机构领养协议")
     public ResponseEntity deleteOrganizationAdoptionAgreement(@PathVariable("id") String id, @PathVariable("key") String key) {
         try {
             CloudAPI cloudAPI = new CloudAPI();
@@ -192,14 +208,4 @@ public class OrganizationController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
-
-
-
-
-
 }

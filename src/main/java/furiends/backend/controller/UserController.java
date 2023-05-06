@@ -2,6 +2,8 @@ package furiends.backend.controller;
 
 import furiends.backend.model.User;
 import furiends.backend.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping(path = "api/v1/users")
+@Api(value = "用户", tags = "用户")
 public class UserController {
     private static final Logger logger = LogManager.getLogger(OrganizationController.class);
 
@@ -22,6 +25,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("{id}")
+    @ApiOperation(value="根据id获取用户")
     public ResponseEntity<User> getUserById(@PathVariable("id")String userId) {
         User user = null;
         try {
@@ -36,6 +40,7 @@ public class UserController {
 
     // get all users
     @GetMapping("")
+    @ApiOperation(value="获取所有用户列表")
     public ResponseEntity<ArrayList<User>> getAllUsers() throws RuntimeException {
         return ResponseEntity.ok(userService.findAllUsers());
     }
