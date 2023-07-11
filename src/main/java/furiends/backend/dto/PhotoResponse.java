@@ -5,7 +5,6 @@ import java.util.List;
 public class PhotoResponse {
 
     private String id;
-
     private List<String> photoUrlList;
 
     public String getId() {
@@ -16,6 +15,7 @@ public class PhotoResponse {
         this.id = id;
     }
 
+
     public List<String> getPhotoUrlList() {
         return photoUrlList;
     }
@@ -23,5 +23,4 @@ public class PhotoResponse {
     public void setPhotoUrlList(List<String> photoUrlList) {
         this.photoUrlList = photoUrlList;
     }
-
 }

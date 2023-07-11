@@ -121,5 +121,31 @@ public class OrganizationTransformer {
 
         return adoptionAgreementList;
     }
+
+
+    public String fromPhotoKeyListToJsonString(List<String> photoKeyList) {
+        if (photoKeyList == null) return "";
+        String photoKeyListString = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            photoKeyListString = mapper.writeValueAsString(photoKeyList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return photoKeyListString;
+    }
+
+
+    public List<String> fromJsonStringToPhotoKeyList(String orgPhotoKeyListString) {
+        List<String> orgPhotoKeyList = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        if (orgPhotoKeyListString == null || orgPhotoKeyListString.length() == 0) return orgPhotoKeyList;
+        try {
+            orgPhotoKeyList = mapper.readValue(orgPhotoKeyListString, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return orgPhotoKeyList;
+    }
 }
 

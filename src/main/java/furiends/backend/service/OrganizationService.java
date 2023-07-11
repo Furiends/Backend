@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -128,14 +129,102 @@ public class OrganizationService {
 
     // delete one agreement
     public void deleteOrganizationAdoptionAgreement(String organizationId, String key, CloudAPI cloudAPI){
-        Organization organization =  findOrganizationById(organizationId).get();
-        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
-        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
+        // delete the agreement from the cloud database
         List<String> toDeleteList = new ArrayList<>();
         toDeleteList.add(key);
         cloudAPI.deleteFile(toDeleteList);
+        // update the organization
+        Organization organization =  findOrganizationById(organizationId).get();
+        List<AdoptionAgreement> adoptionAgreementList = organizationTransformer.fromJsonStringToAdoptionAgreementList(organization.getAdoptionAgreements());
+        adoptionAgreementList.removeIf(agreement -> agreement.getKey().equals(key));
         String adoptionAgreementString = organizationTransformer.fromAdoptionAgreementListToJsonString(adoptionAgreementList);
         organization.setAdoptionAgreements(adoptionAgreementString);
+        organizationRepository.save(organization);
+    }
+
+    // get the photos of an organization by id
+    public PhotoResponse getOrganizationPhotos(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        String photoKeyListString = organization.getOrgPhotoKeyList();
+        List<String> photoKeyList = organizationTransformer.fromJsonStringToPhotoKeyList(photoKeyListString);
+        PhotoResponse photoResponse = new PhotoResponse();
+        photoResponse.setId(id);
+        List<String> urlList = new ArrayList<>();
+        for (String key : photoKeyList) {
+            urlList.add(String.valueOf(cloudAPI.readFromCloud(key)));
+        }
+        photoResponse.setPhotoUrlList(urlList);
+        return photoResponse;
+    }
+
+
+    // add photos of an organization
+    public void addOrganizationPhotos (String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+        String category = "OrgPhoto";
+        Organization organization = findOrganizationById(organizationId).get();
+        List<String> photoKeyList = new ArrayList<>();
+        // upload to cloud
+        for (MultipartFile photo : photos) {
+            Map<String, String> photoData = cloudAPI.uploadToCloud(photo, organizationId, category);
+            photoKeyList.add(photoData.get("key"));
+        }
+        // update photoKeyList of the organization
+        String newPhotoKeyList = organizationTransformer.fromPhotoKeyListToJsonString(photoKeyList);
+        organization.setOrgPhotoKeyList(newPhotoKeyList);
+        organizationRepository.save(organization);
+    }
+
+
+    // update photos of an organization
+    public void updateOrganizationPhotos(String organizationId, List<MultipartFile> photos, CloudAPI cloudAPI) throws IOException {
+        // delete all the existing photos
+        deleteOrganizationPhotos(organizationId, cloudAPI);
+        // upload the new photos
+        addOrganizationPhotos(organizationId, photos, cloudAPI);
+    }
+
+
+    // delete photos of an organization
+    public void deleteOrganizationPhotos(String organizationId, CloudAPI cloudAPI) {
+        Organization organization =  findOrganizationById(organizationId).get();
+        List<String> photoKeyList = organizationTransformer.fromJsonStringToPhotoKeyList(organization.getOrgPhotoKeyList());
+        // delete the organization's photos from cloud
+        cloudAPI.deleteFile(photoKeyList);
+        // update the organization
+        organization.setOrgPhotoKeyList("");
+        organizationRepository.save(organization);
+    }
+
+    public URL getOrganizationIcon(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        String iconKey = organization.getIcon();
+        return cloudAPI.readFromCloud(iconKey);
+    }
+
+    public URL addOrganizationIcon(String id, MultipartFile icon, CloudAPI cloudAPI) throws IOException {
+        String category = "OrgIcon";
+        Organization organization = findOrganizationById(id).get();
+        // upload to cloud
+        Map<String, String> iconData = cloudAPI.uploadToCloud(icon, id, category);
+        // update organization
+        organization.setIcon(iconData.get("key"));
+        organizationRepository.save(organization);
+        return getOrganizationIcon(id, cloudAPI);
+    }
+
+    public URL updateOrganizationIcon(String id, MultipartFile icon, CloudAPI cloudAPI) throws IOException {
+        deleteOrganizationIcon(id, cloudAPI);
+        return addOrganizationIcon(id, icon, cloudAPI);
+    }
+
+    public void deleteOrganizationIcon(String id, CloudAPI cloudAPI) {
+        Organization organization = findOrganizationById(id).get();
+        List<String> toDelete = new ArrayList<>();
+        toDelete.add(organization.getIcon());
+        // delete the organization's icon from cloud
+        cloudAPI.deleteFile(toDelete);
+        // update the organization
+        organization.setIcon("");
         organizationRepository.save(organization);
     }
 }

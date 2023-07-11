@@ -84,9 +84,13 @@ public class CloudAPI {
 
     // read a file from the cloud
     public URL readFromCloud(String objectKey){
+        URL url = null;
         try {
             Date expirationDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
-            return cosClient.generatePresignedUrl(bucket, objectKey, expirationDate, HttpMethodName.GET);
+            if (objectKey != null && !objectKey.isEmpty() && cosClient.doesObjectExist(bucket, objectKey)) {
+                url = cosClient.generatePresignedUrl(bucket, objectKey, expirationDate, HttpMethodName.GET);
+            }
+            return url;
         } catch (CosClientException e) {
             e.printStackTrace();
             throw e;
@@ -99,10 +103,14 @@ public class CloudAPI {
             DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket);
             List<DeleteObjectsRequest.KeyVersion> keyList = new ArrayList<>();
             for (String key : objectKeyList) {
-                keyList.add(new DeleteObjectsRequest.KeyVersion(key));
+                if (key != null && !key.isEmpty()){
+                    keyList.add(new DeleteObjectsRequest.KeyVersion(key));
+                }
             }
-            deleteObjectsRequest.setKeys(keyList);
-            cosClient.deleteObjects(deleteObjectsRequest);
+            if (keyList.size() != 0) {
+                deleteObjectsRequest.setKeys(keyList);
+                cosClient.deleteObjects(deleteObjectsRequest);
+            }
         } catch (MultiObjectDeleteException mde) {
             // 如果部分删除成功部分失败, 返回 MultiObjectDeleteException
             List<DeleteObjectsResult.DeletedObject> deleteObjects = mde.getDeletedObjects();
